@@ -1,1 +1,1 @@
-![alt text](images/image.png)
+![alt text](static/images/image.png)
