@@ -1,0 +1,101 @@
+{% extends 'user/userdashboard.html' %}
+{% load static %}
+{% block navbar %}
+  <main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="" id="">
+    <h2>Pending Friend Requests</h2>
+
+    
+{% if pending_requests %}
+{% for request in pending_requests %}
+    <p ><span onclick="userDetailsPage('{{request.sender.id}}')" class="user_name" style="font-weight: bold;">{{ request.sender.username }}</span> sent you a friend request at {{request.createdAt}}</p>
+    <div class="flex-row">
+        <button onclick="AcceptRequest('{{request.id}}','{{request.status}}')">Accept</button>
+        <button onclick="RejectRequest('{{request.id}}','{{request.status}}')">Reject</button>
+    </div>
+{% endfor %}
+{% else %}
+<p>No pending friend requests.</p>
+{% endif %}
+
+<h2>My Friends</h2>
+{% for friend in friends %}
+   <div class="flex-row flex">
+    <div class="left flex-row">
+        <img src="{{friend.profilePicture.url}}" height="50px" width="50px" style="border-radius: 50%;object-fit: cover;" alt="">
+        <p  class="user_name" onclick="userDetailsPage('{{friend.id}}')">{{ friend.username }}</p>
+    </div>
+ <div class="right">
+
+     <button onclick="RemoveFriend('{{friend.id}}')">Remove</button>
+ </div>
+   </div>
+{% empty %}
+    <p>No friends yet.</p>
+{% endfor %}
+</div>
+<script>
+     function userDetailsPage(id) { 
+        window.location.href = '/user_details/'+encodeURIComponent(id);
+     }
+    function RemoveFriend(id) { 
+        $.ajax({
+            type: "DELETE",
+            url: "/remove_friend/",
+            data: {
+                "friend_id":id,
+            },
+            success: function (response) {
+                if(response.status == 'pass'){
+                    alert(response['message'])
+                    location.reload();
+                }
+                else if(response.status == 'fail'){
+                    alert(response['message'])
+                }
+            }
+        });
+     }
+ function AcceptRequest(id, status) { 
+    $.ajax({
+        type: "POST",
+        url: "/accept_request/",
+        data: {
+            "user_id":id,
+            "status":status,
+        },
+        success: function (response) {
+            if(response.status == 'pass'){
+                alert(response['message'])
+                location.reload();
+            }
+            else if(response.status == 'fail'){
+                alert(response['message'])
+            }
+        }
+    });
+  }
+ function RejectRequest(id, status) { 
+    $.ajax({
+        type: "POST",
+        url: "/reject_request/",
+        data: {
+            "user_id":id,
+            "status":status,
+        },
+        success: function (response) {
+            if(response.status == 'pass'){
+                alert(response['message'])
+            }
+            else if(response.status == 'fail'){
+                alert(response['message'])
+            }
+        }
+    });
+  }
+
+</script>
+  </main>  
+{% endblock navbar %}

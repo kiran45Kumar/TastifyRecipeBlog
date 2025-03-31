@@ -1,0 +1,34 @@
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('signup/', signup, name='signup'),
+    path('',login, name='login'),
+    path('logout/',LogoutUser.as_view(), name='logout'),
+    path('index/', index, name='index'),
+    path('create_user/',CreateStaff.as_view(), name='create_user'),
+    path('login_check/',LoginCheck.as_view(), name='create_user'),
+    path('delete_user/',DeleteUser.as_view(), name='delete_user'),
+    path('view_user/', ViewStaff.as_view(), name='view_user'),
+    path('user_dashboard/',view_user, name='view_user'),
+    path('nick_name/',AddNickName.as_view(), name='nick_name'),
+    path('404/<str:message>',not_found, name='404'),
+    path('<str:name>/<int:id>/dashboard',user_dashboard, name='user_dashboard'),
+    path('save_img/',SaveImg.as_view(), name='save_img'),
+    path('add_cover/',UploadCoverImg.as_view(), name='save_img'),
+    path('user_details/<int:id>',user_details, name='user_details'),
+    path('forgot_password/', forgot_password, name='forgot_password'),
+    path('send_mail/', SendMail.as_view(), name='send_mail'),
+    path('reset_password/<int:id>', reset_password, name='reset_password'),
+    path('change_password/', ChangePassword.as_view(), name='change_password'),
+    path("IncrementViews/", IncrementRecipeView.as_view(), name="increment_recipe_view"),
+    path('friends/', friends, name='friends'),
+    path('ViewRequests/', ViewRequests.as_view(), name='ViewRequests'),
+    path('accept_request/', AcceptRequest.as_view(), name='AcceptRequest'),
+    path('reject_request/', RejectRequest.as_view(), name='RejectRequest'),
+    path('remove_friend/', RemoveFriend.as_view(), name='RemoveFriend'),
+    path('update_user/<int:id>/',update_user, name='update_user'),
+    path('UpdateUserDetails/', UpdateUserDetails.as_view(), name='UpdateUserDetails'),
+    path('check_online_status/',check_online_status, name='check_online_status')
+]
+

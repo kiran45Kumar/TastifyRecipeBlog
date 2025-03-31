@@ -1,0 +1,172 @@
+{% extends 'user/login.html' %}
+{% load static %}
+{% block navbar %}
+{% block title %}Tastify - Signup{% endblock %}
+<body>
+    <div class="login-section " >
+ <h1 id="login">Create Your Account</h1>
+    <div class="signup-section">
+    <div class="login-forms">
+        <label for="">Username</label>
+        <input type="text" placeholder="Enter Your Name" name="username" id="username">
+        <p id="uname"></p>
+    </div>
+    <div class="login-forms">
+        <label for="">Email</label>
+        <input type="email" placeholder="Enter Your Email" name="email" id="email">
+        <p id="emailid"></p>
+    </div>
+    <div class="login-forms">
+        <label for="">Password</label>
+        <input type="password" placeholder="Enter Your Password" name="password" id="password">
+        <p id="passwordid"></p>
+        <div class="flex-row">
+            <input type="checkbox" name="" onclick="showPassword('password')" id="">
+            <p>Show Password</p>
+        </div>
+    </div>
+    <div class="login-forms">
+        <label for="">Phone</label>
+        <input type="number" placeholder="Enter Your Phone" name="phone" id="phone">
+        <p id="phoneno"></p>
+    </div>
+    <div class="login-forms">
+        <label for="">First Name</label>
+        <input type="text" placeholder="Enter Your First Name" name="firstname" id="firstname">
+        <p id="fname"></p>
+    </div>
+    <div class="login-forms">
+        <label for="">Last Name</label>
+        <input type="text" placeholder="Enter Your Last Name" name="lastname" id="lastname">
+        <p id="lname"></p>
+    </div>
+    <div class="login-forms">
+        <label for="">Date of Birth</label>
+        <input type="date" placeholder="Enter Your BirthDate" name="birthdate" id="birthdate">
+        <p id="bdate"></p>
+    </div>
+    <div class="login-forms">
+        <label for="">Profile Picture</label>
+        <input type="file" placeholder="" name="profile" id="profile">
+        <p id="profileimg"></p>
+    </div>
+    <p class="text-small">Dont Have An account <a href="/">Log in</a></p>
+    <div class="login-button signup-button">
+        <button type="button" id="btn_submit" onclick="signup()">Submit</button>
+    </div>
+   </div>
+</div>
+    <script>
+         function showPassword(id) { 
+        let input = $("#"+id);
+        if (input.attr('type') == 'password'){
+            input.attr('type','text');
+        }
+        else{
+            input.attr('type','password');
+        }   
+      }
+      function signup() {
+    let username = $("#username").val();
+    let email = $("#email").val();
+    let password = $("#password").val();
+    let phone = $("#phone").val();
+    let firstname = $("#firstname").val();
+    let lastname = $("#lastname").val();
+    let birthdate = $("#birthdate").val();
+    let profile = $("#profile")[0].files[0];
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;    
+    let passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!username) {
+        $("#uname").html("Please Enter Your Username").css('color', 'red');
+        return;
+    } else if (!email) {
+        $("#emailid").html("Please Enter Your Email").css('color', 'red');
+        return;
+    } else if (!emailRegex.test(email)) {
+        $("#emailid").html("Please enter a valid email address").css('color', 'red');
+        return;
+    } else if (!password) {
+        $("#passwordid").html("Please Enter Your Password").css('color', 'red');
+        return;
+    }else if (!passwordRegex.test(password)) {
+    $("#passwordid").html(`
+        <ul style="color: red; padding-left: 15px;">
+            <li>Password must be at least 8 characters long</li>
+            <li>Must include 1 uppercase letter</li>
+            <li>Must include 1 special character (@$!%*?&)</li>
+            <li>Must include 1 number</li>
+        </ul>
+    `);
+    return;
+     } else if (!phone) {
+        $("#phoneno").text("Please Enter Your Phone No").css('color', 'red');
+        return;
+    } else if (phone.length !== 10) {
+        $("#phoneno").text("Please Enter a Valid 10-digit Phone No").css('color', 'red');
+        return;
+    } else if (!firstname) {
+        $("#firstname").html("Please Enter Your First Name").css('color', 'red');
+        return;
+    } else if (!lastname) {
+        $("#lastname").html("Please Enter Your Last Name").css('color', 'red');
+        return;
+    } else if (!birthdate) {
+        $("#birthdate").html("Please fill in your Date of Birth").css('color', 'red');
+        return;
+    } else if (!profile) {
+        $("#profile").html("Please Upload Your Profile Picture").css('color', 'red');
+        return;
+    } else {
+        $("#emailid, #passwordid, #phoneno, #firstname, #lastname, #birthdate, #profile").html('');
+        $("input").css('border-color', 'gray');
+    }
+
+    const formdata = new FormData();
+    formdata.append('username', username);
+    formdata.append('email', email);
+    formdata.append('password', password);
+    formdata.append('phone', phone);
+    formdata.append('firstname', firstname);
+    formdata.append('lastname', lastname);
+    formdata.append('birthdate', birthdate);
+    formdata.append('profile', profile);
+    $("#btn_submit").text("Please Wait").css({ 'color': '#007BFF', 'fontWeight': '400' });
+    $.ajax({
+        type: 'POST',
+        url: '/create_user/',
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+                if (data["status"] === 'pass') {
+                $("#login").text("Signup Successful").css({ 'color': '#28A745', 'fontWeight': '400' });
+                $("input").css('border-color', 'green');
+                setTimeout(() => {
+                    window.location.replace('/');
+                }, 3000);
+            } else if (data["status"] === 'fail') {
+                $("#uname").text(data['Error']).css({ 'color': '#dc3545', 'fontWeight': '400' });
+                $("#btn_submit").text('Submit')
+            }
+            
+
+        },
+        error: function (xhr, status, error, data) {
+            if (error) {
+                $("#login").text("Please Fill all the fields").css({ 'color': '#DC3545', 'fontWeight': '400' });
+                $('input').css('border-color', 'red');
+            } else if (data['error']) {
+                $("#login").text(data['error']);
+            } else {
+                $('input').css('border-color', 'gray');
+            }
+        }
+    });
+}
+
+    </script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,648 @@
+{% load static %}
+
+<head>
+    <title id="title">{% block title %}{{currentUser}}'s Tastify{% endblock  %}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<style>
+    .opacity-light{
+        opacity: 0.5;
+    }
+</style>
+<!-- navbar section  -->
+<div class="header-section">
+    <div class="header-logo">
+        <p onclick="mainPage('/user/{{currentUser}}/{{current_user_id}}/posts')" id="logo_text">Tastify</p>
+    </div>
+    <div class="header-search">
+        <i class='bx bx-search'></i>
+        <input type="search" name="search-nav" id="search-nav" placeholder="Search">
+    </div>
+    <div class="header-links">
+        <li>
+            <div class="header-link">
+                <i class='bx bxs-home-alt-2 ored'></i>
+                <p id="text" onclick="openPage('home')">Home</p>
+            </div>
+        </li>
+        <li><div class="header-link">
+            <div class="notification-icon" onclick="toggle1()">
+                <i class='bx bx-info-circle'></i>
+                {% if pending_requests %}
+                    <span class="badge">1+</span>
+                {% else %}
+                    <span class="badge">0</span>
+                {% endif %}
+            </div>
+            <p class="opacity-none" id="text1" onclick="openPage('requests')">Requests</p>
+        </div></li>
+        <li>
+            <div class="header-link">
+                <i class='bx bx-edit-alt'onclick="toggle2()"></i>
+                <p class="opacity-none" id="text2">Post</p>
+            </div>
+        </li>
+        <li>
+            <div class="header-link">
+                <i class='bx bx-user-plus'onclick="toggle3()"></i>
+                <p class="opacity-none" id="text3" onclick="openPage('friends')">Friends</p>
+            </div>
+        </li>
+        <li>
+            <div class="header-link">
+                <i class='bx bx-user-circle' onclick="toggle4()"></i>
+                <p class="opacity-none" id="text4">User</p>
+            </div>
+        </li>
+        <li>
+            <div class="header-link">
+                <i class='bx bx-bell' onclick="toggle5()"></i>
+                <p class="opacity-none" id="text5">Alerts</p>
+        </div></li>
+    </div>
+    <div class="header-img-section">
+        <div class="header-text">
+            <h1 onclick="openPage('home')" class="user_name">{{currentUser}} </h1>
+
+            {% if currentUser %}
+            <p>online</p>
+            {% else %}
+            <p>offline</p>
+            {% endif %}
+        </div>
+        
+        {% for user in users %}
+        {% if user.id == request.session.user_id %}
+        <img src="{{user.profilePicture.url}}" onclick="toggleSection()" alt=""  class="profile-img">
+        {% endif %}
+   
+        {% endfor %}
+        <div class="user-main user-section update-section display" id="profile">
+            <div class="bottom-section">
+                <h4 style="text-align: start;">User Details</h4>
+                {% for user in users %}
+                <div class="bottom black">
+                   <p>{{user.email}}</p>
+                   <span><i class='bx bx-envelope'></i></span>
+               </div>
+               <div class="bottom black">
+                   <p>{{user.phone}}</p>
+                   <span><i class='bx bx-phone'></i></span>
+               </div>
+                <div class="bottom black">
+                    <button onclick="UpdateUser('{{user.id}}')">Update</button>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="user-main user-section update-section display" id="section">
+            <div class="bottom-section">
+                <h4 style="text-align: start;">Add Nick Name</h4>
+               <div class="bottom black">
+                   <input type="text" placeholder="Add Your Nick Name" id="nick_name">
+                   <div class="bottom black">
+                    <button onclick="AddNickName()">Add</button>
+                </div>
+               </div>
+              
+            </div>
+        </div>
+        <button onclick="toggleSection2()">Add Foodie Name</button>
+        <button onclick="signout()">
+{% if request.session.user_id %}
+<div class="flex-row">
+    <i class='bx bx-log-out'></i>
+    <span>Sign out</span>
+</div>
+{% else %}
+<i class='bx bx-log-in'></i> Login
+{% endif %}
+        </button>
+    </div>
+</div>
+<!-- main section  -->
+<main>
+    
+    <div class="main-dashboard-section" id="main">
+        {% block navbar %}
+        <div class="user-details">
+            <div class="user-main">
+                {% for user in users %}
+                <img src="{{user.profilePicture.url}}" alt="" id="myImg" >
+                <input type="file" name="profile_img" id="profile_img" accept="image/*" style="display: none;">
+                <a id="editBtn" class="edit-icon" style="cursor: pointer;"><i class='bx bx-edit-alt'></i></a>
+                {% endfor %}
+                <div id="imageModal" class="custom-modal" style="display: none;">
+                    <span class="close-modal">&times;</span>
+                    <img class="custom-modal-content" id="modalImg">
+                </div>
+                {% for user in users %}
+                <h1 id="user-name-profile" class="user_name" onclick="userDetailsPage('{{current_user_id}}')">{{user.username}}</h1>
+                <p style="text-align: center;">{{user.nick}}</p>
+                {% endfor %}
+                <!-- <div class="card">
+                <p>{{ userdata.name }} </p>
+                <p>{{ userdata.phone }}</p>
+                <p>{{ userdata.email }}</p>
+            </div> -->
+                <div class="bottom-section">
+                    <div class="bottom">
+                        <p>Blogs Posted</p>
+                        <span>{{postCount}} posts</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="user-main user-section">
+                <div class="bottom-section">
+                    <h4>Recent Articles</h4>
+                    <div class="bottom black1">
+                        <p>#indianRecipes</p>
+                    </div>
+                    <div class="bottom black1">
+                        <p>#desiflavor</p>
+                    </div>
+                    <div class="bottom black1">
+                        <p>#foodstagram</p>
+                    </div>
+                    <div class="bottom black1">
+                        <p>#yummy
+                        </p>
+                    </div>
+                    <div class="bottom black1 create-button">
+                        <button onclick="toggleModal()">New Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="modal modal-close" id="closeModalicon">
+        <p style="text-align: center;"  id="success-message"></p>
+            <div class="cross-icon">
+                <i class='bx bx-x bx-cross' onclick="toggleModal()"  style="text-align: right;"></i>
+            </div>
+            <div class="modal-flex">
+                <h1 id="success">Create Your Post</h1>
+                <input type="hidden" value="{{current_user_id}}" id="userId">
+            </div>
+      <p class="border-1"></p>
+    <div class="modal-inputs">
+<div class="modal-top" id="top">
+    <div class="post-inputs">
+        <label for="">Title*</label>
+        <input type="text" placeholder="Recipe Title" id="recipe-title">
+        </div>
+     <div class="post-inputs">
+        <label for="">Description*</label>
+        <input type="text" placeholder="Recipe Description" id="desc">
+     </div>
+    <div class="post-inputs">
+        <label for="">Ingredients*</label>
+        <input type="text" placeholder="Ingredients" id="ingredients">
+    </div>
+    <div class="post-inputs">
+        <label for="">Instructions*</label>
+        <input type="text" placeholder="Instructions" id="instruction">
+    </div>
+    <div class="post-buttons">
+        <button onclick="togglePostModal()">Next</button>
+      </div>
+</div>
+<div class="modal-bottom" id="bottom">
+    <div class="modal-flex">
+        <div class="post-inputs">
+            <label for="">Preparation Time*</label>
+            <input type="text" placeholder="Preparation Time" id="preptime">
+        </div>
+        <div class="post-inputs">
+            <label for="">Cooking Time*</label>
+            <input type="text" placeholder="Cooking Time" id="cooktime">
+        </div>
+        <div class="post-inputs">
+            <label for="">Serving Size*</label>
+            <input type="text" placeholder="eg: 1 Cup 4 peoples" id="servSize">
+        </div>
+        <div class="post-inputs">
+            <label for="">Nutrition Info*</label>
+            <input type="text" placeholder="Nutrition Info" id="nutrition">
+        </div>
+        <div class="post-buttons">
+            <button onclick="togglePostModal2()">Next</button>
+          </div>
+    </div>
+</div>
+<div class="modal-last" id="modal-last">
+    <div class="post-inputs">
+        <label for="">Upload image</label>
+        <input type="file" placeholder="Nutrition Info" id="postimg">
+    </div>
+    <div class="post-buttons">
+        <p onclick="toggleModalREfresh()">Cancel</p>
+        <button onclick="createPost()">Post</button>
+    </div>
+</div>
+</div>
+</div>
+        <div class="user-main-blog-section">
+            <div class="user-blog-section">
+                <div class="user-create-post">
+                    <p> <input type="text" placeholder="Create Your Post" readonly></p>
+                    <div class="user-create-buttons">
+                        <div class="user-create" onclick="toggleModal()">
+                            <i class='bx bx-camera post-camera post-one' ></i>
+                            <span>Photo</span>
+                        </div>
+                        <div class="user-create post-video post-one" onclick="toggleModal()">
+                            <i class='bx bx-video'></i>
+                            <span>Kitchen Class</span>
+                        </div>
+                        <div class="user-create post-articles post-one" onclick="toggleModal()">
+                            <i class='bx bx-edit'></i>
+                            <span>write articles</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main" style="display: none;" id="model-open">
+                <p>Posted Succesfully</p>
+            </div>
+            {% block main-content %}
+            
+            {% endblock  %}
+        </div>
+        <div class="user-blog-ad-section"> 
+            <div class="blog-suggestions">
+                <h1>FRIENDS</h1>
+                <div class="blogs">
+                    {% for friend in friends  %}
+                    <div class="blog-recommendations" data-user-id="{{ friend.id }}">
+                        <div class="flex-row">
+                            <img src="{{ friend.profilePicture.url }}" alt="">
+                            <div class="align-start">
+                                <p class="user_name" onclick="userDetailsPage('{{ friend.id }}')">{{ friend.username }}</p>
+                                <p class="{% if friend.is_logged_in %}online{% else %}offline{% endif %}">
+                                    {% if friend.is_logged_in %}Online{% else %}Offline{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <button onclick="RemoveFriend('{{friend.id}}')">Remove</button>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">No Friends</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="ad-section">
+                <h1>ADVERTISEMENT</h1>
+                <p><i class='bx bx-x'></i></p>
+                <div class="ad-img">
+                    <img src="{% static 'images/apple.webp' %}" alt="Ad Image" id="adImage">
+                </div>
+            </div>
+            
+        </div>
+        {% endblock navbar %}
+    </div>
+    <div class="toastBox"></div>
+</main>
+<script>
+       function RemoveFriend(id) { 
+        $.ajax({
+            type: "DELETE",
+            url: "/remove_friend/",
+            data: {
+                "friend_id":id,
+            },
+            success: function (response) {
+                if(response.status == 'pass'){
+                    alert(response['message'])
+                    location.reload();
+                }
+                else if(response.status == 'fail'){
+                    alert(response['message'])
+                }
+            }
+        });
+     }
+
+    function updateOnlineStatus() {
+        fetch('/check_online_status/')
+            .then(response => response.json())
+            .then(data => {
+                data.friends.forEach(friend => {
+                    let userElement = document.querySelector(`[data-user-id="${friend.id}"]`);
+                    if (userElement) {
+                        let statusElement = userElement.querySelector('.online, .offline');
+                        if (friend.is_logged_in) {
+                            statusElement.innerText = "Online";
+                            statusElement.classList.add("online");
+                            statusElement.classList.remove("offline");
+                        } else {
+                            statusElement.innerText = "Offline";
+                            statusElement.classList.add("offline");
+                            statusElement.classList.remove("online");
+                        }
+                    }
+                });
+            });
+    }
+    
+    // Run every 5 seconds
+    setInterval(updateOnlineStatus, 5000);
+    </script>
+    
+<script>
+$(document).ready(function () {
+    $("#logo_text").css('cursor', 'pointer');
+    $("#logo_text").click(function () {
+        location.href = "/user/{{currentUser}}/{{current_user_id}}/posts";
+    });
+});
+function openPage(path){
+    if (path == 'friends'){
+        location.href   = '/friends'
+    }
+    else if (path == 'requests'){
+        location.href   = '/ViewRequests'
+    }
+    else if (path == 'home'){
+        location.href   = '/user/{{currentUser}}/{{current_user_id}}/posts'
+    }
+}
+
+
+const toastBox = document.querySelector('.toastBox');
+const successMsg = 
+    '<i class="fas fa-check-circle"></i> Successfully Updated Image ';
+const errorMsg = 
+    '<i class="fas fa-times-circle"></i> Please fix the error ! ';
+const invalidMsg = 
+    '<i class="fas fa-exclamation-circle"></i> Invalid input, check again';
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.classList.add('toast', type);
+    toast.innerHTML = 
+        '<button class="close-btn">X</button>' 
+                                    + message;
+    toastBox.appendChild(toast);
+
+    const closeButton = 
+            toast.querySelector('.close-btn');
+    closeButton.addEventListener('click', () => {
+        toast.remove();
+    });
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+function UpdateUser(id) { 
+    window.location.href = "/update_user/" + id + "/";
+ }
+
+
+$("#editBtn").on("click", function() {
+    $("#profile_img").click();
+});
+
+$("#profile_img").on("change", function() {
+    let img = this.files[0];
+    if (!img) return;
+    let formData = new FormData();
+    formData.append("img", img);
+    $.ajax({
+        type: 'POST',
+        url: "/save_img/",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (data["status"] == 'pass') {
+                showToast(successMsg, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                alert('Failed to save');
+            }
+        },
+        error: function(error) {
+            showToast(errorMsg, 'error');
+        }
+    });
+});
+    function togglePostModal( ) { 
+        $("#top").hide()
+        $("#bottom").addClass('modal-block');
+      
+     }
+    function togglePostModal2( ) { 
+        $("#bottom").hide()
+        $("#modal-last").addClass('modal-show');
+      
+     }
+    $("#name").css('text-transform', 'capitalize');
+    // $("#title").css('text-transform','capitalize'); doesn't work
+
+
+    function signout() {
+    $.ajax({
+        url: "/logout/",
+        type: "POST",
+        success: function(response) {
+            if (response.status) {
+                window.location.replace("{% url 'login' %}"); 
+            }
+        },
+        error: function(xhr) {
+            console.error("Logout failed:", xhr.responseText);
+        }
+    });
+}
+function AddNickName() { 
+    let nick_name = $("#nick_name").val();
+        $.ajax({
+            type:'POST',
+            url:"/nick_name/",
+            data:{
+                "nick_name":nick_name
+            },
+            success:function(data){
+                if (data["status"]=='pass'){
+                    $("#section").hide();
+                    const msg = 
+                                '<i class="fas fa-check-circle"></i> Added Successfully ';
+                    showToast(msg, 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 4000);
+
+                }
+                else{
+                    showToast(errorMsg, 'success');
+                }
+            },
+            error:function(error){
+                alert(error.message)
+            }
+        })
+    
+ }
+
+    function createPost(){
+        let title = $("#recipe-title").val();
+        let desc = $("#desc").val();
+        let ingredients = $("#ingredients").val();
+        let instruction = $("#instruction").val();
+        let preptime = $("#preptime").val();
+        let cooktime = $("#cooktime").val();
+        let servSize = $("#servSize").val();
+        let nutrition = $("#nutrition").val();
+        let userId = $("#userId").val();
+        let postimg = $("#postimg")[0].files[0];
+        const formdata = new FormData();
+        formdata.append('title',title)
+        formdata.append('desc',desc)
+        formdata.append('ingredients',ingredients)
+        formdata.append('instruction',instruction)
+        formdata.append('preptime',preptime)
+        formdata.append('cooktime',cooktime)
+        formdata.append('servSize',servSize)
+        formdata.append('nutrition',nutrition)
+        formdata.append('userId',userId)
+        formdata.append('postimg',postimg)
+        $.ajax({
+            type:"POST",
+            url:"{% url 'create_post' %}",
+            data:formdata,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                if(data){
+                    $("#success").html('Posted Successfully').css('color','#28a475')
+                    setTimeout(() => {
+                        $("#closeModalicon").hide();
+                        
+                        window.location.reload()
+                    }, 5000);
+                }
+            }
+        })
+    }
+    function toggleSection() {
+        let id = $("#profile");
+        id.css('transition', "all 0.3s ease-in")
+        id.toggleClass('display');
+    }
+    function toggleSection2() {
+        let id = $("#section");
+        id.css('transition', "all 0.3s ease-in")
+        id.toggleClass('display');
+    }
+    function toggleText() {
+        let text_id = $("#user-text");
+        text_id.css('height', '50px')
+    }
+    function toggleModal(){
+        let ModalIcon = $("#closeModalicon");
+        let main = $("#main");
+        ModalIcon.toggle('modal-close')
+    }
+    function toggleModalREfresh(){
+        let ModalIcon = $("#closeModalicon");
+        let main = $("#main");
+        ModalIcon.toggle('modal-close')
+        window.location.reload()
+    }
+    function toggle1(){
+    let text = $("#text");
+    let text1 = $("#text1");
+    let text2 = $("#text2");
+    let text3 = $("#text3");
+    let text4 = $("#text4");
+    let text5 = $("#text5");    
+    text1.toggle('opacity-none')
+    text2.css('display','none')
+    text.hide()
+    text3.hide();
+    text4.hide();
+    text5.hide();
+}
+    function toggle2(){
+    let text1 = $("#text1");
+    let text2 = $("#text2");
+    let text3 = $("#text3");
+    let text4 = $("#text4");
+    let text5 = $("#text5");    
+    text1.hide()
+    text2.toggle('opacity-none')
+    text3.hide();
+    text4.hide();
+    text5.hide();
+}
+    function toggle3(){
+    let text1 = $("#text1");
+    let text2 = $("#text2");
+    let text3 = $("#text3");
+    let text4 = $("#text4");
+    let text5 = $("#text5");    
+    text1.hide();
+    text2.hide();
+    text3.toggle('opacity-none')
+    text4.hide();
+    text5.hide();
+}
+    function toggle4(){
+    let text1 = $("#text1");
+    let text2 = $("#text2");
+    let text3 = $("#text3");
+    let text4 = $("#text4");
+    let text5 = $("#text5");    
+    text1.hide();
+    text2.hide();
+    text3.hide();
+    text4.toggle('opacity-none')
+    text5.hide();
+
+}
+    function toggle5(){
+    let text1 = $("#text1");
+    let text2 = $("#text2");
+    let text3 = $("#text3");
+    let text4 = $("#text4");
+    let text5 = $("#text5");    
+    text1.hide();
+    text2.hide();
+    text3.hide();
+    text4.hide()
+    text5.toggle('opacity-none')
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageElement = document.getElementById('adImage');
+        const images = [
+            "{% static 'images/apple.webp' %}",
+            "{% static 'images/microsoft.jpeg' %}",
+        ];
+
+        let currentIndex = 0;
+
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            imageElement.src = images[currentIndex];
+        }
+
+        setInterval(changeImage, 3000); // Change image every 3 seconds
+    });
+    function userDetailsPage(id) { 
+        window.location.href = '/user_details/'+encodeURIComponent(id);
+     }
+</script>
+<script src="{% static 'javascript/index.js' %}"></script>
+</body>

@@ -1,0 +1,38 @@
+{% extends 'user/userdashboard.html' %}
+{% load static %}
+{% block navbar %}
+  <main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="">
+    {% for user in allUsers %}
+    <p>{{user.username}}</p>
+    <button onclick="addFriend('{{user.id}}')" id="btn{{user.id}}">Add Friend</button>
+    {% endfor %}
+</div>
+<script>
+    function addFriend(userId) { 
+    $.ajax({
+        type: "POST",
+        url: "/send_request/",
+        data: {
+            "userId":userId,
+        },
+        success: function (response) {
+            if(response.status == 'pass'){
+                $(`#btn${userId}`).text("Request Sent")
+                $(`#btn${userId}`).attr("disabled", true)
+            }
+            else if(response.status == 'fail'){
+                alert(response['message'])
+            }
+            else if(response.status == 'same_user'){
+                alert(response['message'])
+            }
+        }
+    });
+ }
+
+</script>
+  </main>  
+{% endblock navbar %}

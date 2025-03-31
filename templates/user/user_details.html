@@ -1,0 +1,186 @@
+{% extends 'user/userdashboard.html' %}
+{% load static %}
+{% block title %}User Details{% endblock %}
+{% block navbar %}
+<style>
+    *{
+        background: none;
+    }
+    .cover-photo-section {
+    width: 1500px;
+    height: 220px;
+    position: relative; 
+    overflow: hidden;
+}
+
+.cover-photo-section img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+
+.profilePicture {
+    width: 180px; 
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: -75px auto 0; 
+}
+
+.profilePicture img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+.add-cover-btn {
+    position: absolute;
+    bottom: 15px; /* Position button at bottom */
+    right: 15px; /* Align to right */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.add-cover-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
+}
+
+</style>
+
+<div class="container">
+    <div class="cover-photo-section">
+        {% if user.cover_photo %}
+        <img src="{{user.cover_photo.url}}" alt="Cover Photo">
+        {% else %}
+        <img src="{% static 'images/apple.webp' %}" alt="">
+        {% endif %}
+        {% if user.id == request.session.user_id %}
+        <button class="add-cover-btn" id="cover_btn" >+Add Cover Photo </button>
+        {% else %}
+        <script>
+            $("#cover_btn").hide();
+        </script>
+        {% endif %}
+        <input type="file" name="cover_img" id="cover_img" accept="image/*" style="display: none;">
+        <input type="hidden" value="{{user.id}}" id="user_id">
+    </div>
+
+    <div class="profilePicture">
+        <img src="{{user.profilePicture.url}}" alt="Profile Picture">
+        {% if user.id == request.session.user_id %}
+        <a id="editBtn2" class="edit-icon" style="cursor: pointer;"><i class='bx bx-edit-alt'></i></a>
+        {% endif %}
+        <input type="file" name="profile_img2" id="profile_img2" accept="image/*" style="display: none;">
+        
+    </div>
+    <div>
+        <h1 class="text-center">{{user.username}}</h1>
+        <p class="text-center">{{user.nick}}</p>
+    </div>
+    <div>
+       {% if recipes %}
+        <h1 class="text-center">{{recipe_count}} Recipes Found</h1>
+       {% else %}
+       <h2 class="text-center">No Recipes Found</h2>
+       {% endif %}
+    </div>
+</div>
+<script>
+
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.classList.add('toast', type);
+    toast.innerHTML = 
+        '<button class="close-btn">X</button>' 
+                                    + message;
+    toastBox.appendChild(toast);
+
+    const closeButton = 
+            toast.querySelector('.close-btn');
+    closeButton.addEventListener('click', () => {
+        toast.remove();
+    });
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+    $("#cover_btn").on("click", function() {
+    $("#cover_img").click();
+});
+
+
+$("#cover_img").on("change", function() {
+    let img = this.files[0];
+    let user_id = $('#user_id').val();
+    if (!img) return;
+    let formData = new FormData();
+    formData.append("cover_img", img);
+    formData.append("user_id", user_id);
+    $.ajax({
+        type: 'POST',
+        url: "/add_cover/",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (data["status"] == 'pass') {
+                showToast(successMsg, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                alert('Failed to save');
+            }
+        },
+        error: function(error) {
+            showToast(errorMsg, 'error');
+        }
+    });
+});
+
+$("#editBtn2").on("click", function() {
+    $("#profile_img2").click();
+});
+
+$("#profile_img2").on("change", function() {
+    let img = this.files[0];
+    if (!img) return;
+    let formData = new FormData();
+    formData.append("img", img);
+    $.ajax({
+        type: 'POST',
+        url: "/save_img/",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (data["status"] == 'pass') {
+                const successMsg = 
+    '<i class="fas fa-check-circle"></i> Successfully Updated Image ';
+                showToast(successMsg, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                alert('Failed to save');
+            }
+        },
+        error: function(error) {
+            showToast(errorMsg, 'error');
+        }
+    });
+});
+
+
+</script>
+ {% endblock %}

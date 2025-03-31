@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>InstantRecipe</title>
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+        <script src="https://kit.fontawesome.com/f3c81801f8.js"
+            crossorigin="anonymous"></script>
+            <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+            
+    </head>
+    <body>
+        <!-- navbar section -->
+        <main>
+            <section>
+                <div class="navbar-section">
+                    <div class="nav-left">
+                        <p>Bites & Spices</p>
+                    </div>
+                    <div class="nav-right">
+                        <li>Receipes</li>
+                        <li>Learn/How-to</li>
+                        <li>Seasonal Sensations</li>
+                        <button>Shop</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <header>
+            <section>
+                <div class="hero-section">
+                    <div class="hero-left">
+                        <h1>Delicious Dishes <br> <span>for Food
+                                Lovers</span></h1>
+                        <p>Cook with passion, savor with pleasure! Discover
+                            mouthwatering recipes that turn every meal into a
+                            celebration.</p>
+                        <div class="hero-button">
+                            <button>Explore Receipes
+                                <span>&#8594;</span></button>
+                        </div>
+                    </div>
+                    <div class="hero-right">
+                        <img src="{% static 'images/check3.png' %}" alt>
+                    </div>
+                </div>
+            </section>
+            <!-- reciepe section -->
+            <section>
+                <div class="text-section">
+                    <h1>Trendy <span>Receipes</span></h1>
+                    <p>View More</p>
+                </div>
+                <div class="reciepe-section">
+                    <div class="reciepes">
+                        <div class="reciepe-img">
+                            <img src="{% static 'images/img.png' %}" alt>
+                        </div>
+                        <div class="caption-section">
+                            <h1>Aloo Gobi</h1>
+                            <h4><b>Ingredients:</b> Aloo Gobi: Spicy potato <br>
+                                cauliflower.</h4>
+                        </div>
+                        <div class="reciepe-button">
+                            <button>Add</button>
+                            <div class="quantity">
+                                <i class="fa-solid fa-plus"></i>
+                                <i class="fa-solid fa-minus"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reciepes">
+                        <div class="reciepe-img">
+                            <img src="{% static 'images/img2.png' %}" alt>
+                        </div>
+                        <div class="caption-section">
+                            <h1> Cauliflower Gobi:</h1>
+                            <h4><b>Ingredients:</b> cauliflower florets,
+                                potatoes, <br>onions, tomatoes</h4>
+                        </div>
+                        <div class="reciepe-button">
+                            <button>Add</button>
+                            <div class="quantity">
+                                <i class="fa-solid fa-plus"></i>
+                                <i class="fa-solid fa-minus"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reciepes">
+                        <div class="reciepe-img">
+                            <img src="{% static 'images/img3.png' %}" alt>
+                        </div>
+                        <div class="caption-section">
+                            <h1>Gobi Rice</h1>
+                            <h4><b>Ingredients:</b> rice, vegetables, and spices
+                                <br> for a quick and flavorful rice dish.</h4>
+                        </div>
+                        <div class="reciepe-button">
+                            <button>Add</button>
+                            <div class="quantity">
+                                <i class="fa-solid fa-plus"></i>
+                                <i class="fa-solid fa-minus"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </header>
+        <section>
+            <div class="text-center">
+                <h1>Check Our Shop</h1>
+            </div>
+            <div class="shop-section">
+                <div class="shops">
+                    <img src="{% static 'images/hero-right.png' %}" alt="">
+                    <div class="shop-heading">
+            
+                    </div>
+                </div>
+                <div class="shops">
+                    <img src="{% static 'images/img2.png' %}" alt="">
+                    <div class="shop-heading">
+                     
+                    </div>
+                </div>
+                <div class="shops">
+                    <img src="{% static 'images/img3.png' %}" alt="">
+                    <div class="shop-heading">
+                       
+                    </div>
+                </div>
+                <div class="shops">
+                    <img src="{% static 'images/check3.png' %}" alt="">
+                    <div class="shop-heading">
+                     
+                    </div>
+                </div>
+                <div class="shops">
+                    <img src="{% static 'images/check4.png' %}" alt="">
+                    <div class="shop-heading">
+                  
+                    </div>
+                </div>
+                <div class="shops">
+                    <img src="{% static 'images/img.png' %}" alt="">
+                    <div class="shop-heading">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="text-section">
+                <h1>Recipe<span> Blogs</span></h1>
+                <p>View More</p>
+            </div>
+            <div class="reciepe-blog-section">
+                <div class="recipe-left">
+                    <img src="{% static 'images/recipei.jpg' %}" alt="">
+                    <p>August 29, 2024</p>
+                    <h1>Our Recipes Blog </h1>
+                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, error.</span>
+                </div>
+                <div class="recipe-right">
+                    <div class="recipe-column">
+                        <img src="{% static 'images/img.png' %}" alt="">
+                        <div class="recipe-text">
+                            <p>August 29, 2024</p>
+                            <h1>Recipe Blogs</h1>
+                            <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse consectetur</span>
+                        </div>
+                    </div>
+                    <div class="recipe-column">
+                        <img src="{% static 'images/img.png' %}" alt="">
+                        <div class="recipe-text">
+                            <p>August 29, 2024</p>
+                            <h1>Recipe Blogs</h1>
+                            <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse consectetur</span>
+                        </div>
+                    </div>
+                    <div class="recipe-column">
+                        <img src="{% static 'images/img.png' %}" alt="">
+                        <div class="recipe-text">
+                            <p>August 29, 2024</p>
+                            <h1>Recipe Blogs</h1>
+                            <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse consectetur</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- footer section -->
+        <section>
+            <footer>
+                <div class="footer-section">
+                    <div class="footer-left footer">
+                        <div class="nav-left">
+                            <p>InstantRecipe</p>
+                            <div class="icons">
+                                <i class='bx bxl-instagram bx-incon'></i>
+                                <i class='bx bxl-facebook bx-fb'></i>
+                                <i class='bx bxl-linkedin bx-li'></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-middle footer">
+                       <h1>Company</h1>
+                       <ul>
+                        <li>About</li>
+                        <li>Privacy</li>
+                        <li>Recipes</li>
+                        <li>Services</li>
+                        <li>Products</li>
+                       </ul>
+                    </div>
+                    <div class="footer-middle footer">
+                       <h1>Contact Us</h1>
+                       <ul>
+                        <li>manage@instantrecipe.com</li>
+                        <li>9916215275</li>
+                        <li>Bengaluru, Karnataka 560078</li>
+                       </ul>
+                    </div>
+                    <div class="footer-right footer">
+                        <h1>News Letter</h1>
+                        <p>Stay Tuned for upcoming offers</p>
+                        <div class="footer-email">
+                            <input type="email" placeholder="Enter Your Email">
+                            <p>Subscribe</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 @InstantRecipe</p>
+                </div>
+            </footer>
+        </section>
+    </body>
+</html>

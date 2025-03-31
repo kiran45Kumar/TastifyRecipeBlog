@@ -1,0 +1,222 @@
+{% extends 'user/userdashboard.html' %}
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <!-- onclick="deletePost('{{recipe.reciepe_id}}')"  -->
+</head>
+{% block main-content %}
+<style>
+    .delete-post{
+        padding: 20px 40px;
+        background: white;
+        box-shadow: 0px 1px 1px 1px silver;
+    }
+    .display-none{
+        display: none;
+    }
+</style>
+ 
+{% for recipe in allposts %}
+<div class="user-blog-section"  data-recipe-id="{{ recipe.reciepe_id }}">          
+    <div class="user-post-section user-border">
+        <div class="user-post-img">
+            <img src="{{recipe.user_id.profilePicture.url}}" alt="">
+            <div class="user-flex">
+                <div class="flex-row">
+                    <p class="user_name" onclick="userDetailsPage('{{recipe.user_id.id}}')" >{{recipe.user_id.username}}</p>
+                    {% if current_user_id == request.session.user_id %}
+                        <script>
+                            $('#add_friend').hide()
+                        </script>
+                    {% else %}
+                        <button id="add_friend" onclick="addFriend('{{recipe.user_id.id}}')">Add Friend</button>
+                    {% endif %}
+                </div>
+                <p>{{recipe.user_id.nick}} &#x2022; Posted {{recipe.created_at}}</p>
+            </div>
+        </div>
+        {% if currentUser  %}
+        <p><i class='bx bx-x' style="cursor: pointer;" onclick="closeModal(this)" ></i></p> 
+        {% else %}
+            HEllo
+        {% endif %}
+    </div>
+    <p class="horizontal"></p>
+    <div class="user-img">
+        <div class="user-blog-text-section">
+            <p class="blog-text">
+                {{recipe.recipe_title}}
+            </p>
+            <div class="user-main-text">
+                <div class="user-post-text">
+                    <div class="height" id="user-text">
+                        <p>{{recipe.description}}</p>
+                        <strong style="margin: 10px;" >Instructions:</strong>
+                        <div class="blog-hashtags">
+                            {% if recipe.instructions %}
+                            <p>{{recipe.instructions}}</p>
+                            {% else %}
+                            <p>No Instructions Provided</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <strong style="margin: 10px;" >Ingredients</strong>
+                            <p>{{recipe.ingredients}}</p>
+                        </div>
+                        <div>
+                            <strong style="margin: 10px;" >Preparation time</strong>
+                            <p>{{recipe.prep_time}}</p>
+                        </div>
+                        <div>
+                            <strong style="margin: 10px;" >Cooking Time</strong>
+                            <p>{{recipe.cook_time}}</p>
+                        </div>
+                        <div>
+                            <strong style="margin: 10px;" >Serving Size</strong>
+                            <p>{{recipe.serving_size}}</p>
+                        </div>
+                        <div>
+                            <strong style="margin: 10px;" >Nutrition Info</strong>
+                            <p>{{recipe.nutrition_info}}</p>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- <a onclick="">Read More</a> -->
+            </div>
+            {% if recipe.post_url %}
+            <img src="{{recipe.post_url.url}}" alt="post_img">
+            {% else %}
+            <img src="{% static 'images/apple.webp' %}" alt="alternate image">
+            {% endif %}
+            <p class="hr"></p>
+        </div>
+    </div>
+
+ <div class="like-display">
+    <p>Yummies: &nbsp;<input type="number" value="{{recipe.likes}}" style="padding: 0;border: none;outline: none;"  id="like-count{{recipe.reciepe_id}}" readonly></p>
+ </div>
+    <div class="user-actions-section">
+        <div class="user-actions">
+            <i class='bx bx-like like-btn' onclick="toggleLike(this, '{{recipe.reciepe_id}}')"></i>
+            
+            <p>Yummy</p>
+        </div>        
+        <div class="user-actions">
+            <i class='bx bx-message-rounded-dots'></i>
+            <p>Comment</p>
+        </div>
+        <div class="user-actions">
+            <p>Views: <span id="views-{{recipe.reciepe_id}}">{{recipe.views}}</span></p>
+
+        </div>
+    </div>
+    <div class="comment-section">
+        <img src="{{recipe.user_id.profilePicture.url}}" alt="">
+        <input type="text" name="" placeholder="Comment" id="">
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    function toggleBox() {
+        
+        $("#delete-post").toggle('display-none')
+      }
+    function deletePost(id){
+        $.ajax({
+            type:"POST",
+            url:"/delete_post/",
+            data: {"id":id},
+            success:function(data){
+                if(data){
+                    window.location.reload()
+                    
+                }
+            }
+        })
+    }
+    function toggleLike(icon, recipeId) {
+        fetch('/like/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `receipeId=${recipeId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "liked") {
+                icon.classList.remove('bx-like');
+                icon.classList.add('bxs-like');
+            } else {
+                icon.classList.remove('bxs-like');
+                icon.classList.add('bx-like');
+            }
+            document.getElementById("like-count" + recipeId).value = data.likes;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function closeModal(elem) { 
+        $(elem).closest('.user-blog-section').addClass('display-none');
+    }
+    function userDetailsPage(id) { 
+        window.location.href = '/user_details/'+encodeURIComponent(id);
+     }
+
+     document.addEventListener("DOMContentLoaded", function () {
+    const recipes = document.querySelectorAll(".user-blog-section"); 
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const reciepeId = entry.getAttribute("data-reciepe-id");
+                if (reciepeId) {
+                    incrementView(reciepeId);
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+
+    recipes.forEach(recipe => observer.observe(recipe));
+});
+
+function incrementView(reciepeId) {
+    fetch("/IncrementViews/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reciepe_id: reciepeId }), // Corrected key
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "pass") {
+            console.log(`Recipe ${reciepeId} views incremented: ${data.views}`);
+        } else {
+            console.error("Error:", data.message);
+        }
+    })
+    .catch(error => console.error("Request failed:", error));
+}
+function addFriend(userId) { 
+    $.ajax({
+        type: "POST",
+        url: "/send_request/",
+        data: {
+            "userId":userId,
+        },
+        success: function (response) {
+            if(response.status == 'pass'){
+                alert(response['message'])
+            }
+            else if(response.status == 'fail'){
+                alert(response['message'])
+            }
+        }
+    });
+ }
+
+</script>
+{% endblock  %}

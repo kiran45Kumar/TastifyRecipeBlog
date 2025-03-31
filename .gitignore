@@ -1,0 +1,9 @@
+# Ignore Python virtual environment
+venv/
+# Ignore Django migrations
+*migrations/
+# Ignore the SQLite database file
+db.sqlite3
+node_modules/
+# media
+media/

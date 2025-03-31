@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tastify - Login{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/index.css ' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="navbar-login">
+        <div class="login-logo">
+            <p>Tastify</p>
+        </div>
+        <div class="login-buttons">
+            <p>Contact Us</p>
+            <p>About Us</p>
+            <p><i class='bx bxl-facebook-circle bx-main-icon'></i></p>
+            <p><i class='bx bxl-instagram bx-main-icon' ></i></p>
+            <p><i class='bx bxl-pinterest-alt bx-main-icon' ></i></p>
+        </div>
+    </div>
+    {% block navbar %}
+        
+    <div class="login-section" >
+        <form action="" method="post">
+           <h1 id="login">Welcome Back</h1>
+        <div class="login-forms">
+            <label for="">Email</label>
+            <input type="email" placeholder="Enter Your Email" name="email" id="email">
+            <p id="emailid"></p>
+        </div>
+        <div class="login-forms">
+            <label for="">Password</label>
+            <input type="password" placeholder="Enter Your Password" name="password" id="password">
+            <p id="passwordid"></p>
+            <div class="flex-row">
+                <input type="checkbox" name="" onclick="showPassword('password')" id="">
+                <p>Show Password</p>
+            </div>
+        </div>
+        <div class="text-remember">
+          <div class="remember">
+            <input type="checkbox" name="" id="check_box" >
+            <span>Remember Me</span>
+          </div>
+          <p onclick="forgotPassword()">Forgot Password</p>
+        </div>
+        <p class="text-small">Dont Have An account <a href="signup/">Sign up</a></p>
+        <div class="login-button">
+            <button type="button" id="btn_text" onclick="login()">Submit</button>
+        </div>
+       </form>
+    </div>
+</body>
+<script>
+    function login(){
+        let email = $("#email").val();
+        let password = $("#password").val();
+        let check_box = $("#check_box").prop('checked');
+        console.log(check_box)
+        if (!email){
+            // $("#login").text("Please Enter Your Email").css('color', 'red ')
+            $("#emailid").html("Please Enter Your Email").css('color','red');
+            $("#email").css('border-color','red')
+            $(document).ready(function () {
+                $("#email").on('input', function () {
+                    $("#emailid").text('')
+                    $("#email").css('border-color','gray')
+                })
+            });
+            return;
+        }
+        else if (!password){
+            // $("#login").text("Please Enter Your Password").css('color', 'red ')
+            $("#passwordid").html("Please Enter Your Password").css('color','red')
+            $("#password").css('border-color','red')
+            $(document).ready(function () {
+                $("#password").on('input', function () {
+                    $("#passwordid").text('')
+                    $("#password").css('border-color','gray')
+                })
+            });
+            return;
+
+        }
+       else if (email && password) {
+            $("#emailid").html('');
+            $("#passwordid").html('')
+            $("input").css('border-color','gray')
+       }
+        $("#btn_text").text("Please Wait...").css({'color': '#007BFF','fontWeight':'400'})
+        $.ajax({
+            type:'POST',
+            url:'/login_check/',
+            data:{'email':email, 'password':password, 'remember_me': check_box ? "true" : "false"  },
+            success:function(data){
+                if(data["status"] == 'pass' && password ){
+                    $("#login").text(data['message']).css({'color': '#28A745','fontWeight':'400'})
+                    $("input").css('border-color','green')
+                    setTimeout(() => {
+                        window.location.replace('user/'+encodeURIComponent(data['name'])+'/'+encodeURIComponent(data['uid'])+'/posts')
+                    }, 3000);
+                }
+                else if(data["status"] == 'fail'){
+                    $("#login").text(data['message']).css({'color': '#DC3545','fontWeight':'400'})
+                    $("#btn_text").text("Submit")
+                }
+                else if(data["status"] == 'no_user'){
+                    $("#login").html(data['message']).css({'color': '#DC3545','fontWeight':'400'})
+                    $("#btn_text").text("Submit")
+                }
+            },
+            error: function(xhr, status, error){
+                    $("#login").text("Invalid Credentials").css({'color': '#DC3545','fontWeight':'400'})
+                    $('input').css('border-color','red')
+                    $("#btn_text").text("Submit")
+            }
+        })
+    }
+
+    function forgotPassword(){
+        window.location.href = '/forgot_password/'
+    }
+
+    function showPassword(id) { 
+        let input = $("#"+id);
+        if (input.attr('type') == 'password'){
+            input.attr('type','text');
+        }
+        else{
+            input.attr('type','password');
+        }   
+      }
+</script>
+{% endblock %}
+</html>

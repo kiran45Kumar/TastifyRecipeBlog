@@ -1,0 +1,103 @@
+{% extends 'user/login.html' %}
+{% load static %}
+{% block navbar %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 50px auto;
+            border-collapse: collapse;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        th {
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        tbody tr:last-of-type {
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        td button{
+            padding: 5px 15px;
+            border: 1px solid gray;
+            background: #000;
+            color: white;
+            border-radius: 5px;
+            outline: none;
+        }
+    </style>
+
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>First Name</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in userdata %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td><button onclick="deleteUser('{{user.id}}')">Delete</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+
+    <script>
+        function deleteUser(id){
+            $.ajax({
+                type:'POST',
+                url:'/delete_user/',
+                data:{'id':id},
+                success:function(data){
+                    if(data["status"] == "pass"){
+                        alert("Success")
+                        window.location.replace('/view_user')
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}
