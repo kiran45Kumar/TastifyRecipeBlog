@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.views.generic.base import TemplateView
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse
-from recipes.models import Like, Recipes
+from recipes.models import Comments, Like, Recipes
 from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.conf import settings
@@ -193,7 +193,6 @@ class LogoutUser(APIView):
         return JsonResponse({"status":"pass"})
 def not_found(request,message):
     return render(request, "404/404.html", {"error":message})
-
 class AddNickName(APIView):
     def post(self, request):
         nick_name = request.POST.get('nick_name')
@@ -423,3 +422,34 @@ def update_user(request, id):
         'user': user,'currentUser':request.session.get('user_name'), 'nick_name':request.session.get('user_nick_name'),
           'current_user_id':request.session.get('user_id',None), 'users':users,'pending_requests':pending_requests
           })
+class AddComment(APIView):
+    def post(self, request):
+        user_id = request.session.get('user_id', None)
+        recipe_id = request.data.get('recipe_id','')
+        content = request.data.get('comment')
+        user = User.objects.get(id = user_id)
+        recipe = Recipes.objects.get(reciepe_id = recipe_id)
+        try:
+            comment = Comments()
+            comment.user_id = user
+            comment.recipe_id = recipe
+            comment.content = content
+            comment.save()
+            return JsonResponse({'status':"pass",'message':"Posted"})
+        except User.DoesNotExist as e:
+            print(e)
+            return JsonResponse({'status':'fail','message':'User Does not Exist'})
+        except Recipes.DoesNotExist as e:
+            print(e)
+            return JsonResponse({'status':'fail','message':'Recipe Does not Exist'})
+        except Exception as e:
+            return JsonResponse({'status':'fail','message':str(e)})
+        
+        
+        
+        
+        
+        
+        
+        
+        

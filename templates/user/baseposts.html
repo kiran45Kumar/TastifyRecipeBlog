@@ -112,13 +112,47 @@
         </div>
     </div>
     <div class="comment-section">
-        <img src="{{recipe.user_id.profilePicture.url}}" alt="">
-        <input type="text" name="" placeholder="Comment" id="">
+        <!-- <img src="{{recipe.user_id.profilePicture.url}}" alt=""> -->
+        <input type="text" name="" placeholder="Comment" id="comment_id{{recipe.reciepe_id}}">
+        <button onclick="AddComment('{{recipe.reciepe_id}}')" id="btn_comment{{recipe.reciepe_id}}"><i class='bx bx-send'></i></button>
     </div>
 </div>
 {% endfor %}
 
 <script>
+    function AddComment(id) { 
+        let comment = $("#comment_id"+id).val();
+        const errorMsg =  '<i class="fas fa-times-circle"></i> Please Enter Your Comment';
+        if(!comment){
+            showToast(errorMsg,'error');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/add_comment/",
+            data: {
+                "recipe_id":id,
+                "comment":comment,
+            },
+            // dataType: "dataType",
+            success: function (response) {
+                if(response.status == 'pass'){
+                    const successMsg = '<i class="fas fa-check-circle"></i> Comment Added ';
+                    showToast(successMsg,'success')
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                }
+                else if(response.status == 'fail'){
+                    const errorMsg =  '<i class="fas fa-times-circle"></i> Failed to Add Comment';
+                    showToast(errorMsg,'error')
+                    setTimeout(() => {
+                            location.reload();
+                    }, 3000);
+                }
+            }
+        });
+     }
     function toggleBox() {
         
         $("#delete-post").toggle('display-none')

@@ -37,8 +37,8 @@ class Comments(models.Model):
     comment_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe_id = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    comments = models.CharField(max_length=5000, default='')
-    reply = models.CharField(max_length=5000, default='')
-    # for django shell __str__() is used
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="replies")  # Nested comments
+    content = models.TextField(null=True, blank=True)  
+    created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     def __str__(self) :
-        return f'{self.comment_id} - {self.comments,} - {self.reply}'
+        return f'Comment By {self.comment_id} - {self.comments,} - {self.reply}'

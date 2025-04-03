@@ -29,6 +29,7 @@ urlpatterns = [
     path('remove_friend/', RemoveFriend.as_view(), name='RemoveFriend'),
     path('update_user/<int:id>/',update_user, name='update_user'),
     path('UpdateUserDetails/', UpdateUserDetails.as_view(), name='UpdateUserDetails'),
-    path('check_online_status/',check_online_status, name='check_online_status')
+    path('check_online_status/',check_online_status, name='check_online_status'),
+    path('add_comment/',AddComment.as_view(), name='add_comment'),
 ]
 
