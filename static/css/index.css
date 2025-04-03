@@ -908,7 +908,7 @@ main {
   display: flex;
   gap: 20px;
   align-items: center;
-  margin: 10px;
+  margin: 20px;
   justify-content: space-between;
 }
 .blog-recommendations img {
