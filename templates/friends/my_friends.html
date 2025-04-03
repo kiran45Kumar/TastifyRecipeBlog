@@ -3,44 +3,213 @@
 {% block navbar %}
   <main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+    .row{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        margin: 5px;
+        gap: 10px;
+        background: #fff;
+        box-shadow: 0px 1px 0px 1px silver;
+    }
+    .friend-section img{
+        height: 250px;
+        width: 260px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .friend{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 10px;
+    }
+    .text-start{
+        text-align: left;
+        font-size:21px;
+        font-weight: bolder;
+        cursor: pointer;
+        margin: 5px 8px;
+    }
+    .text-start:hover{
+        text-decoration: underline;
+    }
+    .friend-button{
+        display: flex;
+        flex-direction: column;
+    }
+    .friend-button .btn-add{
+        padding: 10px 60px;
+        background: rgb(234, 234, 247);
+        border: rgb(234, 234, 247);
+        outline: none;
+        font-size: 17px;
+        font-weight: 500;
+        cursor: pointer;
+        color: blue;
+        border-radius: 10px;
+        margin: 5px;
+    }
+    .column{
+        display: flex;
+        flex-direction: column;
+    }
+    .friend-button .btn-remove{
+        padding: 10px 60px;
+        background: rgb(234, 234, 247);
+        border: rgb(234, 234, 247);
+        outline: none;
+        font-size: 17px;
+        font-weight:500;
+        cursor: pointer;
+        color: #000;
+        border-radius: 10px;
+        margin: 5px;
+    }
+    .thin{
+        margin: 0 5px;
+    }
+.alert-container {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 300px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: none; /* Initially hidden */
+    animation: fadeIn 0.3s ease-in-out;
+}
 
+/* Alert Box */
+.alert-box {
+    text-align: center;
+}
+
+/* User Name */
+.user-name {
+    font-weight: bold;
+    color: #007bff;
+    cursor: pointer;
+}
+
+/* Date */
+.date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Button Group */
+.button-group {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Buttons */
+.accept-btn, .reject-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.accept-btn {
+    background: #28a745;
+    color: white;
+}
+
+.reject-btn {
+    background: #dc3545;
+    color: white;
+}
+
+/* Hover Effects */
+.accept-btn:hover {
+    background: #218838;
+}
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.reject-btn:hover {
+    background: #c82333;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+{% if pending_requests %}
 <div class="" id="">
-    <h2>Pending Friend Requests</h2>
-
-    
 {% if pending_requests %}
 {% for request in pending_requests %}
-    <p ><span onclick="userDetailsPage('{{request.sender.id}}')" class="user_name" style="font-weight: bold;">{{ request.sender.username }}</span> sent you a friend request at {{request.createdAt}}</p>
-    <div class="flex-row">
-        <button onclick="AcceptRequest('{{request.id}}','{{request.status}}')">Accept</button>
-        <button onclick="RejectRequest('{{request.id}}','{{request.status}}')">Reject</button>
+<div class="flex-center">
+    <div id="friendRequestAlert" class="alert-container">
+        <div class="alert-box">
+            <p>
+                <span onclick="userDetailsPage('{{request.sender.id}}')" class="user-name">
+                    {{ request.sender.username }}
+                </span> 
+                sent you a friend request at 
+                <span class="date">{{ request.createdAt | date:'F d, Y' }}</span>
+            </p>
+            <div class="button-group">
+                <button class="accept-btn" onclick="AcceptRequest('{{request.id}}','{{request.status}}')">Accept</button>
+                <button class="reject-btn" onclick="RejectRequest('{{request.id}}','{{request.status}}')">Reject</button>
+            </div>
+        </div>
     </div>
+</div>
 {% endfor %}
 {% else %}
 <p>No pending friend requests.</p>
 {% endif %}
+</div>
+{% endif %}
 
 <h2>My Friends</h2>
+<div class="friend">
 {% for friend in friends %}
-   <div class="flex-row flex">
-    <div class="left flex-row">
-        <img src="{{friend.profilePicture.url}}" height="50px" width="50px" style="border-radius: 50%;object-fit: cover;" alt="">
-        <p  class="user_name" onclick="userDetailsPage('{{friend.id}}')">{{ friend.username }}</p>
-    </div>
- <div class="right">
-
-     <button onclick="RemoveFriend('{{friend.id}}')">Remove</button>
- </div>
+<div class="row" id="row{{friend.id}}">
+    <div class="column friend-section">
+        <img src="{{friend.profilePicture.url}}"alt="user-profile-picture">    
+        <input type="hidden" id="user_id" value="{{friend.id}}">
+        <p class="text-start" onclick="userDetailsPage('{{friend.id}}')">{{ friend.username }}</p>
+        <p class="thin">Joined on {{friend.created_at|date:'F d, y'}}</p>
+       </div>
+        <div class="friend-button">
+            <!-- <button onclick="addFriend('{{friend.id}}')" class="btn-add" id="btn{{friend.id}}">Add Friend</button> -->
+            <button onclick="RemoveFriend1('{{friend.id}}')" class="btn-remove" id="btn{{friend.id}}">Remove</button>
+        </div>
    </div>
 {% empty %}
     <p>No friends yet.</p>
 {% endfor %}
 </div>
+
 <script>
+    function showFriendRequest() {
+    document.getElementById("friendRequestAlert").style.display = "block";
+    setTimeout(() => {
+        document.getElementById("friendRequestAlert").style.display = "none";
+    }, 5000); // Auto-hide after 5 seconds
+}
+
+// Call this function to show the alert when a new request comes in
+showFriendRequest();
      function userDetailsPage(id) { 
         window.location.href = '/user_details/'+encodeURIComponent(id);
      }
-    function RemoveFriend(id) { 
+    function RemoveFriend1(id) { 
         $.ajax({
             type: "DELETE",
             url: "/remove_friend/",
@@ -49,11 +218,18 @@
             },
             success: function (response) {
                 if(response.status == 'pass'){
-                    alert(response['message'])
+                const successMsg = '<i class="fas fa-check-circle"></i> Friend Removed ';
+                showToast(successMsg,'success')
+                setTimeout(() => {
                     location.reload();
+                }, 3000);
                 }
                 else if(response.status == 'fail'){
-                    alert(response['message'])
+               const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
+               showToast(errorMsg,'error')
+               setTimeout(() => {
+                    location.reload();
+               }, 3000);
                 }
             }
         });
@@ -68,11 +244,18 @@
         },
         success: function (response) {
             if(response.status == 'pass'){
-                alert(response['message'])
-                location.reload();
+                const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Accepted ';
+                showToast(successMsg,'success')
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             }
             else if(response.status == 'fail'){
-                alert(response['message'])
+               const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
+               showToast(errorMsg,'error')
+               setTimeout(() => {
+                    location.reload();
+               }, 3000);
             }
         }
     });
@@ -87,10 +270,18 @@
         },
         success: function (response) {
             if(response.status == 'pass'){
-                alert(response['message'])
+                const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Rejected ';
+                showToast(successMsg,'success')
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             }
             else if(response.status == 'fail'){
-                alert(response['message'])
+                const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
+               showToast(errorMsg,'error')
+               setTimeout(() => {
+                    location.reload();
+               }, 3000);
             }
         }
     });

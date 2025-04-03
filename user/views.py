@@ -12,8 +12,6 @@ from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework.parsers import JSONParser
-# Create your views here.
-
 def signup(request):
     return render(request,"user/signup.html")
 def login(request):
@@ -24,11 +22,7 @@ def login(request):
     return render(request, "user/login.html")
 def index(request):
     return render(request, "user/index.html")
-from django.http import JsonResponse
-from django.views import View
-from django.contrib.auth.hashers import check_password
-from rest_framework.views import APIView
-from user.models import User
+
 
 class LoginCheck(APIView):
     def post(self, request):
@@ -158,7 +152,7 @@ def user_dashboard(request,name, id):
 def check_online_status(request):
     user_id = request.session.get('user_id')  # Get logged-in user ID
     if not user_id:
-        return JsonResponse({'error': 'User not logged in'}, status=400)
+        return redirect('404', message = 'User Not Loggedin')
     user = User.objects.get(id=user_id)
     accepted_requests = FriendRequest.objects.filter(
         (Q(reciever=user) | Q(sender=user)), status__iexact='accepted'

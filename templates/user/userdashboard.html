@@ -292,6 +292,9 @@
                     </div>
                     {% empty %}
                     <p class="text-center">No Friends</p>
+                    <div class="flex" style="margin: 40px;">
+                        Start Creating Now <a href="/friends/">Add friends</a>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
@@ -318,11 +321,18 @@
             },
             success: function (response) {
                 if(response.status == 'pass'){
-                    alert(response['message'])
-                    location.reload();
+                    const successMsg = '<i class="fas fa-check-circle"></i> Friend Removed ';
+                    showToast(successMsg,'success')
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 }
                 else if(response.status == 'fail'){
-                    alert(response['message'])
+                    const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
+                    showToast(errorMsg,'error')
+                    setTimeout(() => {
+                            location.reload();
+                    }, 3000);
                 }
             }
         });
