@@ -443,6 +443,7 @@ class AddComment(APIView):
             print(e)
             return JsonResponse({'status':'fail','message':'Recipe Does not Exist'})
         except Exception as e:
+            print(e) 
             return JsonResponse({'status':'fail','message':str(e)})
         
 

@@ -64,12 +64,14 @@
             <div class="user-flex">
                 <div class="flex-row">
                     <p class="user_name" onclick="userDetailsPage('{{recipe.user_id.id}}')" >{{recipe.user_id.username}}</p>
-                    {% if current_user_id == request.session.user_id %}
-                        <script>
-                            $('#add_friend').hide()
-                        </script>
-                    {% else %}
-                        <button id="add_friend" onclick="addFriend('{{recipe.user_id.id}}')">Add Friend</button>
+                    {% if current_user_id != recipe.user_id.id %}
+                    <button 
+                    id="btn{{recipe.user_id.id}}" 
+                    onclick="addFriend('{{recipe.user_id.id}}')" 
+                    style="background-color: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;"
+                >
+                    Follow <i class='bx bx-plus' style="font-size: 18px;"></i>
+                </button>
                     {% endif %}
                 </div>
                 <p>{{recipe.user_id.nick}} &#x2022; Posted {{recipe.created_at}}</p>
@@ -161,7 +163,7 @@
       <div style="margin-left: 10px; padding: 10px;" class="comment">
        <div class="flex-row">
         <img src="{{comment.user_id.profilePicture.url}}" height="50px" width="50px" style="border-radius: 50%; object-fit: cover;" alt="">
-        <strong> <span onclick="userDetailsPage('{{comment.user_id.id}}')" class="user_name"> {{ comment.user_id.username }}</span></strong>: {{ comment.content }}
+        <strong> <span onclick="userDetailsPage('{{comment.user_id.id}}')" class="user_name"> {{ comment.user_id.username }} </span></strong> <p style="font-size: 10px;color: #555;">{% if comment.recipe_id.reciepe_id == comment.user_id.id %}Author{% endif %}</p>: {{ comment.content }}
         {% if current_user_id == comment.user_id.id %}
         <i class='bx bx-x' style="cursor: pointer;" onclick="deleteComment('{{comment.comment_id}}')" ></i>
         {% endif %}
@@ -343,27 +345,51 @@ function incrementView(reciepeId) {
 function addFriend(userId) { 
     $("#comment-loader").show();
     const startTime = new Date().getTime();
+
     $.ajax({
         type: "POST",
         url: "/send_request/",
         data: {
-            "userId":userId,
+            "userId": userId,
         },
         success: function (response) {
             const endTime = new Date().getTime();
             const duration = endTime - startTime;
             const minimumLoaderTime = 1500; // 1.5 seconds
+            const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
 
-            if(response.status == 'pass'){
-                const successMsg = '<i class="fas fa-check-circle"></i> Request Sent';
-                alert(response['message'])
-            }
-            else if(response.status == 'fail'){
-                alert(response['message'])
-            }
+            setTimeout(() => {
+                $("#comment-loader").hide();
+
+                if (response.status == 'pass') {
+                    $(`#btn${userId}`).text("Request Sent");
+                    $(`#btn${userId}`).attr("disabled", true);
+                    const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Sent ';
+                    showToast(successMsg, 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else if (response.status == 'fail') {
+                    const errorMsg = '<i class="fas fa-times-circle"></i> Already Sent';
+                    $(`#btn${userId}`).text("Already Sent");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+
+                    showToast(errorMsg, 'error');
+                } else if (response.status == 'same_user') {
+                    const errorMsg = '<i class="fas fa-times-circle"></i> Cannot Send Request to Yourself';
+                    showToast(errorMsg, 'error');
+                }
+            }, delay);
+        },
+        error: function () {
+            $("#comment-loader").hide();
+            const errorMsg = '<i class="fas fa-times-circle"></i> Something went wrong';
+            showToast(errorMsg, 'error');
         }
     });
- }
+}
 function deleteComment(id) { 
     $("#comment-loader").show();
     const startTime = new Date().getTime();

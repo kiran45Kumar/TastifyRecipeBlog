@@ -4,7 +4,7 @@ class User(models.Model):
     username = models.CharField(max_length=200,null=True, blank=True,unique=True)
     email = models.CharField(max_length=200, unique=True,null=True, blank=True)
     password = models.CharField(max_length=400,null=True, blank=True)
-    phone = models.IntegerField(null=True, blank=True)
+    phone = models.CharField(null=True, blank=True, max_length=15)
     first_name = models.CharField(max_length=50, default='',null=True, blank=True)
     last_name = models.CharField(max_length=50, default='',null=True, blank=True)
     date_of_birth = models.DateField(default=None,null=True, blank=True)

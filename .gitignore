@@ -7,3 +7,21 @@ db.sqlite3
 node_modules/
 # media
 media/
+data.json
+data_fixed.json
+# Ignore all .log files
+*.log
+# Ignore all .pyc files
+*.pyc
+# Ignore all .pyo files
+*.pyo
+# Ignore all .pyd files
+*.pyd
+# Ignore all .db files
+*.db
+# Ignore all .DS_Store files
+.DS_Store
+# Ignore all .env files
+*.env
+# Ignore all .coverage files
+*.coverage
