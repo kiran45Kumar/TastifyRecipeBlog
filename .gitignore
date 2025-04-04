@@ -25,3 +25,11 @@ data_fixed.json
 *.env
 # Ignore all .coverage files
 *.coverage
+# Ignore all .egg-info files
+*.egg-info
+# Ignore all .egg files
+*.egg
+# Ignore all .zip files
+*.zip
+# Ignore all .tar files
+.env
