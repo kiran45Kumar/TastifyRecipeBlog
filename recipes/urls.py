@@ -6,4 +6,5 @@ urlpatterns = [
     path('delete_post/',DeletePost.as_view(), name='delete_post'),
     path('like/',LikePost.as_view(), name='like_post'),
     path('send_request/', SendRequest.as_view(), name='send_request'),
+    path('delete_comment/', DeleteComment.as_view(), name='DeleteComment'),
 ]

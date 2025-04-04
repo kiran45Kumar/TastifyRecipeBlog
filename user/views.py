@@ -445,11 +445,4 @@ class AddComment(APIView):
         except Exception as e:
             return JsonResponse({'status':'fail','message':str(e)})
         
-        
-        
-        
-        
-        
-        
-        
-        
+

@@ -1,12 +1,14 @@
 from typing import Any
 from django.shortcuts import render, redirect,get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from friends.models import FriendRequest
 from .models import  Like, Recipes, Comments
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from user.models import User
 from django.views.generic.base import TemplateView
+from rest_framework import viewsets
+from recipes.serializers import CommentsSerializer
 # Create your views here.
 class RecipePosts(APIView):
     def post(self, request):
@@ -47,31 +49,40 @@ class ViewUser(TemplateView):
         return super().get(request, *args, **kwargs)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        allposts = Recipes.objects.all().order_by('-created_at')
         uid = self.request.session.get('user_id', None)
-        reciepes = Recipes.objects.filter(user_id = uid)
-        user = User.objects.filter(id = uid)
+        reciepes = Recipes.objects.filter(user_id=uid)
+        user = User.objects.filter(id=uid)
         self.request.session['post_count'] = reciepes.count()
         user_u = User.objects.get(id=uid)
+
+        # Friends and requests
         pending_requests = FriendRequest.objects.filter(reciever=user_u, status__iexact='pending')
         accepted_requests = FriendRequest.objects.filter(
-                    (Q(reciever=user_u) | Q(sender=user_u)), status__iexact='accepted'
-                )
+            (Q(reciever=user_u) | Q(sender=user_u)), status__iexact='accepted'
+        )
         friends = set()
         for request in accepted_requests:
             if request.sender != user_u:
                 friends.add(request.sender)
             if request.reciever != user_u:
                 friends.add(request.reciever)
-        context = {"allposts":allposts, 
-                   'currentUser':self.request.session.get('user_name'), 
-                   'postCount':self.request.session.get('post_count'),
-                   'users':user, 
-                   "current_user_id":self.request.session.get('user_id',None),
-                   'nick_name':self.request.session.get('user_nick_name'),
-                   'friends':friends,
-                   'pending_requests':pending_requests,
-                   }
+
+        # Prefetch comments and replies for all posts
+        top_level_comments = Comments.objects.filter(parent__isnull=True).select_related('user_id')
+        allposts = Recipes.objects.all().prefetch_related(
+            Prefetch('comments_set', queryset=top_level_comments.prefetch_related('replies'))
+        ).order_by('-created_at')
+
+        context.update({
+            "allposts": allposts,
+            'currentUser': self.request.session.get('user_name'),
+            'postCount': self.request.session.get('post_count'),
+            'users': user,
+            "current_user_id": uid,
+            'nick_name': self.request.session.get('user_nick_name'),
+            'friends': friends,
+            'pending_requests': pending_requests,
+        })
         return context
 class DeletePost(APIView):
     def delete(self, request):
@@ -86,6 +97,18 @@ class DeletePost(APIView):
             return JsonResponse({"status": "fail", "message": "Post not found"}, status=404)
         except Exception as e:
             return JsonResponse({"status": "fail", "message": str(e)}, status=500)
+class DeleteComment(APIView):
+    def delete(self, request):
+        comment_id = request.data.get('comment_id')
+        try:
+            comment = Comments.objects.get(comment_id=comment_id)
+            comment.delete()
+            return JsonResponse({"status": "pass", "message": "Comment Deleted Successfully"})
+        except Comments.DoesNotExist:
+            return JsonResponse({"status": "fail", "message": "Comment not found"}, status=404)
+        except Exception as e:
+            return JsonResponse({"status": "fail", "message": str(e)}, status=500)
+    
 class LikePost(APIView):
     def post(self, request):
         user_id = request.session.get('user_id')
@@ -125,6 +148,6 @@ class SendRequest(APIView):
 
 
             
-
-
-        
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializer
