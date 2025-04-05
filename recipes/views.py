@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from user.models import User
 from django.views.generic.base import TemplateView
 from rest_framework import viewsets
-from recipes.serializers import CommentsSerializer
+from recipes.serializers import CommentsSerializer, RecipesSerializer
 # Create your views here.
 class RecipePosts(APIView):
     def post(self, request):
@@ -112,6 +112,9 @@ class ViewUser(TemplateView):
             'pending_requests': pending_requests,
         })
         return context
+class RecipesViewSet(viewsets.ModelViewSet):
+    queryset = Recipes.objects.all()
+    serializer_class = RecipesSerializer
 class DeletePost(APIView):
     def delete(self, request):
         id = request.data.get('id') 

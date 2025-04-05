@@ -102,6 +102,22 @@
 .status-label:hover .post-now-btn {
   display: inline-block;
 }
+.btn_remove{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+.btn_remove button{
+    padding: 10px 25px;
+    width: 100%;
+    background: lightgray;
+    color: black;
+    font-weight: 400;
+    cursor: pointer;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
 </style>
 
 <div class="container">
@@ -155,11 +171,33 @@
                 <button class="post-now-btn">Post Now</button>
               </p>
             </div>
+            <div class="btn_remove">
+                <button class="btn-remove" onclick="RemoveRecipe('{{recipe.reciepe_id}}')">Delete</button>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
 <script>
+    function RemoveRecipe(id) { 
+        $.ajax({
+            type:'DELETE',
+            url:'/api/recipes/'+id+'/',
+            data:JSON.stringify({reciepe_id:id}),
+            success:function(response){         
+                const successMsg = 
+                '<i class="fas fa-check-circle"></i> Successfully Deleted Post';
+                showToast(successMsg, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            },
+            error:function(){
+                const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';
+                showToast(errorMsg, 'error');
+            }
+        })
+     }
 $(document).ready(function () {
   $(".status-label").each(function () {
     const status = $(this).data("status");
