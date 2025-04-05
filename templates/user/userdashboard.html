@@ -202,7 +202,7 @@
             </div> -->
                     <div class="bottom-section">
                         <div class="bottom">
-                            <p>Blogs Posted</p>
+                            <p>Blogs Published</p>
                             <span>{{postCount}} posts</span>
                         </div>
 
@@ -318,7 +318,7 @@
                     </div>
                 </div>
                 <div class="main" style="display: none;" id="model-open">
-                    <p>Posted Succesfully</p>
+                    <p>Published Succesfully</p>
                 </div>
                 {% block main-content %}
 
@@ -660,9 +660,9 @@
                setTimeout(() => {
                 $("#comment-loader").hide();
                 if (data) {
-                     $("#success").text("Posted Successfully").css("color","#28a475");
+                     $("#success").text("Published Successfully").css("color","#28a475");
                     const msg =
-                        '<i class="fas fa-check-circle"></i> Posted Successfully ';
+                        '<i class="fas fa-check-circle"></i> Published Successfully ';
                     showToast(msg, 'success');
                     setTimeout(() => {
                         $("#closeModalicon").hide();
