@@ -76,6 +76,32 @@
     font-weight: 500;
     margin:5px 0;
 }
+.likes-status{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.status-label {
+  position: relative;
+  display: inline-block;
+}
+
+.post-now-btn {
+  display: none;
+  font-size: 10px;
+  padding: 3px 6px;
+  margin-left: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status-label:hover .post-now-btn {
+  display: inline-block;
+}
 </style>
 
 <div class="container">
@@ -121,14 +147,27 @@
         <div class="blogs">
             <img src="{{recipe.post_url.url}}" alt="">
             <h4 class="user_name recipe-title" onclick="recipeDetails('{{recipe.reciepe_id}}')">{{recipe.recipe_title|linebreaks}}</h4>
-            <p class="text-nick">Likes: {{recipe.likes}}</p>
+            <div class="likes-status">
+                <p class="text-nick">Likes: {{recipe.likes}}</p>
+            </p>
+            <p class="text-nick status-label" data-status="{{ recipe.status|lower }}">
+                <span class="status-text">{{ recipe.status }}</span>
+                <button class="post-now-btn">Post Now</button>
+              </p>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
 <script>
-
-
+$(document).ready(function () {
+  $(".status-label").each(function () {
+    const status = $(this).data("status");
+    if (status !== "draft") {
+      $(this).find(".post-now-btn").remove(); // Remove button if not draft
+    }
+  });
+});
 function showToast(message, type) {
     const toast = document.createElement('div');
     toast.classList.add('toast', type);
