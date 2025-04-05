@@ -163,14 +163,18 @@
       <div style="margin-left: 10px; padding: 10px;" class="comment">
        <div class="flex-row">
         <img src="{{comment.user_id.profilePicture.url}}" height="50px" width="50px" style="border-radius: 50%; object-fit: cover;" alt="">
-        <strong> <span onclick="userDetailsPage('{{comment.user_id.id}}')" class="user_name"> {{ comment.user_id.username }} </span></strong> <p style="font-size: 10px; color: #555;">
+        <strong> <span onclick="userDetailsPage('{{comment.user_id.id}}')" class="user_name"> {{ comment.user_id.username }} </span></strong>
+        <p style="font-size: 10px; color: #555;">
             {% if comment.user_id.id == comment.recipe_id.user_id.id %}
               <span style="background-color: #eee; color: #333; padding: 2px 6px; border-radius: 4px; font-weight: bold;">
                 👨‍🍳 Author
               </span>
             {% endif %}
-          </p>: <div style="background-color: #f9f9f9; border: 1px solid #e0e0e0; padding: 12px 16px; border-radius: 8px; margin-top: 10px; font-size: 14px; color: #333;">
+          </p> 
+       <div>
+       <div style="background-color: #f9f9f9; border: 1px solid #e0e0e0; padding: 12px 16px; border-radius: 8px; margin-top: 10px; font-size: 14px; color: #333;">
             {{ comment.content|linebreaks }}
+       </div>
           </div>
         {% if current_user_id == comment.user_id.id %}
         <i class='bx bx-x' style="cursor: pointer;" onclick="deleteComment('{{comment.comment_id}}')" ></i>

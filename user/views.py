@@ -231,7 +231,8 @@ def user_details(request, id):
         user_u = User.objects.get(id=user_id)
         pending_requests = FriendRequest.objects.filter(reciever=user_u, status__iexact='pending')
         users = User.objects.filter(id=id)
-        recipes = Recipes.objects.filter(user_id=user)
+        recipes = Recipes.objects.filter(user_id=user,status="Published")
+        all_recipes = Recipes.objects.filter(user_id = user)
         recipe_count = recipes.count()
         return render(request, 'user/user_details.html', {
             'user': user,
@@ -241,7 +242,8 @@ def user_details(request, id):
             'current_user_id': user_id,
             'recipes': recipes,
             'recipe_count': recipe_count,
-            'pending_requests': pending_requests
+            'pending_requests': pending_requests,
+            "all_recipes":all_recipes
         })
     except User.DoesNotExist:
         return JsonResponse({'status': 'fail', 'message': 'User not found'}, status=404)

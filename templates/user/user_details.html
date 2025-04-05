@@ -52,7 +52,30 @@
 .add-cover-btn:hover {
     background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
 }
-
+.blogs-sections{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+.blogs-sections .blogs img{
+    height: 300px;
+    width: 250px;
+    object-fit: cover;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.recipe-title{
+    font-weight: 300;
+    font-size: 18px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+.text-nick{
+    color: #555;
+    font-weight: 500;
+    margin:5px 0;
+}
 </style>
 
 <div class="container">
@@ -83,14 +106,24 @@
     </div>
     <div>
         <h1 class="text-center">{{user.username}}</h1>
-        <p class="text-center">{{user.nick}}</p>
+        <p class="text-center text-nick">{{user.nick}}</p>
     </div>
     <div>
        {% if recipes %}
-        <h1 class="text-center">{{recipe_count}} Recipes Found</h1>
+        <h4 class="text-center recipe-title"> Blogs Published {{recipe_count}}</h4>
        {% else %}
        <h2 class="text-center">No Recipes Found</h2>
        {% endif %}
+    </div>
+    <h1>My Recipe Blogs</h1>
+    <div class="blogs-sections">
+        {% for recipe in all_recipes %}
+        <div class="blogs">
+            <img src="{{recipe.post_url.url}}" alt="">
+            <h4 class="user_name recipe-title" onclick="recipeDetails('{{recipe.reciepe_id}}')">{{recipe.recipe_title|linebreaks}}</h4>
+            <p class="text-nick">Likes: {{recipe.likes}}</p>
+        </div>
+        {% endfor %}
     </div>
 </div>
 <script>

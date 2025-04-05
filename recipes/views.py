@@ -78,7 +78,7 @@ class ViewUser(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         uid = self.request.session.get('user_id', None)
-        reciepes = Recipes.objects.filter(user_id=uid)
+        reciepes = Recipes.objects.filter(user_id=uid,status="Published")
         user = User.objects.filter(id=uid)
         self.request.session['post_count'] = reciepes.count()
         user_u = User.objects.get(id=uid)
