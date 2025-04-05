@@ -409,6 +409,10 @@ class RemoveFriend(APIView):
 def update_user(request, id):
     user = get_object_or_404(User, id=id)
     pending_requests = FriendRequest.objects.filter(reciever=user, status__iexact='pending')
+    if request.method == 'GET':
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return redirect('404',message='Page Not Found')
     users = User.objects.filter(id = id)
     if request.method == 'POST':
         user.username = request.POST['username']
