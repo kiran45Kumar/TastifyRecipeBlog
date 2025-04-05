@@ -8,7 +8,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=50, default='',null=True, blank=True)
     last_name = models.CharField(max_length=50, default='',null=True, blank=True)
     date_of_birth = models.DateField(default=None,null=True, blank=True)
-    nick = models.CharField(max_length=10, default="Snack King", null=True, blank=True); 
+    nick = models.CharField(max_length=100, default="Snack King", null=True, blank=True); 
     profilePicture = models.ImageField(upload_to='images/',null=True, blank=True)
     cover_photo = models.ImageField(upload_to='cover_photos/', null=True, blank=True)
     is_logged_in = models.BooleanField(default=False,null=True, blank=True)

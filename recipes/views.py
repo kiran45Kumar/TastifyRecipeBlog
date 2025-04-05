@@ -31,6 +31,34 @@ class RecipePosts(APIView):
         recipe.instructions = instruction
         recipe.prep_time = preptime
         recipe.cook_time = cooktime
+        recipe.status = 'Published'
+        recipe.serving_size = servSize
+        recipe.nutrition_info = nutrition
+        recipe.post_url = postimg
+        recipe.save()
+        return JsonResponse({"status":"pass"})
+class Draft(APIView):
+    def post(self, request):
+        title = request.data.get('title')
+        desc = request.data.get('desc')
+        ingredients = request.data.get('ingredients')
+        instruction = request.data.get('instruction')
+        preptime = request.data.get('preptime')
+        cooktime = request.data.get('cooktime')
+        servSize = request.data.get('servSize')
+        nutrition = request.data.get('nutrition')
+        userId = request.data.get('userId')
+        postimg = request.FILES.get('postimg')
+        user = get_object_or_404(User, id = userId)
+        recipe = Recipes()
+        recipe.user_id = user
+        recipe.recipe_title = title
+        recipe.description = desc 
+        recipe.ingredients = ingredients
+        recipe.instructions = instruction
+        recipe.prep_time = preptime
+        recipe.cook_time = cooktime
+        recipe.status = 'Draft'
         recipe.serving_size = servSize
         recipe.nutrition_info = nutrition
         recipe.post_url = postimg
@@ -69,7 +97,7 @@ class ViewUser(TemplateView):
 
         # Prefetch comments and replies for all posts
         top_level_comments = Comments.objects.filter(parent__isnull=True).select_related('user_id')
-        allposts = Recipes.objects.all().prefetch_related(
+        allposts = Recipes.objects.filter(status = 'Published').prefetch_related(
             Prefetch('comments_set', queryset=top_level_comments.prefetch_related('replies'))
         ).order_by('-created_at')
 
