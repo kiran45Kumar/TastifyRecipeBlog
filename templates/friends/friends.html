@@ -74,7 +74,30 @@
     .thin{
         margin: 0 5px;
     }
-    
+    .loader-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ddd;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+     0% {transform: rotate(0deg);}
+    100% { transform: rotate(360deg); }
+}
 </style>
 <h1>New Friends</h1>
 <div id="comment-loader" style="display:none;">
@@ -82,30 +105,44 @@
         <div class="loader-spinner"></div>
     </div>
 </div>
-<div class="friend">
-    {% for user in allUsers %}
-   <div class="row" id="row{{user.id}}">
-    <div class="column friend-section">
-        <img src="{{user.profilePicture.url}}"alt="user-profile-picture">    
-        <input type="hidden" id="user_id" value="{{user.id}}">
-        <p class="text-start" onclick="userDetailsPage('{{user.id}}')">{{ user.username }}</p>
-        <p class="thin">Joined on {{user.created_at|date:'F d, y'}}</p>
+<div id="loader1" >
+    <div class="loader-overlay">
+        <div class="loader-spinner"></div>
+    </div>
+</div>
+<div id="f-content">
+    <div class="friend">
+        {% for user in allUsers %}
+       <div class="row" id="row{{user.id}}">
+        <div class="column friend-section">
+            <img src="{{user.profilePicture.url}}"alt="user-profile-picture">    
+            <input type="hidden" id="user_id" value="{{user.id}}">
+            <p class="text-start" onclick="userDetailsPage('{{user.id}}')">{{ user.username }}</p>
+            <p class="thin">Joined on {{user.created_at|date:'F d, y'}}</p>
+           </div>
+            <div class="friend-button">
+                <button onclick="addFriend('{{user.id}}')" class="btn-add" id="btn{{user.id}}">Add Friend</button>
+                <button onclick="RemoveFri('{{user.id}}')" class="btn-remove" id="btn{{user.id}}">Remove</button>
+            </div>
        </div>
-        <div class="friend-button">
-            <button onclick="addFriend('{{user.id}}')" class="btn-add" id="btn{{user.id}}">Add Friend</button>
-            <button onclick="RemoveFri('{{user.id}}')" class="btn-remove" id="btn{{user.id}}">Remove</button>
-        </div>
-   </div>
-   {% empty %}
-    <p>No friends yet.</p>
-    {% endfor %}
+       {% empty %}
+        <p>No friends yet.</p>
+        {% endfor %}
+    </div>
 </div>
     <div class="toastBox"></div>
 <script>
+    
+  window.addEventListener('load', function () {
+        document.getElementById('loader1').style.display = 'none';
+        document.getElementById('f-content').style.display = 'block';
+    });
      function userDetailsPage(id) { 
         window.location.href = '/user_details/'+encodeURIComponent(id);
      }
     function addFriend(userId) { 
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
     $.ajax({
         type: "POST",
         url: "/send_request/",
@@ -113,6 +150,13 @@
             "userId":userId,
         },
         success: function (response) {
+            const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                
+                setTimeout(() => {
+               $("#comment-loader").hide();
             if(response.status == 'pass'){
                 $(`#btn${userId}`).text("Request Sent")
                 $(`#btn${userId}`).attr("disabled", true)
@@ -134,6 +178,7 @@
             else if(response.status == 'same_user'){
                 showToast(errorMsg,'error')
             }
+           }, delay);
         }
     });
  }

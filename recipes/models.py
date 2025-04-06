@@ -1,6 +1,11 @@
 from django.db import models
 from user.models import User
 # Create your models here.
+class RecipeCategory(models.Model):
+    category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=25, null=True, blank=True)
+    sub_category = models.ForeignKey('self',on_delete=models.CASCADE,null=True, blank=True)
+
 class Recipes(models.Model):
     status_choices = [
         ('pending','Pending'),
@@ -14,6 +19,7 @@ class Recipes(models.Model):
     ingredients = models.CharField(max_length=600,default='')
     instructions = models.CharField(max_length=2700,default='')
     prep_time = models.CharField(max_length=500,default='')
+    category = models.ForeignKey(RecipeCategory,on_delete=models.CASCADE, null=True, blank=True)
     cook_time = models.CharField(max_length=500,default='') 
     status = models.CharField(max_length=20, default="Pending",choices=status_choices)
     serving_size = models.CharField(max_length=200,default='') 
@@ -43,7 +49,7 @@ class Comments(models.Model):
     comment_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe_id = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="replies")  # Nested comments
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name="replies")
     content = models.TextField(null=True, blank=True)  
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     def __str__(self) :

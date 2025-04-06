@@ -146,6 +146,31 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+.loader-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ddd;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+     0% {transform: rotate(0deg);}
+    100% { transform: rotate(360deg); }
+}
+
 
 </style>
 {% if pending_requests %}
@@ -186,27 +211,37 @@
         <div class="loader-spinner"></div>
     </div>
 </div>
+
+<div id="loader" class="loader-container">
+    <div class="spinner"></div>
+</div>
 <h2>My Friends</h2>
-<div class="friend">
-{% for friend in friends %}
-<div class="row" id="row{{friend.id}}">
-    <div class="column friend-section">
-        <img src="{{friend.profilePicture.url}}"alt="user-profile-picture">    
-        <input type="hidden" id="user_id" value="{{friend.id}}">
-        <p class="text-start" onclick="userDetailsPage('{{friend.id}}')">{{ friend.username }}</p>
-        <p class="thin">Joined on {{friend.created_at|date:'F d, y'}}</p>
-       </div>
-        <div class="friend-button">
-            <!-- <button onclick="addFriend('{{friend.id}}')" class="btn-add" id="btn{{friend.id}}">Add Friend</button> -->
-            <button onclick="RemoveFriend1('{{friend.id}}')" class="btn-remove" id="btn{{friend.id}}">Remove</button>
+<div id="friend-content" style="display: none;">
+    <div class="friend">
+        {% for friend in friends %}
+        <div class="row" id="row{{friend.id}}">
+            <div class="column friend-section">
+                <img src="{{friend.profilePicture.url}}"alt="user-profile-picture">    
+                <input type="hidden" id="user_id" value="{{friend.id}}">
+                <p class="text-start" onclick="userDetailsPage('{{friend.id}}')">{{ friend.username }}</p>
+                <p class="thin">Joined on {{friend.created_at|date:'F d, y'}}</p>
+               </div>
+                <div class="friend-button">
+                    <!-- <button onclick="addFriend('{{friend.id}}')" class="btn-add" id="btn{{friend.id}}">Add Friend</button> -->
+                    <button onclick="RemoveFriend1('{{friend.id}}')" class="btn-remove" id="btn{{friend.id}}">Remove</button>
+                </div>
+           </div>
+        {% empty %}
+            <p>No friends yet.</p>
+        {% endfor %}
         </div>
-   </div>
-{% empty %}
-    <p>No friends yet.</p>
-{% endfor %}
 </div>
 
 <script>
+     window.addEventListener('load', function () {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('friend-content').style.display = 'block';
+    });
     function showFriendRequest() {
     document.getElementById("friendRequestAlert").style.display = "block";
     setTimeout(() => {
@@ -219,32 +254,54 @@ showFriendRequest();
      function userDetailsPage(id) { 
         window.location.href = '/user_details/'+encodeURIComponent(id);
      }
-    function RemoveFriend1(id) { 
+     function RemoveFriend1(id) {
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
         $.ajax({
             type: "DELETE",
             url: "/remove_friend/",
             data: {
-                "friend_id":id,
+                "friend_id": id,
             },
             success: function (response) {
-                if(response.status == 'pass'){
-                const successMsg = '<i class="fas fa-check-circle"></i> Friend Removed ';
-                showToast(successMsg,'success')
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
                 setTimeout(() => {
-                    location.reload();
-                }, 3000);
-                }
-                else if(response.status == 'fail'){
-               const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
-               showToast(errorMsg,'error')
-               setTimeout(() => {
-                    location.reload();
-               }, 3000);
-                }
+                    $("#comment-loader").hide();
+                    if (response.status == 'pass') {
+                        const successMsg = '<i class="fas fa-check-circle"></i> Removed Friend ';
+                        showToast(successMsg, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 5000);
+                    }
+                    else {
+                        const errorMsg = '<i class="fas fa-times-circle"></i> Oops Something Went wrong';
+                        showToast(errorMsg,'error')
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                    }
+                }, delay);
+            },
+            error:function(){
+                const errorMsg = '<i class="fas fa-times-circle"></i> Oops Something Went wrong';
+                        showToast(errorMsg,'error')
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
             }
         });
-     }
- function AcceptRequest(id, status) { 
+    }
+
+ 
+     function AcceptRequest(id, status) { 
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
     $.ajax({
         type: "POST",
         url: "/accept_request/",
@@ -253,24 +310,33 @@ showFriendRequest();
             "status":status,
         },
         success: function (response) {
-            if(response.status == 'pass'){
-                const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Accepted ';
-                showToast(successMsg,'success')
-                setTimeout(() => {
-                    location.reload();
-                }, 3000);
-            }
-            else if(response.status == 'fail'){
-               const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
-               showToast(errorMsg,'error')
-               setTimeout(() => {
-                    location.reload();
-               }, 3000);
-            }
+                 const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+              setTimeout(() => {
+                $("#comment-loader").hide();
+                    if(response.status == 'pass'){
+                        const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Accepted ';
+                        showToast(successMsg,'success')
+                        setTimeout(() => {
+                            location.reload();
+                        }, 3000);
+                    }
+                    else if(response.status == 'fail'){
+                    const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
+                    showToast(errorMsg,'error')
+                    setTimeout(() => {
+                            location.reload();
+                    }, 3000);
+                    }
+              }, delay);
         }
     });
   }
  function RejectRequest(id, status) { 
+    $("#comment-loader").show();
+    const startTime = new Date().getTime();
     $.ajax({
         type: "POST",
         url: "/reject_request/",
@@ -279,6 +345,13 @@ showFriendRequest();
             "status":status,
         },
         success: function (response) {
+            const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                
+                setTimeout(() => {
+               $("#comment-loader").hide();
             if(response.status == 'pass'){
                 const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Rejected ';
                 showToast(successMsg,'success')
@@ -293,6 +366,7 @@ showFriendRequest();
                     location.reload();
                }, 3000);
             }
+           }, delay);
         }
     });
   }
