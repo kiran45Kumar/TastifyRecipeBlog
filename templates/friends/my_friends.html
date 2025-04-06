@@ -153,6 +153,7 @@
 {% if pending_requests %}
 {% for request in pending_requests %}
 <div class="flex-center">
+    {% if request.status == "pending" %}
     <div id="friendRequestAlert" class="alert-container">
         <div class="alert-box">
             <p>
@@ -168,6 +169,11 @@
             </div>
         </div>
     </div>
+    {% elif request.status == "accepted" %}
+    <script>
+        $("#friendRequestAlert").hide();
+    </script>
+    {% endif %}
 </div>
 {% endfor %}
 {% else %}
@@ -175,7 +181,11 @@
 {% endif %}
 </div>
 {% endif %}
-
+<div id="comment-loader" style="display:none;">
+    <div class="loader-overlay">
+        <div class="loader-spinner"></div>
+    </div>
+</div>
 <h2>My Friends</h2>
 <div class="friend">
 {% for friend in friends %}

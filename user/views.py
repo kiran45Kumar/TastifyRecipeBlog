@@ -105,6 +105,7 @@ class UpdateUserDetails(APIView):
             first_name=first_name,
             last_name=last_name,
             date_of_birth=date_of_birth,
+            # profilePicture= profile_image
         )
         return JsonResponse({"status":"pass"})
     
@@ -262,7 +263,7 @@ class SendMail(APIView):
             if user_exists:
                 send_mail(
                 subject="Hello from Tastify",
-                message=f'Thanks for reaching us out. Here is your link to reset the password link: http://127.0.0.1:5000/reset_password/{user.id}',    
+                message=f'Thanks for reaching us out. Here is your link to reset the password link: http://127.0.0.1:8000/reset_password/{user.id}',    
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
                 fail_silently=False,

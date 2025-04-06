@@ -3,6 +3,11 @@
 {% block title %}Update Your Details{% endblock %}
 {% block navbar %}
 <body>
+    <div id="comment-loader" style="display:none;">
+        <div class="loader-overlay">
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
     <div class="login-section " >
  <h1 id="login">Update Your Account</h1>
     <div class="signup-section">
@@ -47,7 +52,7 @@
     </div>
     <div class="login-forms" style="visibility: hidden;">
         <label for="">Profile Picture</label>
-        <input type="file" placeholder="" name="profile" id="profile" value="{{user.profilePicture.url}}">
+        <input type="file" placeholder="" name="profile" id="profile{{user.id}}" value="{{user.profilePicture.url}}">
         <p id="profileimg"></p>
     </div>
 
@@ -74,7 +79,7 @@
     let firstname = $("#firstname"+id).val();
     let lastname = $("#lastname"+id).val();
     let birthdate = $("#birthdate"+id).val();
-    // let profile = $("#profile")[0].files[0];
+    // let profile = $("#profile"+id)[0].files[0];
     let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;    
     let passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -128,6 +133,7 @@
     formdata.append('firstname', firstname);
     formdata.append('lastname', lastname);
     formdata.append('birthdate', birthdate);
+    // formdata.append('profile', profile);
     $("#btn_update").text("redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
     $.ajax({
         type: 'PUT',

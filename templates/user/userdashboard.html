@@ -55,6 +55,45 @@
         background-color: #bdc3c7;
         color: black;
     }
+    .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.comment{
+    display: flex;
+    align-items: center;
+   justify-content: space-between;
+}
+.comment-time{
+    font-size: 12px;
+    color: gray;
+    margin-left: 10px;
+    font-weight: 500;
+}
+.flex-row .bx-x{
+    margin-right: 10px;
+    color: gray;
+    font-size: 24px;
+}
 </style>
 
 <body>
@@ -126,9 +165,12 @@
 
             {% for user in users %}
             {% if user.id == request.session.user_id %}
+            {% if user.profilePicture %}
             <img src="{{user.profilePicture.url}}" onclick="toggleSection()" alt="" class="profile-img">
+            {% else %}
+            <img src="{% static 'images/apple.webp' %}" alt=""> 
             {% endif %}
-
+            {% endif %}
             {% endfor %}
             <div class="user-main user-section update-section display" id="profile">
                 <div class="bottom-section">
@@ -182,7 +224,11 @@
             <div class="user-details">
                 <div class="user-main">
                     {% for user in users %}
+                    {% if user.profilePicture %}
                     <img src="{{user.profilePicture.url}}" alt="" id="myImg">
+                    {% else %}
+                    <img src="{% static 'images/apple.webp' %}" alt="">
+                    {% endif %}
                     <input type="file" name="profile_img" id="profile_img" accept="image/*" style="display: none;">
                     <a id="editBtn" class="edit-icon" style="cursor: pointer;"><i class='bx bx-edit-alt'></i></a>
                     {% endfor %}
@@ -320,6 +366,11 @@
                 <div class="main" style="display: none;" id="model-open">
                     <p>Published Succesfully</p>
                 </div>
+                <div id="comment-loader" style="display:none;">
+                    <div class="loader-overlay">
+                        <div class="loader-spinner"></div>
+                    </div>
+                </div>
                 {% block main-content %}
 
                 {% endblock %}
@@ -331,7 +382,11 @@
                         {% for friend in friends %}
                         <div class="blog-recommendations" data-user-id="{{ friend.id }}">
                             <div class="flex-row">
+                                {% if friend.profilePicture %}
                                 <img src="{{ friend.profilePicture.url }}" alt="">
+                                {% else %}
+                                <img src="{% static 'images/apple.webp' %}" alt="">
+                                {% endif %}
                                 <div class="align-start">
                                     <p class="user_name" onclick="userDetailsPage('{{ friend.id }}')">{{ friend.username}}</p>
                                     <p class="{% if friend.is_logged_in %}online{% else %}offline{% endif %}">

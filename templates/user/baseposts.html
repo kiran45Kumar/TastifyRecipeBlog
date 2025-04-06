@@ -60,11 +60,15 @@
 <div class="user-blog-section"  data-recipe-id="{{ recipe.reciepe_id }}">          
     <div class="user-post-section user-border">
         <div class="user-post-img">
+            {% if recipe.user_id.profilePicture %}
             <img src="{{recipe.user_id.profilePicture.url}}" alt="">
+            {% else %}
+            <img src="{% static 'images/apple.webp' %}" alt="">
+            {% endif %}
             <div class="user-flex">
                 <div class="flex-row">
                     <p class="user_name" onclick="userDetailsPage('{{recipe.user_id.id}}')" >{{recipe.user_id.username}}</p>
-                    {% if current_user_id != recipe.user_id.id %}
+                    {% if current_user_id != recipe.user_id.id and recipe.user_id not in friends %}
                     <button 
                     id="btn{{recipe.user_id.id}}" 
                     onclick="addFriend('{{recipe.user_id.id}}')" 
@@ -162,7 +166,11 @@
     {% for comment in recipe.comments_set.all %}
       <div style="margin-left: 10px; padding: 10px;" class="comment">
        <div class="flex-row">
-        <img src="{{comment.user_id.profilePicture.url}}" height="50px" width="50px" style="border-radius: 50%; object-fit: cover;" alt="">
+        {% if comment.user_id.profilePicture  %}
+        <img src="{{comment.user_id.profilePicture.url}}" height="30px" width="30px" style="border-radius: 50%; object-fit: cover;" alt="">
+        {% else %}
+        <img src="{% static 'images/apple.webp' %}" alt="alternate image">
+        {% endif %}
         <strong> <span onclick="userDetailsPage('{{comment.user_id.id}}')" class="user_name"> {{ comment.user_id.username }} </span></strong>
         <p style="font-size: 10px; color: #555;">
             {% if comment.user_id.id == comment.recipe_id.user_id.id %}
@@ -193,11 +201,7 @@
 </div>
 
 {% endfor %}
-<div id="comment-loader" style="display:none;">
-    <div class="loader-overlay">
-        <div class="loader-spinner"></div>
-    </div>
-</div>
+
 <script>
    function AddComment(id) { 
     let comment = $("#comment_id" + id).val();
