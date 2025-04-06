@@ -4,7 +4,7 @@ from user.models import User
 class RecipeCategory(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=25, null=True, blank=True)
-    sub_category = models.ForeignKey('self',on_delete=models.CASCADE,null=True, blank=True)
+    sub_category = models.ForeignKey('self',on_delete=models.SET_NULL,null=True, blank=True,related_name='sub_categories')
 
 class Recipes(models.Model):
     status_choices = [
