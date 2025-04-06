@@ -429,6 +429,22 @@ def update_user(request, id):
         'user': user,'currentUser':request.session.get('user_name'), 'nick_name':request.session.get('user_nick_name'),
           'current_user_id':request.session.get('user_id',None), 'users':users,'pending_requests':pending_requests
           })
+def update_recipe(request, id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('404', message='You"re not logged in')
+    user = User.objects.get(id = user_id)
+    recipe = get_object_or_404(Recipes, pk=id)
+    pending_requests = FriendRequest.objects.filter(reciever=user, status__iexact='pending')
+    if request.method == 'GET':
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return redirect('404',message='Page Not Found')
+    users = User.objects.filter(id = id)
+    return render(request, 'user/update_recipe.html', {
+        'user': user,'currentUser':request.session.get('user_name'), 'nick_name':request.session.get('user_nick_name'),
+          'current_user_id':request.session.get('user_id',None), 'users':users,'pending_requests':pending_requests,'recipe':recipe,
+          })
 class AddComment(APIView):
     def post(self, request):
         user_id = request.session.get('user_id', None)

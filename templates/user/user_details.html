@@ -63,12 +63,13 @@
         display: flex;
         align-items: center;
         justify-content: space-evenly;
+        gap: 5px;
         flex-wrap: wrap;
     }
 
     .blogs-sections .blogs img {
         height: 300px;
-        width: 250px;
+        width: 300px;
         object-fit: cover;
         border-top-right-radius: 10px;
         border-top-left-radius: 10px;
@@ -123,6 +124,8 @@
         align-items: center;
         justify-content: center;
         margin: 5px;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .btn_remove button {
@@ -160,7 +163,11 @@
     </div>
 
     <div class="profilePicture">
+        {% if user.profilePicture %}
         <img src="{{user.profilePicture.url}}" alt="Profile Picture">
+        {% else %}
+        <img src="{% static 'images/apple.webp' %}" alt="">
+        {% endif %}
         {% if user.id == request.session.user_id %}
         <a id="editBtn2" class="edit-icon" style="cursor: pointer;"><i class='bx bx-edit-alt'></i></a>
         {% endif %}
@@ -182,9 +189,15 @@
     <div class="blogs-sections">
         {% for recipe in all_recipes %}
         <div class="blogs">
+            {% if recipe.post_url %}
             <img src="{{recipe.post_url.url}}" alt="">
-            <h4 class="user_name recipe-title" onclick="recipeDetails('{{recipe.reciepe_id}}')">
-                {{recipe.recipe_title|linebreaks}}</h4>
+            {% else %}
+            <img src="{% static 'images/apple.webp' %}" alt="">
+            {% endif %}
+            <h4 class="user_name recipe-title" {% if current_user_id == recipe.user_id.id %}
+            onclick="recipeDetails('{{recipe.reciepe_id}}')"
+            {% endif %} >
+                {{recipe.recipe_title|slice:'20'}}...</h4>
             <div class="likes-status">
                 <p class="text-nick">Likes: {{recipe.likes}}</p>
                 </p>
@@ -195,6 +208,7 @@
             </div>
             <div class="btn_remove">
                 {% if current_user_id == recipe.user_id.id %}
+                <button class="btn-remove" onclick="recipeDetails('{{recipe.reciepe_id}}')">Update</button>
                 <button class="btn-remove" onclick="RemoveRecipe('{{recipe.reciepe_id}}')">Delete</button>
                 {% endif %}
             </div>
@@ -203,6 +217,10 @@
     </div>
 </div>
 <script>
+    
+    function recipeDetails(id){
+        window.location.href = '/update_recipe/'+id
+    }
     function RemoveRecipe(id) {
         $.ajax({
             type: 'DELETE',

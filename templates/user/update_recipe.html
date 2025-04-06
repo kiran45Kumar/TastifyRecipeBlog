@@ -1,0 +1,161 @@
+{% extends 'user/userdashboard.html' %}
+{% load static %}
+{% block title %}Update Your Details{% endblock %}
+{% block navbar %}
+
+<body>
+    <div id="comment-loader" style="display:none;">
+        <div class="loader-overlay">
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
+    <div class="login-section ">
+        <h1 id="login">Update Your Blog</h1>
+        <div class="signup-section">
+            <div class="login-forms">
+                <label for="">Title</label>
+                <input type="text" placeholder="Enter Your Name" value="{{recipe.recipe_title}}" name="username"
+                    id="title{{recipe.reciepe_id}}">
+                <p id="uname"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Description</label>
+                <input type="email" placeholder="Enter Your Email" name="email" value="{{recipe.description}}"
+                    id="description{{recipe.reciepe_id}}">
+                <p id="emailid"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Ingredients</label>
+                <input type="text" placeholder="Enter Your Password" name="password"
+                    id="ingredients{{recipe.reciepe_id}}" value="{{recipe.ingredients}}">
+                <p id="passwordid"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Instructions</label>
+                <input type="text" placeholder="Enter Your Phone" name="phone" id="instructions{{recipe.reciepe_id}}"
+                    value="{{recipe.instructions}}">
+                <p id="phoneno"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Preparation Time</label>
+                <input type="text" placeholder="Enter Your First Name" name="firstname"
+                    id="prep_time{{recipe.reciepe_id}}" value="{{recipe.prep_time}}">
+                <p id="fname"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Cooking Time</label>
+                <input type="text" placeholder="Enter Your Last Name" name="lastname"
+                    id="cook_time{{recipe.reciepe_id}}" value="{{recipe.cook_time}}">
+                <p id="lname"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Status</label>
+                <input type="text" placeholder="Enter Your BirthDate" name="birthdate" id="status{{recipe.reciepe_id}}"
+                    value="{{recipe.status}}">
+                <p id="bdate"></p>
+                <input type="hidden" name="user_id" id="user_id" value="{{recipe.user_id.id}}">
+            </div>
+            <div class="login-forms">
+                <label for="">Serving Size</label>
+                <input type="text" placeholder="Enter Your BirthDate" name="birthdate" id="serving_size{{recipe.reciepe_id}}"
+                    value="{{recipe.serving_size}}">
+                <p id="bdate"></p>
+            </div>
+            <div class="login-forms">
+                <label for="">Nutrition Info</label>
+                <input type="text" placeholder="Enter Your BirthDate" name="birthdate"
+                    id="nutrition_info{{recipe.reciepe_id}}" value="{{recipe.nutrition_info}}">
+                <p id="bdate"></p>
+            </div>
+            <div class="login-forms">
+                <label for="post_url{{ recipe.reciepe_id }}">Profile Picture</label>
+                <img src="{{ recipe.post_url.url }}" alt="Recipe Image" style="max-width: 200px; width: 50px; height: 50px;">
+                <input type="file" name="post_url" id="post_url{{ recipe.reciepe_id }}">
+                <p id="profileimg"></p>
+            </div>
+            
+
+            <div class="login-button signup-button">
+                <button type="" id="btn_update" onclick="UpdateRecipeDetails('{{recipe.reciepe_id}}')">Update</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showPassword(id) {
+            let input = $("#" + id);
+            if (input.attr('type') == 'password') {
+                input.attr('type', 'text');
+            }
+            else {
+                input.attr('type', 'password');
+            }
+        }
+        function UpdateRecipeDetails(id) {
+            let formData = new FormData();
+            formData.append("recipe_title", $("#title"+id).val());
+            formData.append("description", $("#description"+id).val());
+            formData.append("ingredients", $("#ingredients"+id).val());
+            formData.append("instructions", $("#instructions"+id).val());
+            formData.append("prep_time", $("#prep_time"+id).val());
+            formData.append("cook_time", $("#cook_time"+id).val());
+            formData.append("status", $("#status"+id).val());
+            formData.append("serving_size", $("#serving_size"+id).val());
+            formData.append("nutrition_info", $("#nutrition_info"+id).val());
+            formData.append("reciepe_id", id);
+            let fileInput = $("#post_url" + id)[0];
+            if (fileInput.files.length > 0) {
+                formData.append("post_url", fileInput.files[0]);
+            }
+            $("#comment-loader").show();
+        const startTime = new Date().getTime();
+            $("#btn_update").text("redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
+            $.ajax({
+                type: 'PUT',
+                url: '/update_recipes/',
+                data:formData,
+                processData: false,
+                contentType:false,
+                success: function (data) {
+                    const endTime = new Date().getTime();
+                    const duration = endTime - startTime;
+                    const minimumLoaderTime = 1500;
+                    const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                  setTimeout(() => {
+                $("#comment-loader").hide();
+
+                    if (data) {
+                        $("#login").text(" Updated Successfully").css({ 'color': '#28A745', 'fontWeight': '400' });
+                        $("input").css('border-color', 'green');
+                        $("#btn_submit").text("Redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
+                        const successMsg = '<i class="fas fa-check-circle"></i> Updated Successfully ';
+                        showToast(successMsg,'success')
+                        setTimeout(() => {
+                            window.location.replace('/user_details/{{recipe.user_id.id}}');
+                        }, 3000);
+                    } else{
+                        const errorMsg =  '<i class="fas fa-times-circle"></i> Something Went Wrong';
+                    showToast(errorMsg,'error')
+                    setTimeout(() => {
+                            location.reload();
+                    }, 3000);
+                    }
+                  }, delay);
+                },
+                error: function (xhr, status, error, data) {
+                    if (error) {
+                        $("#login").text("Something Went Wrong").css({ 'color': '#DC3545', 'fontWeight': '400' });
+                        $('input').css('border-color', 'red');
+                    } else if (data['error']) {
+                        $("#login").text(data['error']);
+                    } else {
+                        $('input').css('border-color', 'gray');
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>
+{% endblock %}

@@ -9,6 +9,8 @@ from user.models import User
 from django.views.generic.base import TemplateView
 from rest_framework import viewsets
 from recipes.serializers import CommentsSerializer, RecipesSerializer
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
+from django.contrib import messages
 # Create your views here.
 class RecipePosts(APIView):
     def post(self, request):
@@ -36,7 +38,57 @@ class RecipePosts(APIView):
         recipe.nutrition_info = nutrition
         recipe.post_url = postimg
         recipe.save()
+        messages.success(request, "Recipe posted successfully!")
         return JsonResponse({"status":"pass"})
+class UpdateRecipe(APIView):
+    def put(self, request):
+        print("DATA =>", request.data)
+        print("FILES =>", request.FILES)
+        title = request.data.get('recipe_title')
+        desc = request.data.get('description')
+        ingredients = request.data.get('ingredients')
+        instruction = request.data.get('instructions')
+        preptime = request.data.get('prep_time')
+        cooktime = request.data.get('cook_time')
+        status = request.data.get('status')
+        serving_size = request.data.get('serving_size')
+        nutrition = request.data.get('nutrition_info')
+        reciepe_id = request.data.get('reciepe_id')
+        user_id = request.session.get('user_id')
+        postimg = request.FILES.get('post_url')
+        try:
+            user = User.objects.get(id=user_id)
+            recipe = Recipes.objects.get(reciepe_id=reciepe_id)
+
+            recipe.recipe_title = title
+            recipe.user_id = user
+            recipe.description = desc
+            recipe.ingredients = ingredients
+            recipe.instructions = instruction
+            recipe.prep_time = preptime
+            recipe.cook_time = cooktime
+            recipe.status = status
+            recipe.serving_size = serving_size
+            recipe.nutrition_info = nutrition
+
+            if postimg:
+                recipe.post_url = postimg
+
+            recipe.save()
+
+        except User.DoesNotExist:
+            return JsonResponse({"status": 'fail', "message": "User doesn't exist"})
+
+        except Recipes.DoesNotExist:
+            return JsonResponse({"status": 'fail', "message": "Recipe doesn't exist"})
+
+        except Exception as e:
+            print("Error:", str(e))
+            return JsonResponse({"status": 'fail', "message": str(e)})
+
+        return JsonResponse({'status': 'success'})
+    
+
 class Draft(APIView):
     def post(self, request):
         title = request.data.get('title')
@@ -113,6 +165,7 @@ class ViewUser(TemplateView):
         })
         return context
 class RecipesViewSet(viewsets.ModelViewSet):
+    parser_classes = [FormParser]
     queryset = Recipes.objects.all()
     serializer_class = RecipesSerializer
 class DeletePost(APIView):

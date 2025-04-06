@@ -10,4 +10,3 @@ class RecipesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipes
         fields = "__all__"
-        read_only_fields = ['reciepe_id', 'created_at']

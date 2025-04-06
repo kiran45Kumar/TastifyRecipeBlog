@@ -28,6 +28,7 @@ urlpatterns = [
     path('reject_request/', RejectRequest.as_view(), name='RejectRequest'),
     path('remove_friend/', RemoveFriend.as_view(), name='RemoveFriend'),
     path('update_user/<int:id>/',update_user, name='update_user'),
+    path('update_recipe/<int:id>/',update_recipe, name='update_recipe'),
     path('UpdateUserDetails/', UpdateUserDetails.as_view(), name='UpdateUserDetails'),
     path('check_online_status/',check_online_status, name='check_online_status'),
     path('add_comment/',AddComment.as_view(), name='add_comment'),

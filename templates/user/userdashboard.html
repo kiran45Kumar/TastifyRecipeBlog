@@ -94,9 +94,31 @@
     color: gray;
     font-size: 24px;
 }
+.message-box {
+            padding: 15px;
+            margin: 90px auto;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .message-success { background-color: #4CAF50; }
+        .message-error { background-color: #f44336; }
+        .message-info { background-color: #2196F3; }
+        .message-warning { background-color: #ff9800; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 </style>
 
 <body>
+
 
     <!-- navbar section  -->
     <div class="header-section">
@@ -218,7 +240,13 @@
     </div>
     <!-- main section  -->
     <main>
-        
+        {% if messages %}
+        {% for message in messages %}
+            <div class="message-box message-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %} 
         <div class="main-dashboard-section" id="main">
             {% block navbar %}
             <div class="user-details">
@@ -276,6 +304,7 @@
                     </div>
                 </div>
             </div>
+          
             <div class="modal modal-close" id="closeModalicon">
                 <p style="text-align: center;" id="success-message"></p>
                 <div class="cross-icon">
