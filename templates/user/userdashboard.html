@@ -432,6 +432,8 @@
 </body>
 <script>
     function RemoveFriend(id) {
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
         $.ajax({
             type: "DELETE",
             url: "/remove_friend/",
@@ -439,20 +441,36 @@
                 "friend_id": id,
             },
             success: function (response) {
-                if (response.status == 'pass') {
-                    const successMsg = '<i class="fas fa-check-circle"></i> Friend Removed ';
-                    showToast(successMsg, 'success')
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
-                }
-                else if (response.status == 'fail') {
-                    const errorMsg = '<i class="fas fa-times-circle"></i> Something Went Wrong';
-                    showToast(errorMsg, 'error')
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
-                }
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                    $("#comment-loader").hide();
+                    if (response.status == 'pass') {
+                        const successMsg = '<i class="fas fa-check-circle"></i> Removed Friend ';
+                        showToast(successMsg, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 5000);
+                    }
+                    else {
+                        const errorMsg = '<i class="fas fa-times-circle"></i> Oops Something Went wrong';
+                        showToast(errorMsg,'error')
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                    }
+                }, delay);
+            },
+            error:function(){
+                const errorMsg = '<i class="fas fa-times-circle"></i> Oops Something Went wrong';
+                        showToast(errorMsg,'error')
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
             }
         });
     }
