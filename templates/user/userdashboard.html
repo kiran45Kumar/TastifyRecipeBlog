@@ -435,7 +435,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <button onclick="RemoveFriend('{{friend.id}}')">Remove</button>
+                            <button onclick="RemoveFriend('{{friend.id}}')">Unfollow</button>
                         </div>
                         {% empty %}
                         <p class="text-center">No Friends</p>
@@ -494,7 +494,7 @@
                 setTimeout(() => {
                     $("#comment-loader").hide();
                     if (response.status == 'pass') {
-                        const successMsg = '<i class="fas fa-check-circle"></i> Removed Friend ';
+                        const successMsg = `<i class="fas fa-check-circle"></i> Unfollowed`;
                         showToast(successMsg, 'success');
                         setTimeout(() => {
                             location.reload();

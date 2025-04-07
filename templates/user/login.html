@@ -11,6 +11,31 @@
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
+<style>
+        .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
 <body>
     <div class="navbar-login">
         <div class="login-logo">
@@ -24,8 +49,12 @@
             <p><i class='bx bxl-pinterest-alt bx-main-icon' ></i></p>
         </div>
     </div>
+    <div id="comment-loader" style="display:none;">
+        <div class="loader-overlay">
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
     {% block navbar %}
-        
     <div class="login-section" >
         <form action="" method="post">
            <h1 id="login">Welcome Back</h1>
@@ -93,12 +122,20 @@
             $("#passwordid").html('')
             $("input").css('border-color','gray')
        }
+       $("#comment-loader").show();
+    const startTime = new Date().getTime();
         $("#btn_text").text("Please Wait...").css({'color': '#007BFF','fontWeight':'400'})
         $.ajax({
             type:'POST',
             url:'/login_check/',
             data:{'email':email, 'password':password, 'remember_me': check_box ? "true" : "false"  },
             success:function(data){
+                const endTime = new Date().getTime();
+                    const duration = endTime - startTime;
+                    const minimumLoaderTime = 1500;
+                    const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+               setTimeout(() => {
+                $("#comment-loader").hide();
                 if(data["status"] == 'pass' && password ){
                     $("#login").text(data['message']).css({'color': '#28A745','fontWeight':'400'})
                     $("input").css('border-color','green')
@@ -114,6 +151,7 @@
                     $("#login").html(data['message']).css({'color': '#DC3545','fontWeight':'400'})
                     $("#btn_text").text("Submit")
                 }
+               }, delay);
             },
             error: function(xhr, status, error){
                     $("#login").text("Invalid Credentials").css({'color': '#DC3545','fontWeight':'400'})

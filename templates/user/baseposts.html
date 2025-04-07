@@ -437,7 +437,7 @@ function addFriend(userId) {
                 if (response.status == 'pass') {
                     $(`#btn${userId}`).text("Request Sent");
                     $(`#btn${userId}`).attr("disabled", true);
-                    const successMsg = '<i class="fas fa-check-circle"></i> Friend Request Sent ';
+                    const successMsg = '<i class="fas fa-check-circle"></i> Follow Request Sent ';
                     showToast(successMsg, 'success');
                     setTimeout(() => {
                         location.reload();

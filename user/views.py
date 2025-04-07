@@ -282,7 +282,7 @@ class ChangePassword(APIView):
         password = request.data.get('newpassword')
         try:
             user = User.objects.get(id = id)
-            user.password = password
+            user.password = make_password(password)
             user.save()
         except User.DoesNotExist:
             return JsonResponse({'status':'fail','message':'User Does not exist'})

@@ -22,15 +22,6 @@
         <p id="emailid"></p>
     </div>
     <div class="login-forms">
-        <label for="">Password</label>
-        <input type="password" placeholder="Enter Your Password" name="password" id="password{{user.id}}" value="{{user.password}}">
-        <p id="passwordid"></p>
-        <div class="flex-row">
-            <input type="checkbox" name="" onclick="showPassword('password{{user.id}}')" id="">
-            <p>Show Password</p>
-        </div>
-    </div>
-    <div class="login-forms">
         <label for="">Phone</label>
         <input type="number" placeholder="Enter Your Phone" maxlength="10" name="phone" id="phone{{user.id}}" value="{{user.phone}}">
         <p id="phoneno"></p>
@@ -74,7 +65,7 @@
       function UpdateUserDetails(id) {
     let username = $("#username"+id).val();
     let email = $("#email"+id).val();
-    let password = $("#password"+id).val();
+    // let password = $("#password"+id).val();
     let phone = $("#phone"+id).val();
     let firstname = $("#firstname"+id).val();
     let lastname = $("#lastname"+id).val();
@@ -93,20 +84,8 @@
     } else if (!emailRegex.test(email)) {
         $("#emailid").html("Please enter a valid email address").css('color', 'red');
         return;
-    } else if (!password) {
-        $("#passwordid").html("Please Enter Your Password").css('color', 'red');
-        return;
-    }else if (!passwordRegex.test(password)) {
-    $("#passwordid").html(`
-        <ul style="color: red; padding-left: 15px;">
-            <li>Password must be at least 8 characters long</li>
-            <li>Must include 1 uppercase letter</li>
-            <li>Must include 1 special character (@$!%*?&)</li>
-            <li>Must include 1 number</li>
-        </ul>
-    `);
-    return;
-     } else if (!phone) {
+    } 
+     else if (!phone) {
         $("#phoneno").text("Please Enter Your Phone No").css('color', 'red');
         return;
     } else if (phone.length !== 10) {
@@ -129,7 +108,7 @@
     const formdata = new FormData();
     formdata.append('username', username);
     formdata.append('email', email);
-    formdata.append('password', password);
+    // formdata.append('password', password);
     formdata.append('phone', phone);
     formdata.append('firstname', firstname);
     formdata.append('lastname', lastname);
@@ -150,7 +129,7 @@
            setTimeout(() => {
             $("#comment-loader").hide();
 
-            if (data["status"] === 'pass') {
+             if (data["status"] === 'pass') {
                 $("#login").text(" Updated Successfully").css({ 'color': '#28A745', 'fontWeight': '400' });
                 $("input").css('border-color', 'green');
                 $("#btn_submit").text("Redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
