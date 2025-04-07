@@ -7,6 +7,7 @@ from kitchen.serializers import KitchenSerializer, CookingCategorySerializer
 class KitchenViewSet(ModelViewSet):
     queryset = Kitchen.objects.all()
     serializer_class = KitchenSerializer
+
 class CookingCategoryViewSet(ModelViewSet):
-    queryset = Kitchen.objects.all()
+    queryset = CookingCategory.objects.all()
     serializer_class = CookingCategorySerializer

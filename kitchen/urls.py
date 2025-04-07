@@ -4,7 +4,7 @@ from kitchen.views import *
 router = DefaultRouter()
 router.register(r'kitchens',KitchenViewSet, basename='kitchen')
 router.register(r'categories',CookingCategoryViewSet, basename='categories')
-url_patterns = [
+urlpatterns = [
     path('api/', include(router.urls))
     # template views
 ]
