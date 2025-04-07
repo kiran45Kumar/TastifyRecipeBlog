@@ -31,7 +31,7 @@ class LoginCheck(APIView):
             password = request.POST.get('password')
             remember_me = request.POST.get("remember_me") == 'true'
             user = User.objects.get(email=email)
-            if user.password != password:
+            if not check_password(password, user.password):
                 return JsonResponse({"status": "fail", "message": "Invalid Password"})
             request.session['user_name'] = user.username
             request.session['user_firstname'] = user.first_name
@@ -75,7 +75,7 @@ class CreateStaff(APIView):
             return JsonResponse({"status":"fail","Error":"username is already taken."})
         user = User()
         user.email = email
-        user.password = password
+        user.password = make_password(password)
         user.username = username
         user.phone = phone
         user.first_name = first_name
