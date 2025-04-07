@@ -366,6 +366,18 @@
                             <input type="file" placeholder="Nutrition Info" id="postimg">
                         </div>
                         <div class="post-buttons">
+                            <button onclick="togglePostModal3()">Next</button>
+                        </div>
+                    </div>
+                    <div class="modal-last" id="modal-last2">
+                        <div class="post-inputs">
+                            <label for="">Add Tags</label>
+                            <div id="tag-container">
+                                <input type="text" class="postTag" placeholder="Enter a tag" />
+                            </div>
+                            <button type="button" id="add-tag-btn">Add More Tags</button>
+                        </div>
+                        <div class="post-buttons">
                             <p onclick="toggleModalREfresh()">Cancel</p>
                             <button onclick="createPost()">Post</button>
                         </div>
@@ -460,6 +472,11 @@
 
 </body>
 <script>
+    $("#add-tag-btn").click(function () {
+    $("#tag-container").append(`
+        <input type="text" class="postTag" placeholder="Enter a tag" />
+    `);
+});
     function RemoveFriend(id) {
         $("#comment-loader").show();
         const startTime = new Date().getTime();
@@ -622,6 +639,11 @@
         $("#modal-last").addClass('modal-show');
 
     }
+    function togglePostModal3() {
+        $("#modal-last").hide()
+        $("#modal-last2").addClass('modal-show');
+
+    }
     $("#name").css('text-transform', 'capitalize');
     // $("#title").css('text-transform','capitalize'); doesn't work
 
@@ -734,7 +756,12 @@
         let nutrition = $("#nutrition").val();
         let userId = $("#userId").val();
         let postimg = $("#postimg")[0].files[0];
-        
+        let postTag = $(".postTag").val();
+        let tagsArray = []
+        $(".postTag").each(function () {
+            tagsArray.push($(this).val());
+        });
+
         const formdata = new FormData();
         formdata.append('title', title)
         formdata.append('desc', desc)
@@ -745,7 +772,8 @@
         formdata.append('servSize', servSize)
         formdata.append('nutrition', nutrition)
         formdata.append('userId', userId)
-        formdata.append('postimg', postimg)
+        formdata.append('postimg', postimg);
+        formdata.append('postTag', JSON.stringify(tagsArray));
         $("#comment-loader").show();
         const startTime = new Date().getTime();
         $("#success").text("Posting...").css("color","#28a475");

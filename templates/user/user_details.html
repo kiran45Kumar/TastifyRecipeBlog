@@ -222,17 +222,26 @@
         window.location.href = '/update_recipe/'+id
     }
     function RemoveRecipe(id) {
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
         $.ajax({
             type: 'DELETE',
             url: '/api/recipes/' + id + '/',
             data: JSON.stringify({ reciepe_id: id }),
             success: function (response) {
-                const successMsg =
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                $("#comment-loader").hide();
+                    const successMsg =
                     '<i class="fas fa-check-circle"></i> Successfully Deleted Post';
                 showToast(successMsg, 'success');
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
+                }, delay);
             },
             error: function () {
                 const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';

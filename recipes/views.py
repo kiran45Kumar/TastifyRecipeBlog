@@ -10,6 +10,7 @@ from django.views.generic.base import TemplateView
 from rest_framework import viewsets
 from recipes.serializers import CommentsSerializer, RecipesSerializer
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
+import json
 from django.contrib import messages
 # Create your views here.
 class RecipePosts(APIView):
@@ -24,6 +25,7 @@ class RecipePosts(APIView):
         nutrition = request.data.get('nutrition')
         userId = request.data.get('userId')
         postimg = request.FILES.get('postimg')
+        tags = json.loads(request.POST.get('postTag', '[]'))
         user = get_object_or_404(User, id = userId)
         recipe = Recipes()
         recipe.user_id = user
@@ -37,6 +39,7 @@ class RecipePosts(APIView):
         recipe.serving_size = servSize
         recipe.nutrition_info = nutrition
         recipe.post_url = postimg
+        recipe.tags = tags
         recipe.save()
         messages.success(request, "Recipe posted successfully!")
         return JsonResponse({"status":"pass"})
@@ -51,6 +54,7 @@ class UpdateRecipe(APIView):
         preptime = request.data.get('prep_time')
         cooktime = request.data.get('cook_time')
         status = request.data.get('status')
+        # tag = request.data.get('tag')
         serving_size = request.data.get('serving_size')
         nutrition = request.data.get('nutrition_info')
         reciepe_id = request.data.get('reciepe_id')
@@ -59,7 +63,6 @@ class UpdateRecipe(APIView):
         try:
             user = User.objects.get(id=user_id)
             recipe = Recipes.objects.get(reciepe_id=reciepe_id)
-
             recipe.recipe_title = title
             recipe.user_id = user
             recipe.description = desc
@@ -70,22 +73,17 @@ class UpdateRecipe(APIView):
             recipe.status = status
             recipe.serving_size = serving_size
             recipe.nutrition_info = nutrition
-
+            # recipe.tags = tag
             if postimg:
                 recipe.post_url = postimg
-
             recipe.save()
-
         except User.DoesNotExist:
             return JsonResponse({"status": 'fail', "message": "User doesn't exist"})
-
         except Recipes.DoesNotExist:
             return JsonResponse({"status": 'fail', "message": "Recipe doesn't exist"})
-
         except Exception as e:
             print("Error:", str(e))
             return JsonResponse({"status": 'fail', "message": str(e)})
-
         return JsonResponse({'status': 'success'})
     
 

@@ -21,6 +21,7 @@ class Recipes(models.Model):
     prep_time = models.CharField(max_length=500,default='')
     category = models.ForeignKey(RecipeCategory,on_delete=models.CASCADE, null=True, blank=True)
     cook_time = models.CharField(max_length=500,default='') 
+    tags = models.JSONField(default=list,null=True, blank=True)
     status = models.CharField(max_length=20, default="Pending",choices=status_choices)
     serving_size = models.CharField(max_length=200,default='') 
     likes = models.IntegerField(default=0, null=True, blank=True)

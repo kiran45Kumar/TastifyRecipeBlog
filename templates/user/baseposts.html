@@ -73,6 +73,11 @@
     cursor: pointer;
     margin: 5px;
 }
+.user-tags{
+    font-size: 8px;
+    font-weight: 500;
+    color: #007bff;
+}
 </style>
  
 {% for recipe in allposts %}
@@ -124,6 +129,13 @@
         <div class="user-blog-text-section">
             <p class="blog-text">
                 {{recipe.recipe_title}}
+            </p>
+            <p class="user-tags">
+                {% if recipe.tags %}
+                    {% for tag in recipe.tags %}
+                        {{tag}}
+                    {% endfor %}
+                {% endif %}
             </p>
             <div class="user-main-text">
                 <div class="user-post-text">

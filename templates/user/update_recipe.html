@@ -50,17 +50,27 @@
             </div>
             <div class="login-forms">
                 <label for="">Status</label>
-                <input type="text" placeholder="Enter Your BirthDate" name="birthdate" id="status{{recipe.reciepe_id}}"
+                <input type="text" placeholder="Enter Your status" name="birthdate" id="status{{recipe.reciepe_id}}"
                     value="{{recipe.status}}">
                 <p id="bdate"></p>
                 <input type="hidden" name="user_id" id="user_id" value="{{recipe.user_id.id}}">
             </div>
             <div class="login-forms">
                 <label for="">Serving Size</label>
-                <input type="text" placeholder="Enter Your BirthDate" name="birthdate" id="serving_size{{recipe.reciepe_id}}"
+                <input type="text" placeholder="Enter Your serving_size" name="birthdate" id="serving_size{{recipe.reciepe_id}}"
                     value="{{recipe.serving_size}}">
                 <p id="bdate"></p>
             </div>
+            {% if recipe.tags %}
+            {% for tag in recipe.tags %}
+            <div class="login-forms">
+                <label for="">Hash Tags</label>
+                    <input type="text" placeholder="Enter Your tag" name="birthdate" id="tag{{recipe.reciepe_id}}_{{forloop.counter}}"
+                    value="{{tag}}">
+                <p id="bdate"></p>
+            </div>
+            {% endfor %}
+            {% endif %}
             <div class="login-forms">
                 <label for="">Nutrition Info</label>
                 <input type="text" placeholder="Enter Your BirthDate" name="birthdate"
@@ -73,7 +83,7 @@
                 <input type="file" name="post_url" id="post_url{{ recipe.reciepe_id }}">
                 <p id="profileimg"></p>
             </div>
-            
+
 
             <div class="login-button signup-button">
                 <button type="" id="btn_update" onclick="UpdateRecipeDetails('{{recipe.reciepe_id}}')">Update</button>
