@@ -299,7 +299,7 @@
                             </p>
                         </div>
                         <div class="bottom black1 create-button">
-                            <button onclick="toggleModal()">New Post</button>
+                            <button onclick="openPage('kitchen')">New Kitchen</button>
                         </div>
                     </div>
                 </div>
@@ -389,15 +389,15 @@
                     <div class="user-create-post">
                         <p> <input type="text" placeholder="Create Your Post" readonly></p>
                         <div class="user-create-buttons">
-                            <div class="user-create" onclick="toggleModal()">
+                            <div class="user-create" onclick="toggleModaln()">
                                 <i class='bx bx-camera post-camera post-one'></i>
                                 <span>Photo</span>
                             </div>
-                            <div class="user-create post-video post-one" onclick="toggleModal()">
+                            <div class="user-create post-video post-one" onclick="toggleModanl()">
                                 <i class='bx bx-video'></i>
                                 <span>Kitchen Class</span>
                             </div>
-                            <div class="user-create post-articles post-one" onclick="toggleModal()">
+                            <div class="user-create post-articles post-one" onclick="toggleModanl()">
                                 <i class='bx bx-edit'></i>
                                 <span>write articles</span>
                             </div>
@@ -563,6 +563,9 @@
         }
         else if (path == 'home') {
             location.href = '/user/{{currentUser}}/{{current_user_id}}/posts'
+        }
+        else if (path == 'kitchen') {
+            location.href = '/create_kitchen/'
         }
     }
 
@@ -825,6 +828,11 @@
     function toggleText() {
         let text_id = $("#user-text");
         text_id.css('height', '50px')
+    }
+    function toggleModal() {
+        let ModalIcon = $("#closeModalicon");
+        let main = $("#main");
+        ModalIcon.toggle('modal-close')
     }
     function toggleModal() {
         let ModalIcon = $("#closeModalicon");

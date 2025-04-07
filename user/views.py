@@ -12,6 +12,7 @@ from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework.parsers import JSONParser
+from kitchen.models import Kitchen, KitchenImage, KitchenVideo
 def signup(request):
     return render(request,"user/signup.html")
 def login(request):
@@ -226,6 +227,9 @@ class UploadCoverImg(APIView):
 def user_details(request, id):
     try:
         user = get_object_or_404(User, id=id)
+        kitchen = Kitchen.objects.filter(user = user)
+        kitchen_image = KitchenImage.objects.filter(kitchen__in = kitchen)
+        kitchen_video = KitchenVideo.objects.filter(kitchen__in = kitchen)
         user_id = request.session.get('user_id')
         if not user_id:
             return redirect('/')
@@ -244,7 +248,10 @@ def user_details(request, id):
             'recipes': recipes,
             'recipe_count': recipe_count,
             'pending_requests': pending_requests,
-            "all_recipes":all_recipes
+            "all_recipes":all_recipes,
+            "kitchens":kitchen,
+            "kitchen_images": kitchen_image,
+            "kitchen_videos": kitchen_video
         })
     except User.DoesNotExist:
         return JsonResponse({'status': 'fail', 'message': 'User not found'}, status=404)

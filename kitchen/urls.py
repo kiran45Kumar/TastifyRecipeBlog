@@ -5,6 +5,11 @@ router = DefaultRouter()
 router.register(r'kitchens',KitchenViewSet, basename='kitchen')
 router.register(r'categories',CookingCategoryViewSet, basename='categories')
 urlpatterns = [
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
     # template views
+    path('create_kitchen/',CreateKitchen.as_view(), name='create_kitchen'),
+    path('add_kitchen/',AddKitchen.as_view(), name='AddKitchen'),
+    path('upload_image_video/',CreateImageVideo.as_view(), name='CreateImageVideo'),
+    path('kitchen_dashboard/<int:id>',kitchen_dashboard, name='kitchen_dashboard'),
+    path('create_recipe/<int:id>',create_recipe, name='create_recipe'),
 ]

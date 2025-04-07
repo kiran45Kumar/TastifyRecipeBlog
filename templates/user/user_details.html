@@ -185,6 +185,30 @@
         <h2 class="text-center">No Recipes Found</h2>
         {% endif %}
     </div>
+
+    <h1>My Kitchen</h1>
+    <div class="blogs-sections">
+        {% for kitchen in kitchens %}
+            <div class="blogs">
+                {% if kitchen.kitchen_logo %}
+                <img src="{{kitchen.kitchen_logo.url}}" alt="">
+                {% else %}
+                <img src="{% static 'images/apple.webp' %}" alt="">
+                {% endif %}
+                <h4 class="">
+                    {{kitchen.kitchen_name|slice:'20'}}...</h4>
+                    <div class="btn_remove">
+                        {% if current_user_id == kitchen.user.id %}
+                        <button class="btn-remove" onclick="kitchenDashboard('{{kitchen.kitchen_id}}')">Dashboard</button>
+                        <button class="btn-remove" onclick="RemoveKitchen('{{kitchen.kitchen_id}}')">Delete</button>
+                        {% endif %}
+                    </div>    
+            </div>
+            {% empty %}
+            NO Kitchen found 
+            <a href="/create_kitchen/">Create Kitchen</a>
+        {% endfor %}
+    </div>
     <h1>My Recipe Blogs</h1>
     <div class="blogs-sections">
         {% for recipe in all_recipes %}
@@ -221,6 +245,9 @@
     function recipeDetails(id){
         window.location.href = '/update_recipe/'+id
     }
+    function kitchenDashboard(id){
+        window.location.href = '/kitchen_dashboard/'+id
+    }
     function RemoveRecipe(id) {
         $("#comment-loader").show();
         const startTime = new Date().getTime();
@@ -237,6 +264,34 @@
                 $("#comment-loader").hide();
                     const successMsg =
                     '<i class="fas fa-check-circle"></i> Successfully Deleted Post';
+                showToast(successMsg, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }, delay);
+            },
+            error: function () {
+                const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';
+                showToast(errorMsg, 'error');
+            }
+        })
+    }
+    function RemoveKitchen(id) {
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/kitchens/' + id + '/',
+            data: JSON.stringify({ reciepe_id: id }),
+            success: function (response) {
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                $("#comment-loader").hide();
+                    const successMsg =
+                    '<i class="fas fa-check-circle"></i> Successfully Deleted Kitchen';
                 showToast(successMsg, 'success');
                 setTimeout(() => {
                     window.location.reload();

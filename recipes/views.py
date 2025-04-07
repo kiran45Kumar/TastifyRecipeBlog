@@ -12,6 +12,7 @@ from recipes.serializers import CommentsSerializer, RecipesSerializer
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 import json
 from django.contrib import messages
+from kitchen.models import Kitchen
 # Create your views here.
 class RecipePosts(APIView):
     def post(self, request):
@@ -23,8 +24,10 @@ class RecipePosts(APIView):
         cooktime = request.data.get('cooktime')
         servSize = request.data.get('servSize')
         nutrition = request.data.get('nutrition')
+        kitchen = request.data.get('kitchen')
         userId = request.data.get('userId')
         postimg = request.FILES.get('postimg')
+        kchen = Kitchen.objects.get(kitchen_id = kitchen)
         tags = json.loads(request.POST.get('postTag', '[]'))
         user = get_object_or_404(User, id = userId)
         recipe = Recipes()
@@ -36,6 +39,7 @@ class RecipePosts(APIView):
         recipe.prep_time = preptime
         recipe.cook_time = cooktime
         recipe.status = 'Published'
+        recipe.kitchen = kchen
         recipe.serving_size = servSize
         recipe.nutrition_info = nutrition
         recipe.post_url = postimg

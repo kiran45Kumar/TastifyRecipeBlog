@@ -13,8 +13,8 @@ class Kitchen(models.Model):
     business_email = models.EmailField(unique=True, null=True,blank=True) #optional
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True) #required
     kitchen_logo = models.ImageField(upload_to='kitchen_logo/',null=True, blank=True) #required
-    kitchen_images = models.FileField(upload_to='kitchen_images/',null=True, blank=True) #optional
-    kitchen_videos = models.FileField(upload_to='kitchen_videos/',null=True, blank=True) #optional 
+    # kitchen_images = models.FileField(upload_to='kitchen_images/',null=True, blank=True) #optional
+    # kitchen_videos = models.FileField(upload_to='kitchen_videos/',null=True, blank=True) #optional 
     location = models.TextField() #required
     cooking_category = models.ForeignKey(CookingCategory, on_delete=models.CASCADE, null=True, blank=True)#optional
     rating = models.IntegerField(null=True, blank=True) #will be given by user;
@@ -23,4 +23,11 @@ class Kitchen(models.Model):
     
     def __str__(self):
         return self.kitchen_name
+
+class KitchenImage(models.Model):
+    kitchen = models.ForeignKey(Kitchen, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='kitchen_images/')
     
+class KitchenVideo(models.Model):
+    kitchen = models.ForeignKey(Kitchen, related_name='videos', on_delete=models.CASCADE)
+    video = models.FileField(upload_to='kitchen_videos/')

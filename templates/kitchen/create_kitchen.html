@@ -1,0 +1,208 @@
+{% extends 'user/userdashboard.html' %}
+{% load static %}
+{% block title %}User Details{% endblock %}
+{% block navbar %}
+<div class="create-kitchen-section">
+    <div class="first-section" id="first-section">
+    <div class="create-kitchen">
+    <div class="create-inputs">
+        <label for="kitchen_name">Kitchen Name *</label>
+        <input type="text" name="kitchen_name" id="kitchen_name" placeholder="Enter Your Kitchen Name">
+    </div>
+    <div class="create-inputs">
+        <label for="kitchen_name">Website URL (optional)</label>
+        <input type="url" name="website_url" id="website_url" placeholder="Enter Your Website URL">
+    </div>
+    <div class="create-inputs">
+        <label for="business_email">Business Email (optional)</label>
+        <input type="email" name="business_email" id="business_email" placeholder="Enter Your Business Email">
+    </div>
+    <div class="create-inputs">
+        <label for="location">Location</label>
+        <input type="text" name="location" id="location" placeholder="Enter Your location">
+    </div>
+    <div class="create-inputs">
+        <label for="kitchen_desc">Kitchen Desc</label>
+        <input type="text" name="kitchen_desc" id="kitchen_desc" placeholder="Enter Your location">
+    </div>
+    <div class="create-inputs">
+        <label for="location">Kitchen Logo</label>
+        <input type="file" name="kitchen_logo" id="kitchen_logo" >
+    </div>
+    <div class="create-inputs">
+        <button onclick="CreateKitchen()">Create</button>
+    </div>
+    </div>
+</div>
+   <div class="next-section" id="next-section" hidden>
+    <div class="create-inputs">
+        <label for="location">Kitchen Images</label>
+        <input type="file" name="kitchen_images" id="kitchen_images" multiple >
+    </div>
+    <div class="create-inputs">
+        <label for="kitchen_videos">Videos</label>
+        <input type="file" name="kitchen_videos" id="kitchen_videos" multiple >
+    </div>
+    <div class="create-inputs">
+        <button onclick="back()">Back</button>
+        <button onclick="ImageVideoUpload()">Submit</button>
+    </div>
+   </div>
+    
+</div>
+<div id="comment-loader" style="display:none;">
+    <input type="hidden" name="user_id" id="user_id" value="{{current_user_id}}">
+    <div class="loader-overlay">
+        <div class="loader-spinner"></div>
+    </div>
+</div>
+<script>
+    function back(){
+        $("#first-section").show()
+        $("#next-section").hide();
+    }
+    function ImageVideoUpload() { 
+        let kitchen_name = $("#kitchen_name").val();
+        let kitchen_images = $("#kitchen_images")[0].files;
+        let kitchen_videos = $("#kitchen_videos")[0].files;
+        let formdata = new FormData();
+        formdata.append("kitchen_name",kitchen_name);
+        for (let i = 0; i < kitchen_images.length; i++) {
+            formdata.append('kitchen_images', kitchen_images[i]);
+        }
+        for (let i = 0; i < kitchen_videos.length; i++) {
+            formdata.append('kitchen_videos', kitchen_videos[i]);
+        }
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
+        $.ajax({
+            type:"POST",
+            url:'/upload_image_video/',
+            data:formdata,
+            contentType:false,
+            processData:false,
+            success:function(response){
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                $("#comment-loader").hide();
+                if(response['status']=='pass'){
+                const successMsg =
+                    `<i class="fas fa-check-circle"></i> Uploaded Images`;
+                showToast(successMsg, 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }
+                else if(response['status']=='fail'){
+                    const errorMsg = `<i class="fas fa-check-circle"></i> Uploaded Videos`;
+                showToast(errorMsg, 'error');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }
+                    
+                }, delay);
+            },
+            error:function(){
+                $("#comment-loader").hide();
+                const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';
+                showToast(errorMsg, 'error');
+            }
+        })
+     }
+
+     
+    function CreateKitchen() { 
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
+        let kitchen_name = $("#kitchen_name").val();
+        let website_url = $("#website_url").val();
+        let business_email = $("#business_email").val();
+        let location = $("#location").val();
+        let user_id  = $("#user_id").val();
+        let kitchen_desc = $("#kitchen_desc").val();
+        let kitchen_logo = $("#kitchen_logo")[0].files[0]
+        if(!kitchen_name){
+             const errorMsg = '<i class="fas fa-check-circle"></i> Enter Your Kitchen Name'
+             $("#comment-loader").hide();
+            showToast(errorMsg, 'error');
+            return;
+        }
+
+       else if(!location){
+             const errorMsg = '<i class="fas fa-check-circle"></i> Enter Your Location'
+             $("#comment-loader").hide();
+
+            showToast(errorMsg, 'error');
+            return;
+        }
+       else if(kitchen_logo==null){
+             const errorMsg = '<i class="fas fa-check-circle"></i> Upload Your Kitchen Logo'
+             $("#comment-loader").hide();
+
+            showToast(errorMsg, 'error');
+            return;
+        }
+
+        let formdata = new FormData();
+        formdata.append('kitchen_name',kitchen_name);
+        formdata.append('website_url',website_url);
+        formdata.append('kitchen_desc',kitchen_desc);
+        formdata.append('business_email',business_email);
+        formdata.append('location',location);
+        formdata.append('kitchen_logo',kitchen_logo);
+        formdata.append('user',user_id);
+            $.ajax({
+            type: "POST",
+            url: "/add_kitchen/",
+            data: formdata,
+            contentType:false,
+            processData:false,
+            success: function (response) {
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                $("#comment-loader").hide();
+                if(response['status']=='pass'){
+                const successMsg =
+                    `<i class="fas fa-check-circle"></i>${response['message']}`;
+                showToast(successMsg, 'success');   
+                $("#first-section").hide()
+                $("#next-section").show();
+                }
+                else if(response['status']=='fail'){
+                    const errorMsg = `<i class="fas fa-check-circle"></i> ${response['message']}`;
+                showToast(errorMsg, 'error');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }
+                    
+                }, delay);
+            },
+            error: function (xhr) {
+                $("#comment-loader").hide();
+
+                if (xhr.responseJSON) {
+                    let errors = xhr.responseJSON;
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            let errorMsg = `<i class="fas fa-check-circle"></i> ${errors[field]}`;
+                            showToast(errorMsg, 'error');
+                        }
+                    }
+                } else {
+                    const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';
+                    showToast(errorMsg, 'error');
+                }
+}
+
+        });
+     }
+</script>
+{% endblock %}
