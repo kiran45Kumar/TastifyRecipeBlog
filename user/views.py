@@ -89,7 +89,7 @@ class UpdateUserDetails(APIView):
     def put(self, request):
         username = request.data.get('username')
         email = request.data.get('email')
-        password = request.data.get('password')
+        # password = request.data.get('password')
         phone = request.data.get('phone')
         first_name = request.data.get('firstname')
         last_name = request.data.get('lastname')
@@ -99,7 +99,7 @@ class UpdateUserDetails(APIView):
         
         User.objects.filter(id=user_id).update(
             email=email,
-            password=password,
+            # password=password,
             username=username,
             phone=phone,
             first_name=first_name,
