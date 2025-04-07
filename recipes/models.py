@@ -1,5 +1,6 @@
 from django.db import models
 from user.models import User
+from kitchen.models import Kitchen
 # Create your models here.
 class RecipeCategory(models.Model):
     category_id = models.AutoField(primary_key=True)
@@ -21,6 +22,7 @@ class Recipes(models.Model):
     prep_time = models.CharField(max_length=500,default='')
     category = models.ForeignKey(RecipeCategory,on_delete=models.CASCADE, null=True, blank=True)
     cook_time = models.CharField(max_length=500,default='') 
+    kitchen = models.ForeignKey(Kitchen, on_delete=models.CASCADE, null=True,blank=True)
     tags = models.JSONField(default=list,null=True, blank=True)
     status = models.CharField(max_length=20, default="Pending",choices=status_choices)
     serving_size = models.CharField(max_length=200,default='') 
