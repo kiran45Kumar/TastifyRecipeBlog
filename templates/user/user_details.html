@@ -206,7 +206,9 @@
             </div>
             {% empty %}
             NO Kitchen found 
-            <a href="/create_kitchen/">Create Kitchen</a>
+          {% if current_user_id == kitchen.user.id %}
+          <a href="/create_kitchen/">Create Kitchen</a>
+          {% endif %}
         {% endfor %}
     </div>
     <h1>My Recipe Blogs</h1>

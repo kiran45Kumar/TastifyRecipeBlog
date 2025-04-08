@@ -77,7 +77,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" hidden>
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="mdi mdi-crosshairs-gps menu-icon"></i>
               <span class="menu-title">UI Elements</span>
@@ -97,31 +97,31 @@
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" hidden>
             <a class="nav-link" href="pages/icons/mdi.html">
               <i class="mdi mdi-contacts menu-icon"></i>
               <span class="menu-title">Icons</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/recipes/{{kitchen.kitchen_id}}">
+            <a class="nav-link cursor-pointer" href="javascript:void(0)" >
               <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-              <span class="menu-title">Recipes</span>
+              <span class="menu-title" onclick="location.replace('/recipes/{{kitchen.kitchen_id}}')">Recipes</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" hidden>
             <a class="nav-link" href="pages/charts/chartjs.html">
               <i class="mdi mdi-chart-bar menu-icon"></i>
               <span class="menu-title">Charts</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/tables/basic-table.html">
+            <a class="nav-link" href="  javascript:void(0)">
               <i class="mdi mdi-table-large menu-icon"></i>
-              <span class="menu-title">Tables</span>
+              <span class="menu-title" onclick="location.replace('/view_recipes/{{kitchen.kitchen_id}}')">View Recipes</span>
             </a>
           </li>
-          <li class="nav-item pt-3">
+          <li class="nav-item pt-3" hidden>
             <a class="nav-link" href="http://bootstrapdash.com/demo/plus-free/documentation/documentation.html" target="_blank">
               <i class="mdi mdi-file-document-box menu-icon"></i>
               <span class="menu-title">Documentation</span>

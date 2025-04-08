@@ -506,10 +506,10 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Category</label>
+                            <label class="col-sm-3 col-form-label">Kitchen</label>
                             <div class="col-sm-9">
                               <select class="form-control" id="category">
-                              <option selected="">Select category</option>
+                              <option value="">Select category</option>
                                 {% for kitchen in kitchens %}
                                 <option value="{{kitchen.kitchen_id}}">{{kitchen.kitchen_name}}</option>
                                 {% endfor %}
@@ -664,7 +664,7 @@
         <!-- main-panel ends -->
          <script>
 function toggleModalREfresh() {
-        let title = $("#recipe-title").val();
+  let title = $("#recipe-title").val();
         let desc = $("#desc").val();
         let ingredients = $("#ingredients").val();
         let instruction = $("#instruction").val();
@@ -673,7 +673,70 @@ function toggleModalREfresh() {
         let servSize = $("#servSize").val();
         let nutrition = $("#nutrition").val();
         let userId = $("#userId").val();
+        let category = $("#category").val();
         let postimg = $("#postimg")[0].files[0];
+        let postTag = $(".postTag").val();
+        if(!title){
+          const errorMsg = 'Enter title';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!desc){
+          const errorMsg = 'Enter Description';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!category){
+          const errorMsg = ' Select Kitchen';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!ingredients){
+          const errorMsg = ' Enter Ingredients';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!instruction){
+          const errorMsg = 'Enter Instruction';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!preptime){
+          const errorMsg = ' Enter Preparation Time';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!cooktime){
+          const errorMsg = 'Enter Cooking Time';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!servSize){
+          const errorMsg = ' Enter Serving Size';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!cooktime){
+          const errorMsg = ' Enter Cooking Time';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+       
+        else if(nutrition){
+          const errorMsg = ' Enter Nutrition';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(postimg == null){
+          const errorMsg = ' Please Upload Image';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        let tagsArray = []
+        $(".postTag").each(function () {
+            tagsArray.push($(this).val());
+        });
+
         const formdata = new FormData();
         formdata.append('title', title)
         formdata.append('desc', desc)
@@ -684,9 +747,12 @@ function toggleModalREfresh() {
         formdata.append('servSize', servSize)
         formdata.append('nutrition', nutrition)
         formdata.append('userId', userId)
-        formdata.append('postimg', postimg)
+        formdata.append('kitchen', category)
+        formdata.append('postimg', postimg);
+        formdata.append('postTag', JSON.stringify(tagsArray));
         $("#comment-loader").show();
         const startTime = new Date().getTime();
+        // $("#success").text("Posting...").css("color","#28a475");
         $.ajax({
             type: "POST",
             url: "/change_draft/",
@@ -734,8 +800,59 @@ function createPost() {
         let postimg = $("#postimg")[0].files[0];
         let postTag = $(".postTag").val();
         if(!title){
-          const errorMsg = '<i class="fas fa-times-circle"></i> Something Went Wrong';
-          showToast(errorMsg, 'error')
+          const errorMsg = ' Enter title';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!desc){
+          const errorMsg = ' Enter Description';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!category){
+          const errorMsg = ' Select Kitchen';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!ingredients){
+          const errorMsg = ' Enter Ingredients';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!instruction){
+          const errorMsg = 'Enter Instruction';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!preptime){
+          const errorMsg = ' Enter Preparation Time';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!cooktime){
+          const errorMsg = 'Enter Cooking Time';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!servSize){
+          const errorMsg = ' Enter Serving Size';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(!cooktime){
+          const errorMsg = ' Enter Cooking Time';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+       
+        else if(nutrition){
+          const errorMsg = ' Enter Nutrition';
+          showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(postimg == null){
+          const errorMsg = ' Please Upload Image';
+          showCustomToast(errorMsg, 'error')
           return;
         }
         let tagsArray = []
