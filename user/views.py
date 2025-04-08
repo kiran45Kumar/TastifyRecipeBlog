@@ -51,14 +51,13 @@ class LoginCheck(APIView):
             expiry_seconds = request.session.get_expiry_age()
             print(f"Session Expires At: {expiry_date}")
             print(f"Session Duration: {expiry_seconds} seconds")
-            return JsonResponse({"status": "pass", "uid": user.id, 'name': user.first_name,"message":"Login Successful"})
+            return JsonResponse({"status": "pass", "uid": user.id, 'name': user.first_name,"message":"Login Successful",'role':user.role})
 
         except User.DoesNotExist:
             return JsonResponse({"status": "no_user", "message": "Account does not exist"})
         
         except Exception as e:
             return JsonResponse({"status": "exception", "message": str(e)})
-
 
 class CreateStaff(APIView):
     def post(self, request):

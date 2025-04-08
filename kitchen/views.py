@@ -121,11 +121,23 @@ def kitchen_dashboard(request, id):
     kitchen_image = KitchenImage.objects.filter(kitchen = kitchen)
     kitchen_video = KitchenVideo.objects.filter(kitchen = kitchen)
     user = User.objects.get(id=user_id)
-    recipes = Recipes.objects.filter(user_id = user)
-    return render(request, 'kitchen/kitchen_dashboard.html',{'kitchen':kitchen,'kitchen_images':kitchen_image,'recipes':recipes,
-'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None)})
+    kitchens = Kitchen.objects.all()
 
-        
+    recipes = Recipes.objects.filter(user_id = user)
+    return render(request, 'adminPanel/admin.html',{'kitchen':kitchen,'kitchen_images':kitchen_image,'recipes':recipes,"kitchens":kitchens,
+'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None)})
+def recipes(request, id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('404', message='Something Went Wrong')
+    kitchen = Kitchen.objects.get(kitchen_id = id)
+    kitchen_image = KitchenImage.objects.filter(kitchen = kitchen)
+    kitchen_video = KitchenVideo.objects.filter(kitchen = kitchen)
+    user = User.objects.get(id=user_id)
+    recipes = Recipes.objects.filter(user_id = user)
+    kitchens = Kitchen.objects.all()
+    return render(request, 'kitchen/create.html',{'kitchen':kitchen,'kitchen_images':kitchen_image,'recipes':recipes,"kitchens":kitchens,
+'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None)})
 def create_recipe(request,id):
     user_id = request.session.get('user_id')
     if not user_id:

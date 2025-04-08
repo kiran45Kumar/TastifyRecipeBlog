@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include("user.urls")),
     path('',include('recipes.urls')),
     path('',include('friends.urls')),
-    path('',include('kitchen.urls'))
+    path('',include('kitchen.urls')),
+    path('',include('adminPanel.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
