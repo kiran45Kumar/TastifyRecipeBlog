@@ -13,5 +13,6 @@ urlpatterns = [
     path('kitchen_dashboard/<int:id>',kitchen_dashboard, name='kitchen_dashboard'),
     path('recipes/<int:id>',recipes, name='recipes'),
     path('view_recipes/<int:id>',view_recipes, name='recipes'),
+    path('update_recipe/<int:id>/<int:rid>',update_recipe, name='update_recipe'),
     # path('create_recipe/<int:id>',create_recipe, name='create_recipe'),
 ]

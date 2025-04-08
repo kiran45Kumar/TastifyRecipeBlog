@@ -1,20 +1,95 @@
 {% extends 'adminPanel/admin.html' %}
 {% load static %}
 {% block body-content %}
+<style>
+ .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+  .my-toast {
+    background-color: #ffffff;
+    color: #28a745;
+    border-left: 6px solid #28a745;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+    min-width: 250px;
+    max-width: 300px;
+    animation: slideIn 0.4s ease, fadeOut 0.5s ease 4.5s forwards;
+    position: relative;
+  }
+
+  .my-toast .my-toast-close {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #666;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+</style>
+<div id="comment-loader" style="display:none;">
+  <div class="loader-overlay">
+      <div class="loader-spinner"></div>
+  </div>
+</div>
+
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title">Basic Tables</h3>
+              <h3 class="page-title">Your Recipes</h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                  <li class="breadcrumb-item active" aria-current="page"> Basic tables </li>
+                  <li class="breadcrumb-item"><a href="#">View Recipes</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> View </li>
                 </ol>
               </nav>
             </div>
             <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
+              <!-- <div class="col-lg-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Basic Table</h4>
@@ -76,8 +151,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-6 grid-margin stretch-card">
+              </div> -->
+              <!-- <div class="col-lg-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Hoverable Table</h4>
@@ -144,123 +219,78 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Striped Table</h4>
-                    <p class="card-description"> Add class <code>.table-striped</code>
+                    <h4 class="card-title">All Recipes</h4>
+                    <!-- <p class="card-description"> Add class <code>.table-striped</code> -->
                     </p>
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <thead>
                           <tr>
-                            <th>User</th>
-                            <th>First name</th>
-                            <th>Progress</th>
-                            <th>Amount</th>
-                            <th>Deadline</th>
+                            <th>Recipe Image</th>
+                            <th>Recipe Name </th>
+                            <th>Preparation time</th>
+                            <th>Cooking Time</th>
+                            <th>Serving Size</th>
+                            <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {% for recipe in recipes %}
                           <tr>
                             <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-1.png' %}" alt="image" />
+                              <img src="{{recipe.post_url.url}}" alt="image"  data-bs-toggle="modal" data-bs-target="#exampleModal"/>
                             </td>
-                            <td>Herman Beck</td>
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tastify</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <img src="{{recipe.post_url.url}}" style="width: 100%;height: 100%;border-radius: 10px;"  alt="">
+                                    <p>{{recipe.recipe_title}}</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             <td>
-                              <div class="progress">
+                              {{recipe.recipe_title}}
+                            </td>
+                            <td>
+                              {{recipe.prep_time}}
+                              <!-- <div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
+                              </div> -->
                             </td>
-                            <td>$ 77.99</td>
-                            <td>May 15, 2015</td>
-                          </tr>
-                          <tr>
-                            <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-2.png' %}" alt="image" />
-                            </td>
-                            <td>Messsy Adam</td>
                             <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
+                              {{recipe.cook_time}}
                             </td>
-                            <td>$245.30</td>
-                            <td>July 1, 2015</td>
-                          </tr>
-                          <tr>
-                            <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-3.png' %}" alt="image" />
-                            </td>
-                            <td>John Richards</td>
                             <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
+                              {{recipe.serving_size}}
                             </td>
-                            <td>$138.00</td>
-                            <td>Apr 12, 2015</td>
-                          </tr>
-                          <tr>
-                            <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-4.png' %}" alt="image" />
-                            </td>
-                            <td>Peter Meggik</td>
                             <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
+                              <button class="btn btn-success" onclick="UpdateRecipe('{{kitchen.kitchen_id}}','{{recipe.reciepe_id}}')">Update</button>
+                              <button class="btn btn-danger" onclick="RemoveRecipe('{{recipe.reciepe_id}}')">Delete</button>
                             </td>
-                            <td>$ 77.99</td>
-                            <td>May 15, 2015</td>
                           </tr>
-                          <tr>
-                            <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-1.png' %}" alt="image" />
-                            </td>
-                            <td>Edward</td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            </td>
-                            <td>$ 160.25</td>
-                            <td>May 03, 2015</td>
-                          </tr>
-                          <tr>
-                            <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-2.png' %}" alt="image" />
-                            </td>
-                            <td>John Doe</td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            </td>
-                            <td>$ 123.21</td>
-                            <td>April 05, 2015</td>
-                          </tr>
-                          <tr>
-                            <td class="py-1">
-                              <img src="{% static 'assets/images/faces-clipart/pic-3.png' %}" alt="image" />
-                            </td>
-                            <td>Henry Tom</td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            </td>
-                            <td>$ 150.00</td>
-                            <td>June 16, 2015</td>
-                          </tr>
+                          {% endfor %}
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-12 grid-margin stretch-card">
+              <!-- <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Bordered table</h4>
@@ -425,8 +455,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-12 stretch-card">
+              </div> -->
+              <!-- <div class="col-lg-12 stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Table with contextual classes</h4>
@@ -484,7 +514,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <!-- content-wrapper ends -->
@@ -497,5 +527,57 @@
           </footer>
           <!-- partial -->
         </div>
+        <div id="my-toast-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
         <!-- main-panel ends -->
+         <script>
+          function UpdateRecipe(id,rid) { 
+            location.href = '/update_recipe/'+id+'/'+rid 
+           }
+              function showCustomToast(message = "Action Successful") {
+    const toastContainer = document.getElementById('my-toast-container');
+
+    const toast = document.createElement('div');
+    toast.className = 'my-toast';
+    toast.innerHTML = `
+      <span>${message}</span>
+      <button class="my-toast-close" onclick="this.parentElement.remove()">×</button>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      toast.remove();
+    }, 5000);
+  }
+             function RemoveRecipe(id) {
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/recipes/' + id + '/',
+            data: JSON.stringify({ reciepe_id: id }),
+            success: function (response) {
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                $("#comment-loader").hide();
+                const msg =
+                        'Post Deleted ';
+                    showCustomToast(msg);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }, delay);
+            },
+            error: function () {
+              const msg =
+                        'Failed to Delete ';
+                    showCustomToast(msg);
+            }
+        })
+    }
+         </script>
 {% endblock body-content %}

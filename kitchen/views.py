@@ -162,6 +162,17 @@ def create_recipe(request,id):
     return render(request, 'kitchen/create_recipe.html',{'kitchen':kitchen,'kitchen_images':kitchen_image,"kitchens":kitchens,
 'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None)})
 
+def update_recipe(request, id, rid):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('404', message='Something Went Wrong')
+    kitchen = Kitchen.objects.get(kitchen_id = id)
+    kitchen_image = KitchenImage.objects.filter(kitchen = kitchen)
+    kitchen_video = KitchenVideo.objects.filter(kitchen = kitchen)
+    kitchens = Kitchen.objects.all()
+    recipe = Recipes.objects.get(reciepe_id = rid)
+    return render(request, 'kitchen/update_recipe.html', {'kitchen':kitchen,'kitchen_images':kitchen_image,"kitchens":kitchens,
+'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None), 'recipe':recipe})
         
         
         

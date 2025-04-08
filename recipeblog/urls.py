@@ -26,5 +26,4 @@ urlpatterns = [
     path('',include('friends.urls')),
     path('',include('kitchen.urls')),
     path('',include('adminPanel.urls')),
-]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
