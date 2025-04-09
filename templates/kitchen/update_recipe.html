@@ -488,7 +488,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Recipe Title</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" id="recipe-title" placeholder="Recipe Title" value="{{recipe.recipe_title}}" />
+                              <input type="text" class="form-control" id="title{{recipe.reciepe_id}}" placeholder="Recipe Title" value="{{recipe.recipe_title}}" />
                             </div>
                           </div>
                         </div>
@@ -496,7 +496,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" id="desc" value="{{recipe.description}}"  placeholder="Description"/>
+                              <input type="text" class="form-control" id="desc{{recipe.reciepe_id}}" value="{{recipe.description}}"  placeholder="Description"/>
                             </div>
                           </div>
                         </div>
@@ -506,8 +506,9 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Kitchen</label>
                             <div class="col-sm-9">
-                              <select class="form-control" id="category">
+                              <select class="form-control" id="category{{recipe.reciepe_id}}">
                               <option value="">Select category</option>
+                              <!-- <option value="{{recipe.reciepe_id}}">{{recipe.kitchen}}</option>/ -->
                                 {% for kitchen in kitchens %}
                                 <option value="{{kitchen.kitchen_id}}">{{kitchen.kitchen_name}}</option>
                                 {% endfor %}
@@ -519,7 +520,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Ingredients</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" id="ingredients" value="{{recipe.ingredients}}" placeholder="Enter the Ingredients" />
+                              <input type="text" class="form-control" id="ingredients{{recipe.reciepe_id}}" value="{{recipe.ingredients}}" placeholder="Enter the Ingredients" />
                             </div>
                           </div>
                         </div>
@@ -530,7 +531,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Instructions</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control"  value="{{recipe.instructions}}" id="instruction" placeholder="Instructions"/>
+                              <input type="text" class="form-control"  value="{{recipe.instructions}}" id="instruction{{recipe.reciepe_id}}" placeholder="Instructions"/>
                             </div>
                           </div>
                         </div>
@@ -538,7 +539,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Preparation Time</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" value="{{recipe.prep_time}}"  id="preptime" placeholder="Enter the Preparation Time"/>
+                              <input type="text" class="form-control" value="{{recipe.prep_time}}"  id="preptime{{recipe.reciepe_id}}" placeholder="Enter the Preparation Time"/>
                             </div>
                           </div>
                         </div>
@@ -548,7 +549,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Cooking Time</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" value="{{recipe.cook_time}}" id="cooktime" placeholder="Enter the Cooking Time" />
+                              <input type="text" class="form-control" value="{{recipe.cook_time}}" id="cooktime{{recipe.reciepe_id}}" placeholder="Enter the Cooking Time" />
                             </div>
                           </div>
                         </div>
@@ -556,17 +557,18 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Serving Size</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" value="{{recipe.serving_size}}" id="servSize" placeholder="Serving Size" />
+                              <input type="text" class="form-control" value="{{recipe.serving_size}}" id="servSize{{recipe.reciepe_id}}" placeholder="Serving Size" />
                             </div>
                           </div>
                         </div>
+                      
                       </div>
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Nutrtion Info</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" value="{{recipe.nutrition_info}}" placeholder="Nutrition Info" id="nutrition" />
+                              <input type="text" class="form-control" value="{{recipe.nutrition_info}}" placeholder="Nutrition Info" id="nutrition{{recipe.reciepe_id}}" />
                               <input type="hidden" name="user_id" id="userId" value="{{current_user_id}}">
                             </div>
                           </div>
@@ -576,14 +578,30 @@
                             <label class="col-sm-3 col-form-label">Recipe Image</label>
                             <div class="col-sm-9">
                               <img src="{{recipe.post_url.url}}" height="50px" width="50px" style="border-radius: 10px;" alt="">
-                              <input type="file" class="form-control" id="postimg" />
+                              <input type="file" class="form-control" id="post_url{{recipe.reciepe_id}}" />
                             </div>
                           </div>
                         </div>
+                      </div>
+                      <div class="row">
                         <div class="col-md-6">
-                          <button type="submit" class="btn btn-primary m-10" onclick="updateRecipe('{{recipe.reciepe_id}}')"> Update </button>
-                      <!-- <button class="btn btn-light" onclick="toggleModalREfresh()">Cancel</button> -->
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Status</label>
+                            <div class="col-sm-9">
+                              <select class="form-control" id="status{{recipe.reciepe_id}}">
+                              <option value="">Select category</option>
+                                <option value="pending">Pending</option>
+                                <option value="draft">Draft</option>
+                                <option value="published">Published</option>
+             
+                              </select>
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                      <div class="col-md-6">
+                        <button type="submit" id="btn_update" class="btn btn-primary m-10" onclick="updateRecipe('{{recipe.reciepe_id}}')"> Update </button>
+                    <!-- <button class="btn btn-light" onclick="toggleModalREfresh()">Cancel</button> -->
                       </div>
                     </div>
                   </div>
@@ -667,14 +685,14 @@
 function updateRecipe(id) {
             let formData = new FormData();
             formData.append("recipe_title", $("#title"+id).val());
-            formData.append("description", $("#description"+id).val());
+            formData.append("description", $("#desc"+id).val());
             formData.append("ingredients", $("#ingredients"+id).val());
-            formData.append("instructions", $("#instructions"+id).val());
-            formData.append("prep_time", $("#prep_time"+id).val());
-            formData.append("cook_time", $("#cook_time"+id).val());
+            formData.append("instructions", $("#instruction"+id).val());
+            formData.append("prep_time", $("#preptime"+id).val());
+            formData.append("cook_time", $("#cooktime"+id).val());
             formData.append("status", $("#status"+id).val());
-            formData.append("serving_size", $("#serving_size"+id).val());
-            formData.append("nutrition_info", $("#nutrition_info"+id).val());
+            formData.append("serving_size", $("#servSize"+id).val());
+            formData.append("nutrition_info", $("#nutrition"+id).val());
             formData.append("reciepe_id", id);
             let fileInput = $("#post_url" + id)[0];
             if (fileInput.files.length > 0) {
@@ -682,7 +700,7 @@ function updateRecipe(id) {
             }
             $("#comment-loader").show();
         const startTime = new Date().getTime();
-            $("#btn_update").text("redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
+            $("#btn_update").text("Redirecting...")
             $.ajax({
                 type: 'PUT',
                 url: '/update_recipes/',
@@ -697,10 +715,10 @@ function updateRecipe(id) {
                   setTimeout(() => {
                 $("#comment-loader").hide();
                     if (data) {
-                      showCustomToast("Posted Successfully")
+                      showCustomToast("Posted Updated")
                     setTimeout(() => {
                       window.location.replace('/view_recipes/{{kitchen.kitchen_id}}')
-                    }, 5000)
+                    }, 2000)
                     } else{
                         const errorMsg =  'Something Went Wrong';
                         showCustomToast(errorMsg)
