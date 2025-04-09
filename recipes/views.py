@@ -80,6 +80,7 @@ class UpdateRecipe(APIView):
             # recipe.tags = tag
             if postimg:
                 recipe.post_url = postimg
+            messages.success(request, "Recipe Updated successfully!")
             recipe.save()
         except User.DoesNotExist:
             return JsonResponse({"status": 'fail', "message": "User doesn't exist"})

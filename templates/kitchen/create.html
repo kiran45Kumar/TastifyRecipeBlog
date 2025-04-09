@@ -498,7 +498,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" id="desc"  placeholder="Description"/>
+                              <textarea class="form-control" id="desc"  placeholder="Description"></textarea>
                             </div>
                           </div>
                         </div>
@@ -583,7 +583,7 @@
                         </div>
                         <div class="col-md-6">
                           <button type="submit" class="btn btn-primary m-10" onclick="createPost()"> Submit </button>
-                      <button class="btn btn-light" onclick="toggleModalREfresh()">Cancel</button>
+                      <!-- <button class="btn btn-light" onclick="toggleModalREfresh()">Cancel</button> -->
                         </div>
                       </div>
                     </div>
@@ -804,9 +804,19 @@ function createPost() {
           showCustomToast(errorMsg, 'error')
           return;
         }
+        else if(title.length > 50){
+          const errorMsg = 'Title length should be less than 50'
+          showCustomToast(errorMsg)
+          return;
+        }
         else if(!desc){
           const errorMsg = ' Enter Description';
           showCustomToast(errorMsg, 'error')
+          return;
+        }
+        else if(desc.length > 500){
+          const errorMsg = 'Description Should be 500';
+          showCustomToast(errorMsg);
           return;
         }
         else if(!category){
