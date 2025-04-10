@@ -141,7 +141,7 @@
                     $("input").css('border-color','green')
                     if(data['role']=='admin'){
                         setTimeout(() => {
-                        window.location.replace('/admin_dashboard/')
+                        window.location.replace('/admin_dashboard/'+data['uid'])
                     }, 3000);
                     }
                        else{

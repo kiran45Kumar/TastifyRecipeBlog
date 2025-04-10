@@ -635,15 +635,20 @@
                                 <h4>Recent Messages</h4>
                             </div>
                             <div class="card-content pb-4">
-                                <div class="recent-message d-flex px-4 py-3">
-                                    <div class="avatar avatar-lg">
-                                        <img src="{% static 'assets2/images/faces/4.jpg' %}">
-                                    </div> 
-                                    <div class="name ms-4">
-                                        <h5 class="mb-1">Hank Schrader</h5>
-                                        <h6 class="text-muted mb-0">@johnducky</h6>
+                                {% if messages %}
+                                    {% for message in messages %}
+                                    <div class="recent-message d-flex px-4 py-3">
+                                        <div class="avatar avatar-lg">
+                                            <img src="{% static 'assets2/images/faces/4.jpg' %}">
+                                        </div> 
+                                        <div class="name ms-4">
+                                            <h5 class="mb-1">{{request.user}} {{message}}</h5>
+                                            <h6 class="text-muted mb-0">@johnducky</h6>
+                                        </div>
                                     </div>
-                                </div>
+                                    {% endfor %}
+                                {% endif %}
+                              
                                 <div class="recent-message d-flex px-4 py-3">
                                     <div class="avatar avatar-lg">
                                         <img src="{% static 'assets2/images/faces/5.jpg' %}">

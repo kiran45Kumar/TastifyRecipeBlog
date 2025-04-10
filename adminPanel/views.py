@@ -13,7 +13,7 @@ class AdminDashboard(TemplateView):
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
         user_id = self.request.session.get('user_id')
-        user = User.objects.get(id = user_id)
+        user = User.objects.get(id = kwargs['uid'])
         user_img = user.profilePicture
         users = User.objects.all()
         users_count = users.count()
