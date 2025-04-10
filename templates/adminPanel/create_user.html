@@ -1,0 +1,591 @@
+{% extends 'adminPanel/admin.html' %}
+{% block main-content %}
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Create User</h3>
+                    <p class="text-subtitle text-muted"></p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add User</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basic Horizontal form layout section start -->
+        <section id="basic-horizontal-layouts">
+            <!-- <div class="row match-height">
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Horizontal Form</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <form class="form form-horizontal">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>First Name</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <input type="text" id="first-name" class="form-control"
+                                                    name="fname" placeholder="First Name">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <input type="email" id="email-id" class="form-control"
+                                                    name="email-id" placeholder="Email">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Mobile</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <input type="number" id="contact-info" class="form-control"
+                                                    name="contact" placeholder="Mobile">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Password</label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <input type="password" id="password" class="form-control"
+                                                    name="password" placeholder="Password">
+                                            </div>
+                                            <div class="col-12 col-md-8 offset-md-4 form-group">
+                                                <div class='form-check'>
+                                                    <div class="checkbox">
+                                                        <input type="checkbox" id="checkbox1"
+                                                            class='form-check-input' checked>
+                                                        <label for="checkbox1">Remember Me</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 d-flex justify-content-end">
+                                                <button type="submit"
+                                                    class="btn btn-primary me-1 mb-1">Submit</button>
+                                                <button type="reset"
+                                                    class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Horizontal Form with Icons</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <form class="form form-horizontal">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Name</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group has-icon-left">
+                                                    <div class="position-relative">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Name" id="first-name-icon">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-person"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group has-icon-left">
+                                                    <div class="position-relative">
+                                                        <input type="email" class="form-control"
+                                                            placeholder="Email" id="first-name-icon">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-envelope"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Mobile</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group has-icon-left">
+                                                    <div class="position-relative">
+                                                        <input type="number" class="form-control"
+                                                            placeholder="Mobile">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-phone"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Password</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group has-icon-left">
+                                                    <div class="position-relative">
+                                                        <input type="password" class="form-control"
+                                                            placeholder="Password">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-lock"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-8 offset-md-4">
+                                                <div class='form-check'>
+                                                    <div class="checkbox">
+                                                        <input type="checkbox" id="checkbox2"
+                                                            class='form-check-input' checked>
+                                                        <label for="checkbox2">Remember Me</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit"
+                                                    class="btn btn-primary me-1 mb-1">Submit</button>
+                                                <button type="reset"
+                                                    class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </section>
+        <!-- // Basic Horizontal form layout section end -->
+
+        <!-- Basic Vertical form layout section start -->
+        <section id="basic-vertical-layouts">
+            <!-- <div class="row match-height">
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Vertical Form</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <form class="form form-vertical">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="first-name-vertical">First Name</label>
+                                                    <input type="text" id="first-name-vertical"
+                                                        class="form-control" name="fname"
+                                                        placeholder="First Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="email-id-vertical">Email</label>
+                                                    <input type="email" id="email-id-vertical"
+                                                        class="form-control" name="email-id"
+                                                        placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="contact-info-vertical">Mobile</label>
+                                                    <input type="number" id="contact-info-vertical"
+                                                        class="form-control" name="contact"
+                                                        placeholder="Mobile">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="password-vertical">Password</label>
+                                                    <input type="password" id="password-vertical"
+                                                        class="form-control" name="contact"
+                                                        placeholder="Password">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class='form-check'>
+                                                    <div class="checkbox">
+                                                        <input type="checkbox" id="checkbox3"
+                                                            class='form-check-input' checked>
+                                                        <label for="checkbox3">Remember Me</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit"
+                                                    class="btn btn-primary me-1 mb-1">Submit</button>
+                                                <button type="reset"
+                                                    class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Vertical Form with Icons</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <form class="form form-vertical">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group has-icon-left">
+                                                    <label for="first-name-icon">First Name</label>
+                                                    <div class="position-relative">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Input with icon left"
+                                                            id="first-name-icon">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-person"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+
+                                                <div class="form-group has-icon-left">
+                                                    <label for="email-id-icon">Email</label>
+                                                    <div class="position-relative">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Email" id="email-id-icon">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-envelope"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group has-icon-left">
+                                                    <label for="mobile-id-icon">Mobile</label>
+                                                    <div class="position-relative">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Mobile" id="mobile-id-icon">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-phone"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group has-icon-left">
+                                                    <label for="password-id-icon">Password</label>
+                                                    <div class="position-relative">
+                                                        <input type="password" class="form-control"
+                                                            placeholder="Password" id="password-id-icon">
+                                                        <div class="form-control-icon">
+                                                            <i class="bi bi-lock"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class='form-check'>
+                                                    <div class="checkbox mt-2">
+                                                        <input type="checkbox" id="remember-me-v"
+                                                            class='form-check-input' checked>
+                                                        <label for="remember-me-v">Remember Me</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit"
+                                                    class="btn btn-primary me-1 mb-1">Submit</button>
+                                                <button type="reset"
+                                                    class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </section>
+        <!-- // Basic Vertical form layout section end -->
+
+
+        <!-- // Basic multiple Column Form section start -->
+        <section id="multiple-column-form">
+            <div class="row match-height">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Add User</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <div class="form">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="username">User Name</label>
+                                                <input type="text" id="username" class="form-control"
+                                                    placeholder="Username" name="username">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="text" id="email" class="form-control"
+                                                    placeholder="Email" name="email">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="password">Password</label>
+                                                <input type="text" id="password" class="form-control"
+                                                    placeholder="Password" name="city-column">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="phoneno">Phone No</label>
+                                                <input type="text" id="phone" class="form-control"
+                                                    name="country-floating" placeholder="Phone No">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="firstname">First Name</label>
+                                                <input type="text" id="firstname" class="form-control"
+                                                    name="firstname" placeholder="First Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="lastname">Last Name</label>
+                                                <input type="text" id="lastname" class="form-control"
+                                                    name="lastname" placeholder="Last Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="dob">Date of Birth</label>
+                                                <input type="date" id="birthdate" class="form-control"
+                                                    name="dob" placeholder="Date of Birth">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="lastname">Profile Image</label>
+                                                <input type="file" id="profile" class="form-control"
+                                                    name="lastname" placeholder="Last Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="lastname">Role</label>
+
+                                                <select class="form-select" id="role">
+                                                    <option selected>Select Role</option>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="user">User</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="nick">Nick Name</label>
+                                                <input type="text" id="nick" class="form-control"
+                                                name="Nick Name" placeholder="Nick Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="nick">Cover Photo</label>
+                                                <input type="file" id="cover_photo" class="form-control"
+                                                name="cover_photo" placeholder="Nick Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-end">
+                                            <button type="submit"
+                                                class="btn btn-primary me-1 mb-1" onclick="addUser()">Submit</button>
+                                            <button type="reset"
+                                                class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- // Basic multiple Column Form section end -->
+    </div>
+
+    <footer>
+        <div class="footer clearfix mb-0 text-muted">
+            <div class="float-start">
+                <p>2021 &copy; Mazer</p>
+            </div>
+            <div class="float-end">
+                <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+                        href="http://ahmadsaugi.com">A. Saugi</a></p>
+            </div>
+        </div>
+    </footer>
+</div>
+<script>
+       function addUser() {
+    let username = $("#username").val();
+    let email = $("#email").val();
+    let password = $("#password").val();
+    let phone = $("#phone").val();
+    let firstname = $("#firstname").val();
+    let lastname = $("#lastname").val();
+    let birthdate = $("#birthdate").val();
+    let profile = $("#profile")[0].files[0];
+    let role = $("#role").val();
+    let nick = $("#nick").val();
+    let cover_photo = $("#cover_photo")[0].files[0];
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;    
+    let passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // if (!username) {
+    //     $("#uname").html("Please Enter Your Username").css('color', 'red');
+    //     $(document).ready(function () {
+    //             $("#username").on('input', function () {
+    //                 $("#uname").text('')
+    //                 $("#username").css('border-color','gray')
+    //             })
+    //         });
+    //     return;
+    // } else if (!email) {
+    //     $("#emailid").html("Please Enter Your Email").css('color', 'red');
+    //     return;
+    // } else if (!emailRegex.test(email)) {
+    //     $("#emailid").html("Please enter a valid email address").css('color', 'red');
+    //     return;
+    // } else if (!password) {
+    //     $("#passwordid").html("Please Enter Your Password").css('color', 'red');
+    //     return;
+    // }else if (!passwordRegex.test(password)) {
+    // $("#passwordid").html(`
+    //     <ul style="color: red; padding-left: 15px;">
+    //         <li>Password must be at least 8 characters long</li>
+    //         <li>Must include 1 uppercase letter</li>
+    //         <li>Must include 1 special character (@$!%*?&)</li>
+    //         <li>Must include 1 number</li>
+    //     </ul>
+    // `);
+    // return;
+    //  } else if (!phone) {
+    //     $("#phoneno").text("Please Enter Your Phone No").css('color', 'red');
+    //     return;
+    // } else if (phone.length !== 10) {
+    //     $("#phoneno").text("Please Enter a Valid 10-digit Phone No").css('color', 'red');
+    //     return;
+    // } else if (!firstname) {
+    //     $("#firstname").html("Please Enter Your First Name").css('color', 'red');
+    //     return;
+    // } else if (!lastname) {
+    //     $("#lastname").html("Please Enter Your Last Name").css('color', 'red');
+    //     return;
+    // } else if (!birthdate) {
+    //     $("#birthdate").html("Please fill in your Date of Birth").css('color', 'red');
+    //     return;
+    // } else if (!profile) {
+    //     $("#profile").html("Please Upload Your Profile Picture").css('color', 'red');
+    //     return;
+    // } else {
+    //     $("#emailid, #passwordid, #phoneno, #firstname, #lastname, #birthdate, #profile").html('');
+    //     $("input").css('border-color', 'gray');
+    // }
+
+    const formdata = new FormData();
+    formdata.append('username', username);
+    formdata.append('email', email);
+    formdata.append('password', password);
+    formdata.append('phone', phone);
+    formdata.append('firstname', firstname);
+    formdata.append('lastname', lastname);
+    formdata.append('birthdate', birthdate);
+    formdata.append('profile', profile);
+    formdata.append('role', role);
+    formdata.append('nick', nick);
+    formdata.append('cover_photo', cover_photo);
+    $("#comment-loader").show();
+    const startTime = new Date().getTime();
+    $("#btn_submit").text("Please Wait").css({ 'color': '#007BFF', 'fontWeight': '400' });
+    $.ajax({
+        type: 'POST',
+        url: '/add_user/',
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+                    const endTime = new Date().getTime();
+                    const duration = endTime - startTime;
+                    const minimumLoaderTime = 1500;
+                    const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+             setTimeout(() => {
+                $("#comment-loader").hide();
+
+                if (data["status"] === 'pass') {
+                    alert('Signup success')
+                $("#login").text("Signup Successful").css({ 'color': '#28A745', 'fontWeight': '400' });
+                $("input").css('border-color', 'green');
+                setTimeout(() => {
+                    window.location.replace('/view_user/{{user.id}}');
+                }, 3000);
+            } else if (data["status"] === 'fail') {
+                $("#uname").text(data['Error']).css({ 'color': '#dc3545', 'fontWeight': '400' });
+                $("#btn_submit").text('Submit')
+                $("#comment-loader").hide();
+
+            }
+             }, delay);
+            
+
+        },
+        error: function (xhr, status, error, data) {
+            if (error) {
+                $("#login").text("Please Fill all the fields").css({ 'color': '#DC3545', 'fontWeight': '400' });
+                $('input').css('border-color', 'red');
+                $("#comment-loader").hide();
+
+            } else if (data['error']) {
+                $("#login").text(data['error']);
+                $("#comment-loader").hide();
+
+            } else {
+                $('input').css('border-color', 'gray');
+                $("#comment-loader").hide();
+
+            }
+        }
+    });
+}
+</script>
+{% endblock main-content %}
+      

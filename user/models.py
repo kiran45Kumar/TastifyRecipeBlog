@@ -5,6 +5,10 @@ class User(models.Model):
         ('admin','Admin'),
         ('user','User'),
     ]
+    active_choices = [
+        ('active','Active'),
+        ('inactive','InActive'),
+    ]
     username = models.CharField(max_length=200,null=True, blank=True,unique=True)
     email = models.CharField(max_length=200, unique=True,null=True, blank=True)
     password = models.CharField(max_length=400,null=True, blank=True)
@@ -17,7 +21,7 @@ class User(models.Model):
     role = models.CharField(max_length=20, default='user', null=True,blank=True,choices=status_choices)
     cover_photo = models.ImageField(upload_to='cover_photos/', null=True, blank=True)
     is_logged_in = models.BooleanField(default=False,null=True, blank=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.CharField(max_length=20,default='active',choices=active_choices, null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     updated_at = models.DateTimeField(auto_now=True,null=True,blank=True)
     

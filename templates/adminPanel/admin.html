@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{% static 'assets2/vendors/bootstrap-icons/bootstrap-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets2/css/app.css' %}">
     <link rel="shortcut icon" href="{% static 'assets2/images/favicon.svg' %}" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -145,17 +146,17 @@
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-hexagon-fill"></i>
-                                <span>Form Elements</span>
+                                <span>User</span>
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="form-element-input.html">Input</a>
+                                    <a href="/create_user/{{uid}}">Create</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="form-element-input-group.html">Input Group</a>
+                                    <a href="/view_user/{{uid}}">View Users</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="form-element-select.html">Select</a>
+                                    <a href="/update_user/{{uid}}">Update User</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="form-element-radio.html">Radio</a>
@@ -326,7 +327,7 @@
                                     <a href="auth-login.html">Login</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="auth-register.html">Register</a>
+                                    <a href="javascript:void(0)" onclick="location.href = '/logout/'">Logout</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="auth-forgot-password.html">Forgot Password</a>
@@ -380,7 +381,7 @@
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
-
+{% block main-content %}
         <div id="main">
             {% if messages %}
             {% for message in messages %}
@@ -643,34 +644,11 @@
                                         </div> 
                                         <div class="name ms-4">
                                             <h5 class="mb-1">{{request.user}} {{message}}</h5>
-                                            <h6 class="text-muted mb-0">@johnducky</h6>
+                                            <!-- <h6 class="text-muted mb-0">@johnducky</h6> -->
                                         </div>
                                     </div>
                                     {% endfor %}
                                 {% endif %}
-                              
-                                <div class="recent-message d-flex px-4 py-3">
-                                    <div class="avatar avatar-lg">
-                                        <img src="{% static 'assets2/images/faces/5.jpg' %}">
-                                    </div>
-                                    <div class="name ms-4">
-                                        <h5 class="mb-1">Dean Winchester</h5>
-                                        <h6 class="text-muted mb-0">@imdean</h6>
-                                    </div>
-                                </div>
-                                <div class="recent-message d-flex px-4 py-3">
-                                    <div class="avatar avatar-lg">
-                                        <img src="{% static 'assets2/images/faces/1.jpg' %}">
-                                    </div>
-                                    <div class="name ms-4">
-                                        <h5 class="mb-1">John Dodol</h5>
-                                        <h6 class="text-muted mb-0">@dodoljohn</h6>
-                                    </div>
-                                </div>
-                                <div class="px-4">
-                                    <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start
-                                        Conversation</button>
-                                </div>
                             </div>
                         </div>
                         <div class="card">
@@ -697,7 +675,11 @@
                 </div>
             </footer>
         </div>
+{% endblock main-content %}
+
     </div>
+    <script>
+    </script>
     <script src="{% static 'assets2/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
     <script src="{% static 'assets2/js/bootstrap.bundle.min.js' %}"></script>
 

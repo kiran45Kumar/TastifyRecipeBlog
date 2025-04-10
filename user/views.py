@@ -39,6 +39,7 @@ class LoginCheck(APIView):
             request.session['user_firstname'] = user.first_name
             request.session['user_lastname'] = user.last_name
             request.session['user_nick_name'] = user.nick
+            request.session['role'] = user.role
             request.session['user_id'] = user.id
             request.session['user_img'] = user.profilePicture.url if user.profilePicture else None
             user.is_logged_in = True
@@ -52,7 +53,7 @@ class LoginCheck(APIView):
             expiry_seconds = request.session.get_expiry_age()
             print(f"Session Expires At: {expiry_date}")
             print(f"Session Duration: {expiry_seconds} seconds")
-            return JsonResponse({"status": "pass", "uid": user.id, 'name': user.first_name,"message":"Login Successful",'role':user.role})
+            return JsonResponse({"status": "pass", "uid": user.id, 'name': user.first_name,"message":"Login Successful",'role':user.role, 'is_active':user.is_active})
 
         except User.DoesNotExist:
             return JsonResponse({"status": "no_user", "message": "Account does not exist"})
@@ -69,6 +70,9 @@ class CreateStaff(APIView):
         first_name = request.POST['firstname']
         last_name = request.POST['lastname']
         date_of_birth = request.POST['birthdate']
+        # role = request.POST['role']
+        # nick = request.POST['nick']
+        # cover_photo = request.FILES.get('cover_photo')
         profile_image = request.FILES.get('profile')
         if User.objects.filter(email = email).exists():
             return JsonResponse({"status":'fail',"Error":"Email Already Exists Try with another one"})

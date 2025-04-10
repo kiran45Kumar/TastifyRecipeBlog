@@ -113,6 +113,7 @@
 <div id="f-content">
     <div class="friend">
         {% for user in allUsers %}
+       {% if user.is_active == 'active' %}
        <div class="row" id="row{{user.id}}">
         <div class="column friend-section">
             <img src="{{user.profilePicture.url}}"alt="user-profile-picture">    
@@ -125,6 +126,7 @@
                 <button onclick="RemoveFri('{{user.id}}')" class="btn-remove" id="btn{{user.id}}">Remove</button>
             </div>
        </div>
+       {% endif %}
        {% empty %}
         <p>No friends yet.</p>
         {% endfor %}

@@ -125,8 +125,12 @@ def posts(request):
 class ViewUser(TemplateView):
     template_name = 'user/baseposts.html'
     def get(self, request, *args, **kwargs):
-        uid = request.session.get('user_id', None)
-        if not uid:
+        uid = request.session.get('user_id')
+        try:
+            user = User.objects.get(id = uid)
+        except User.DoesNotExist as e:
+            return redirect("404", message = str(e) )
+        if not uid and user:
             error = "You are not logged in"
             return redirect('404', message=error)
         return super().get(request, *args, **kwargs)
