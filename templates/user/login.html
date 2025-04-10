@@ -137,12 +137,18 @@
                setTimeout(() => {
                 $("#comment-loader").hide();
                 if(data["status"] == 'pass' && password ){
-
                     $("#login").text(data['message']).css({'color': '#28A745','fontWeight':'400'})
                     $("input").css('border-color','green')
+                    if(data['role']=='admin'){
+                        setTimeout(() => {
+                        window.location.replace('/admin_dashboard/')
+                    }, 3000);
+                    }
+                       else{
                         setTimeout(() => {
                         window.location.replace('user/'+encodeURIComponent(data['name'])+'/'+encodeURIComponent(data['uid'])+'/posts')
                     }, 3000);
+                       }
                     
                 }
                 else if(data["status"] == 'fail'){

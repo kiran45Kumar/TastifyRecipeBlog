@@ -9,6 +9,7 @@ urlpatterns = [
     # template views
     path('create_kitchen/',CreateKitchen.as_view(), name='create_kitchen'),
     path('add_kitchen/',AddKitchen.as_view(), name='AddKitchen'),
+    path('UpdateKitchen/',UpdateKitchen.as_view(), name='UpdateKitchen'),
     path('upload_image_video/',CreateImageVideo.as_view(), name='CreateImageVideo'),
     path('kitchen_dashboard/<int:id>',kitchen_dashboard, name='kitchen_dashboard'),
     path('recipes/<int:id>',recipes, name='recipes'),

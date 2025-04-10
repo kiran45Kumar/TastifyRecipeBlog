@@ -77,10 +77,15 @@
     let profile = $("#profile")[0].files[0];
     let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;    
     let passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    $("#comment-loader").show();
-    const startTime = new Date().getTime();
+
     if (!username) {
         $("#uname").html("Please Enter Your Username").css('color', 'red');
+        $(document).ready(function () {
+                $("#username").on('input', function () {
+                    $("#uname").text('')
+                    $("#username").css('border-color','gray')
+                })
+            });
         return;
     } else if (!email) {
         $("#emailid").html("Please Enter Your Email").css('color', 'red');
@@ -133,6 +138,8 @@
     formdata.append('lastname', lastname);
     formdata.append('birthdate', birthdate);
     formdata.append('profile', profile);
+    $("#comment-loader").show();
+    const startTime = new Date().getTime();
     $("#btn_submit").text("Please Wait").css({ 'color': '#007BFF', 'fontWeight': '400' });
     $.ajax({
         type: 'POST',
@@ -157,6 +164,8 @@
             } else if (data["status"] === 'fail') {
                 $("#uname").text(data['Error']).css({ 'color': '#dc3545', 'fontWeight': '400' });
                 $("#btn_submit").text('Submit')
+                $("#comment-loader").hide();
+
             }
              }, delay);
             
@@ -166,10 +175,16 @@
             if (error) {
                 $("#login").text("Please Fill all the fields").css({ 'color': '#DC3545', 'fontWeight': '400' });
                 $('input').css('border-color', 'red');
+                $("#comment-loader").hide();
+
             } else if (data['error']) {
                 $("#login").text(data['error']);
+                $("#comment-loader").hide();
+
             } else {
                 $('input').css('border-color', 'gray');
+                $("#comment-loader").hide();
+
             }
         }
     });

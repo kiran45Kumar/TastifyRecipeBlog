@@ -35,6 +35,7 @@ class LoginCheck(APIView):
             if not check_password(password, user.password):
                 return JsonResponse({"status": "fail", "message": "Invalid Password"})
             request.session['user_name'] = user.username
+            request.session['user_email'] = user.email
             request.session['user_firstname'] = user.first_name
             request.session['user_lastname'] = user.last_name
             request.session['user_nick_name'] = user.nick
@@ -118,6 +119,7 @@ def user_dashboard(request,name, id):
     user_id = get_object_or_404(User,id = id)
     user_name = request.session['user_name']
     user = User.objects.get(id=user_id)
+    # kitchen = Kitchen.objects.get(user = user)
     pending_requests = FriendRequest.objects.filter(reciever=user, status__iexact='pending')
     accepted_requests = FriendRequest.objects.filter(
                     (Q(reciever=user) | Q(sender=user)), status__iexact='accepted'
@@ -145,7 +147,8 @@ def user_dashboard(request,name, id):
         'like_count':request.session['likes'],
         'user_img':request.session['user_img'],
         'friends':friends,
-        'pending_requests':pending_requests
+        'pending_requests':pending_requests,
+        # 'kitchen':kitchen
     }
     return render(request, 'user/userdashboard.html', context)
 

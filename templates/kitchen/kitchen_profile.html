@@ -1,4 +1,4 @@
-{% extends 'adminPanel/admin.html' %}
+{% extends 'kitchen/admin.html' %}
 {% block body-content %}
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -415,9 +415,9 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3 col-form-label">Recipe Title</label>
+                      <label class="col-sm-3 col-form-label">Kitchen Name</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" id="recipe-title" placeholder="Recipe Title" value="{{kitchen.kitchen_name}}" />
+                        <input type="text" class="form-control" id="kitchen_name" placeholder="Recipe Title" value="{{kitchen.kitchen_name}}" />
                       </div>
                     </div>
                   </div>
@@ -425,7 +425,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Description</label>
                       <div class="col-sm-9">
-                        <input class="form-control" id="desc"  placeholder="Description" value="{{kitchen.kitchen_desc}}"/>
+                        <input class="form-control" id="kitchen_desc"  placeholder="Description" value="{{kitchen.kitchen_desc}}"/>
                       </div>
                     </div>
                   </div>
@@ -462,14 +462,20 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Kitchen Logo</label>
                       <div class="col-sm-9">
-                        <img height="50px" width="50px" style="object-fit: cover;" id="preptime" src="{{kitchen.kitchen_logo.url}}"/>
-                        <i class='bx bx-edit' id="user_edit"></i>
+                        <img height="50px" width="50px" style="object-fit: cover;border-radius: 50%;cursor: pointer;"    data-bs-toggle="modal" data-bs-target="#exampleModal{{kitchen.kitchen_id}}" id="preptime" src="{{kitchen.kitchen_logo.url}}"/>
+                        <i class='bx bx-edit cursor-pointer' id="user_edit"></i>
                         <input type="file" name="" hidden id="kitchen_logo">
-                      </div>
+                        <input type="hidden" name="userId" id="userId" value="{{current_user_id}}">
+                        <input type="hidden" name="kitchenId" id="kitchenId" value="{{kitchen.kitchen_id}}">
+                      </div> 
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary m-10" id="btn_submit" disabled onclick="updateKitchen('{{kitchen.kitchen_id}}')"> Save </button>
+                <!-- <button class="btn btn-light" onclick="toggleModalREfresh()">Cancel</button> -->
+                  </div>
                 </div>
-                <div class="row">
+                <div class="row" hidden> 
                   <div class="col-md-6">
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Cooking Time</label>
@@ -487,7 +493,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" hidden>
                   <div class="col-md-6">
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Nutrtion Info</label>
@@ -565,6 +571,26 @@
         </div> -->
       </div>
     </div>
+
+    
+    <div class="modal fade" id="exampleModal{{kitchen.kitchen_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Tastify</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <img src="{{kitchen.kitchen_logo.url}}" style="width: 100%;height: 100%;border-radius: 10px;object-fit: cover;cursor: pointer;"  alt="">
+            <p>{{kitchen.kitchen_name}}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- content-wrapper ends -->
     <!-- partial:../../partials/_footer.html -->
     <footer class="footer">
@@ -586,6 +612,60 @@
 
 
 <script>
+  $("input").on('input', function(){
+    $('#btn_submit').prop('disabled', false);
+  })
+  function updateKitchen(id) { 
+    let kitchen_id = $('#kitchenId').val();
+    let kitchen_name = $('#kitchen_name').val();
+    let kitchen_desc = $('#kitchen_desc').val();
+    let business_email = $('#business_email').val();
+    let location = $('#location').val();
+    let kitchen_logo = $('#kitchen_logo')[0].files[0];
+    let website_url = $('#website_url').val();
+    let user = $('#userId').val();
+    let formData = new FormData();
+    formData.append('kitchen_id', kitchen_id)
+    formData.append('kitchen_name', kitchen_name)
+    formData.append('kitchen_desc', kitchen_desc)
+    formData.append('business_email', business_email)
+    formData.append('location', location)
+    formData.append('kitchen_logo', kitchen_logo)
+    formData.append('website_url', website_url)
+    formData.append('user', user);
+    $("#comment-loader").show();
+    const startTime = new Date().getTime();
+    $("#btn_submit").text("Saving Changes...")
+    $.ajax({
+      type: "PUT",
+      url: "/UpdateKitchen/",
+      data: formData,
+      processData:false,
+      contentType:false,
+      // dataType: "dataType",
+      success: function (response) {
+                  const endTime = new Date().getTime();
+                    const duration = endTime - startTime;
+                    const minimumLoaderTime = 1500;
+                    const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                    setTimeout(() => {
+                      if (response) {
+                        const successMsg = 'Updated Successfully ';
+                        showCustomToast(successMsg)
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    } else{
+                        const errorMsg =  'Something Went Wrong';
+                        showCustomToast(errorMsg)
+                    setTimeout(() => {
+                            location.reload();
+                    }, 3000);
+                    }
+                    }, delay);
+      }
+    });
+   }
     $(document).ready(function () {
         $("#user_edit").click(function(){
             $("#kitchen_logo").click();

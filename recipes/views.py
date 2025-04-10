@@ -137,7 +137,7 @@ class ViewUser(TemplateView):
         user = User.objects.filter(id=uid)
         self.request.session['post_count'] = reciepes.count()
         user_u = User.objects.get(id=uid)
-
+        # kitchen = Kitchen.objects.get(user = user_u)
         # Friends and requests
         pending_requests = FriendRequest.objects.filter(reciever=user_u, status__iexact='pending')
         accepted_requests = FriendRequest.objects.filter(
@@ -165,6 +165,7 @@ class ViewUser(TemplateView):
             'nick_name': self.request.session.get('user_nick_name'),
             'friends': friends,
             'pending_requests': pending_requests,
+            # 'kitchen':kitchen,
         })
         return context
 class RecipesViewSet(viewsets.ModelViewSet):

@@ -11,6 +11,7 @@ from django.db.models import Q , Max
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.http import JsonResponse
 import time
+from django.contrib import messages
 # Create your views here.
 
 class KitchenViewSet(ModelViewSet):
@@ -95,8 +96,36 @@ class AddKitchen(APIView):
             return JsonResponse({'status':"fail",'message':'User Does not Exist'})  
         except Exception as e:
             return JsonResponse({'status':"fail",'message':str(e)})  
-        
-
+class UpdateKitchen(APIView):
+    def put(self, request):
+        print('Request Data', request.data)
+        print('Request FILES', request.FILES)
+        kitchen_id = request.data.get('kitchen_id')
+        kitchen_name = request.data.get('kitchen_name')
+        website_url = request.data.get('website_url')
+        business_email = request.data.get('business_email')
+        location = request.data.get('location')
+        user_id = request.data.get('user')
+        kitchen_desc = request.data.get('kitchen_desc')
+        kitchen_logo = request.FILES.get('kitchen_logo')
+        user = User.objects.get(id = user_id)
+        try:
+            kitchen = Kitchen.objects.get(kitchen_id = kitchen_id)
+            kitchen.kitchen_name = kitchen_name
+            kitchen.website_url = website_url
+            kitchen.user = user
+            kitchen.business_email = business_email
+            kitchen.location = location
+            kitchen.kitchen_desc = kitchen_desc
+            if kitchen_logo:
+                kitchen.kitchen_logo = kitchen_logo
+            messages.success(request, 'Kitchen Profile Updated Successfully')
+            kitchen.save()
+            return JsonResponse({"status":"pass","message":"Kitchen Created Successfully"})
+        except User.DoesNotExist as e:
+            return JsonResponse({'status':"fail",'message':'User Does not Exist'})  
+        except Exception as e:
+            return JsonResponse({'status':"fail",'message':str(e)})  
         
 class CreateImageVideo(APIView):
         def post(self, request):
@@ -124,7 +153,7 @@ def kitchen_dashboard(request, id):
     kitchens = Kitchen.objects.all()
 
     recipes = Recipes.objects.filter(user_id = user)
-    return render(request, 'adminPanel/admin.html',{'kitchen':kitchen,'kitchen_images':kitchen_image,'recipes':recipes,"kitchens":kitchens,
+    return render(request, 'kitchen/admin.html',{'kitchen':kitchen,'kitchen_images':kitchen_image,'recipes':recipes,"kitchens":kitchens,
 'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None)})
 def recipes(request, id):
     user_id = request.session.get('user_id')
@@ -174,9 +203,6 @@ def update_recipe(request, id, rid):
     return render(request, 'kitchen/update_recipe.html', {'kitchen':kitchen,'kitchen_images':kitchen_image,"kitchens":kitchens,
 'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None), 'recipe':recipe})
         
-        
-        
-        
 def kitchen_profile(request, id):
     user_id = request.session.get('user_id')
     if not user_id:
@@ -188,7 +214,3 @@ def kitchen_profile(request, id):
     # recipe = Recipes.objects.get(reciepe_id = rid)
     return render(request, 'kitchen/kitchen_profile.html', {'kitchen':kitchen,'kitchen_images':kitchen_image,"kitchens":kitchens,
 'kitchen_videos':kitchen_video,"current_user_id":request.session.get('user_id',None),"currentUser":request.session.get('user_name',None)})
-        
-        
-        
-        
