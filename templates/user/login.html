@@ -139,15 +139,28 @@
                 if(data["status"] == 'pass' && password ){
                     $("#login").text(data['message']).css({'color': '#28A745','fontWeight':'400'})
                     $("input").css('border-color','green')
-                    if(data['role']=='admin'){
+                    if(data['role']=='admin' && data['is_active'] == 'active'){
                         setTimeout(() => {
                         window.location.replace('/admin_dashboard/'+data['uid'])
                     }, 3000);
                     }
-                       else{
-                        setTimeout(() => {
+                    else if(data['role'] == 'admin' && data['is_active'] == 'inactive'){
+                        alert("Your Account Is Deactivated Due to Rules Violations")
+                    $("#login").text('Account Deactived').css({'color': '#DC3545','fontWeight':'400'})
+                    $('input').css('border-color','red')
+
+                    }
+                    else if(data['role'] == 'user' && data['is_active'] == 'active'){
+                    setTimeout(() => {
                         window.location.replace('user/'+encodeURIComponent(data['name'])+'/'+encodeURIComponent(data['uid'])+'/posts')
                     }, 3000);
+                    }
+                       else if(data['role'] == 'user' && data['is_active'] == 'inactive'){
+                           
+                           alert("Your Account Is Deactivated Due to Rules Violations")
+                           $("#login").text('Account Deactived').css({'color': '#DC3545','fontWeight':'400'})
+                    $('input').css('border-color','red')
+
                        }
                     
                 }
