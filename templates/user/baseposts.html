@@ -78,6 +78,14 @@
     font-weight: 500;
     color: #007bff;
 }
+.kitchen-title{
+    margin: 10px 5px;
+    font-size: 17px;
+    background: rgb(232, 224, 224);
+    padding: 5px;
+    width: fit-content;
+    border-radius: 5px;
+}
 </style>
  
 {% for recipe in allposts %}
@@ -106,6 +114,7 @@
                
             </div>
         </div>
+        
    <div class="user-buttons">
     {% if currentUser  %}
     <p><i class='bx bx-x' style="cursor: pointer;" onclick="closeModal(this)" ></i></p> 
@@ -125,6 +134,11 @@
 {% endif %}
    </div>
     </div>
+    {% if kitchen %}
+            <p class="kitchen-title">
+                {{kitchen.kitchen_name}}
+            </p>
+        {% endif %}
     <p class="horizontal"></p>
     <div class="user-img">
         <div class="user-blog-text-section">

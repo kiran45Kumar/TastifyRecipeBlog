@@ -90,7 +90,7 @@ class AddKitchen(APIView):
             kitchen.kitchen_desc = kitchen_desc
             kitchen.kitchen_logo = kitchen_logo
             kitchen.save()
-            return JsonResponse({"status":"pass","message":"Kitchen Created Successfully"})
+            return JsonResponse({"status":"pass","message":"Kitchen Created Successfully",'kitchen_id':kitchen.kitchen_id})
 
         except User.DoesNotExist as e:
             return JsonResponse({'status':"fail",'message':'User Does not Exist'})  
@@ -138,7 +138,7 @@ class CreateImageVideo(APIView):
                 kitchen_videos = request.FILES.getlist('kitchen_videos')
                 for video in kitchen_videos:
                     KitchenVideo.objects.create(kitchen=kitchen, video=video)
-                return JsonResponse({"status":"pass"})
+                return JsonResponse({"status":"pass",'kitchen_id':kitchen.kitchen_id})
             except Kitchen.DoesNotExist as e:
                 print(e)
                 return JsonResponse({"status":"fail"})

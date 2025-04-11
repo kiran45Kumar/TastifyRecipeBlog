@@ -123,7 +123,10 @@ def user_dashboard(request,name, id):
     user_id = get_object_or_404(User,id = id)
     user_name = request.session['user_name']
     user = User.objects.get(id=user_id)
-    # kitchen = Kitchen.objects.get(user = user)
+    # try:
+    #     kitchen = Kitchen.objects.get(user = user)
+    # except Kitchen.DoesNotExist:
+    #     return JsonResponse({"status":"fail","message":"No Kitchen Found"})
     pending_requests = FriendRequest.objects.filter(reciever=user, status__iexact='pending')
     accepted_requests = FriendRequest.objects.filter(
                     (Q(reciever=user) | Q(sender=user)), status__iexact='accepted'

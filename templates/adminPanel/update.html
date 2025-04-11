@@ -41,6 +41,7 @@
                                 <th>Updated At</th>
                                 <th>Status</th>
                                 <th>Actions</th>
+                                <th><button class="btn btn-danger" onclick="deleteAll()">Delete All</button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +63,7 @@
                                     </td>
                                     <td>
                                         <button type="submit"
-                                        class="btn btn-primary me-1 mb-1" onclick="openUpdate('{{user.id}}')">Update</button>
+                                        class="btn btn-primary me-1 mb-1" onclick="openUpdate('{{user.id}}')">Edit</button>
                                         <button type="submit"
                                         class="btn btn-danger me-1 mb-1" onclick="deleteUser('{{user.id}}')">Delete</button>
                                     </td>
@@ -99,6 +100,15 @@
             url: "/delete_user_admin/",
             data: {'id':id},
             dataType: "dataType",
+            success: function (response) {
+                alert('Deleted Successfully')
+            }
+        });
+      }
+     function deleteAll() { 
+        $.ajax({
+            type: "DELETE",
+            url: "/delete_all/",
             success: function (response) {
                 alert('Deleted Successfully')
             }

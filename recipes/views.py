@@ -128,8 +128,11 @@ class ViewUser(TemplateView):
         uid = request.session.get('user_id')
         try:
             user = User.objects.get(id = uid)
+            # kitchen = Kitchen.objects.get(user = user)
         except User.DoesNotExist as e:
             return redirect("404", message = str(e) )
+        # except Kitchen.DoesNotExist as e:
+        #     return JsonResponse({"status":'fail','message':'Not Found'})
         if not uid and user:
             error = "You are not logged in"
             return redirect('404', message=error)
@@ -141,7 +144,6 @@ class ViewUser(TemplateView):
         user = User.objects.filter(id=uid)
         self.request.session['post_count'] = reciepes.count()
         user_u = User.objects.get(id=uid)
-        # kitchen = Kitchen.objects.get(user = user_u)
         # Friends and requests
         pending_requests = FriendRequest.objects.filter(reciever=user_u, status__iexact='pending')
         accepted_requests = FriendRequest.objects.filter(

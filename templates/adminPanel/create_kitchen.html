@@ -10,14 +10,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Update User</h3>
+                    <h3>Create Kitchen</h3>
                     <p class="text-subtitle text-muted"></p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Update User</li>
+                            <li class="breadcrumb-item"><a href="/admin_dashboard/{{uid}}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Kitchen</li>
                         </ol>
                     </nav>
                 </div>
@@ -339,7 +339,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Update User</h4>
+                            <h4 class="card-title">Add Kitchen</h4>
                         </div>
                         <div class="card-content">
                             <div class="card-body">
@@ -347,110 +347,67 @@
                                     <div class="row">
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="username">User Name</label>
-                                                <input type="text" id="username{{user.id}}" class="form-control"
-                                                    placeholder="Username" value="{{user.username}}" name="username">
+                                                <label for="username">Kitchen Name</label>
+                                                <input type="text" id="kitchen_name" class="form-control"
+                                                    placeholder="Username" name="kitchen_name">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="email">Kitchen Email</label>
+                                                <input type="text" id="email" class="form-control"
+                                                    placeholder="Email" name="email">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input type="text" id="email{{user.id}}" class="form-control"
-                                                    placeholder="Email" value="{{user.email}}" name="email">
+                                                <label for="password">Business Email</label>
+                                                <input type="text" id="password" class="form-control"
+                                                    placeholder="Password" name="city-column">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="password">Password</label>
-                                                <input type="text" id="password{{user.id}}" class="form-control"
-                                                    placeholder="Password" value="{{user.password}}" name="city-column">
+                                                <label for="phoneno">Location</label>
+                                                <input type="text" id="phone" class="form-control"
+                                                    name="country-floating" placeholder="Phone No">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="phoneno">Phone No</label>
-                                                <input type="text" id="phone{{user.id}}" class="form-control"
-                                                    name="country-floating" value="{{user.phone}}" placeholder="Phone No">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="firstname">First Name</label>
-                                                <input type="text" id="firstname{{user.id}}" class="form-control"
-                                                    name="firstname" value="{{user.first_name}}" placeholder="First Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="lastname">Last Name</label>
-                                                <input type="text" id="lastname{{user.id}}" class="form-control"
-                                                    name="lastname" value="{{user.last_name}}" placeholder="Last Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="dob">Date of Birth</label>
-                                                <input type="date" id="birthdate{{user.id}}" class="form-control"
-                                                    name="dob" value="{{user.date_of_birth | date:'Y-m-d'}}" placeholder="Date of Birth">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <img src="{{user.profilePicture.url}}" height="50px" width="50px" style="object-fit: cover;border-radius: 10px;" alt="">
-
-                                            <div class="form-group">
-                                                <label for="lastname">Profile Image</label>
-                                                <input type="file" id="profile{{user.id}}" class="form-control"
+                                                <label for="lastname">Kitchen Logo</label>
+                                                <input type="file" id="profile" class="form-control"
                                                     name="lastname" placeholder="Last Name">
                                             </div>
                                         </div>
+                                  
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="lastname">Role - (currentrole-{{user.role}})</label>
-                                                <select class="form-select" id="role{{user.id}}">
-                                                    <option selected value="">Select Role</option>
-                                                    <option value="admin">Admin</option>
-                                                    <option value="user">User</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                               
-                                        {% if user.nick %}
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="nick">Nick Name</label>
-                                                <input type="text" id="nick{{user.id}}" class="form-control"
-                                                name="Nick Name" value="{{user.nick}}" placeholder="Nick Name">
-                                            </div>
-                                        </div>
-                                        {% endif %}
-                                        {% if user.cover_photo %}
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                            <img src="{{user.cover_photo.url}}" height="50px" width="50px" style="object-fit: cover;border-radius: 10px;" alt="">
-
-                                                <label for="nick">Cover Photo</label>
-                                                <input type="file" id="cover_photo{{user.id}}" class="form-control"
+                                                <label for="nick">Kitchen Images</label>
+                                                <input type="file" id="cover_photo" class="form-control" accept="image/*"
                                                 name="cover_photo" placeholder="Nick Name">
-                                                <!-- <input type="hidden" name="user_id" id="user_id"> -->
                                             </div>
                                         </div>
-                                        {% endif %}
-
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="lastname">Active Status - ({{user.is_active}})</label>
-                                                <select class="form-select" id="is_active{{user.id}}">
-                                                    <option selected value="">Select Status</option>
-                                                    <option value="active">Active</option>
-                                                    <option value="inactive">Inactive</option>
-                                                </select>
+                                                <label for="nick">Kitchen Videos</label>
+                                                <input type="file" id="cover_photo" class="form-control"
+                                                name="cover_photo" placeholder="Nick Name" accept="video/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="username">Description</label>
+                                                <textarea id="username" class="form-control"
+                                                    placeholder="Kitchen Description" name="username"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-end">
                                             <button type="submit"
-                                                class="btn btn-primary me-1 mb-1" onclick="updateUser('{{user.id}}')">Update User</button>
-                                            <!-- <button type="reset"
-                                                class="btn btn-light-secondary me-1 mb-1">Reset</button> -->
+                                                class="btn btn-primary me-1 mb-1" onclick="addKitchen()">Add Kitchen</button>
+                                            <button type="reset"
+                                                class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                         </div>
                                     </div>
                                 </div>
@@ -476,62 +433,73 @@
     </footer>
 </div>
 <script>
-     function updateUser(id) {
-    let is_active = $("#is_active"+id).val();
-    let username = $("#username"+id).val();
-    let email = $("#email"+id).val();
-    let password = $("#password"+id).val();
-    let phone = $("#phone"+id).val();
-    let firstname = $("#firstname"+id).val();
-    let lastname = $("#lastname"+id).val();
-    let birthdate = $("#birthdate"+id).val();
-    let role = $("#role"+id).val();
-    let nick = $("#nick"+id).val();
-    let profile = $("#profile"+id)[0].files[0];
+       function addUser() {
+    let username = $("#username").val();
+    let email = $("#email").val();
+    let password = $("#password").val();
+    let phone = $("#phone").val();
+    let firstname = $("#firstname").val();
+    let lastname = $("#lastname").val();
+    let birthdate = $("#birthdate").val();
+    let profile = $("#profile")[0].files[0];
+    let role = $("#role").val();
+    let nick = $("#nick").val();
+    let cover_photo = $("#cover_photo")[0].files[0];
     let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;    
     let passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    $("#comment-loader").show();
-    const startTime = new Date().getTime();
-    if(!role){
-        alert("please select role")
-        return;
-    }
-    else if(!is_active){
-        alert("please select status")
-        return;
-    }
-    if (!username) {
-        $("#uname").html("Please Enter Your Username").css('color', 'red');
-        return;
-    } else if (!email) {
-        $("#emailid").html("Please Enter Your Email").css('color', 'red');
-        return;
-    } else if (!emailRegex.test(email)) {
-        $("#emailid").html("Please enter a valid email address").css('color', 'red');
-        return;
-    } 
-     else if (!phone) {
-        $("#phoneno").text("Please Enter Your Phone No").css('color', 'red');
-        return;
-    } else if (phone.length !== 10) {
-        $("#phoneno").text("Please Enter a Valid 10-digit Phone No").css('color', 'red');
-        return;
-    } else if (!firstname) {
-        $("#firstname").html("Please Enter Your First Name").css('color', 'red');
-        return;
-    } else if (!lastname) {
-        $("#lastname").html("Please Enter Your Last Name").css('color', 'red');
-        return;
-    } else if (!birthdate) {
-        $("#birthdate").html("Please fill in your Date of Birth").css('color', 'red');
-        return;
-    } else {
-        $("#emailid, #passwordid, #phoneno, #firstname, #lastname, #birthdate, #profile").html('');
-        $("input").css('border-color', 'gray');
-    }
+
+    // if (!username) {
+    //     $("#uname").html("Please Enter Your Username").css('color', 'red');
+    //     $(document).ready(function () {
+    //             $("#username").on('input', function () {
+    //                 $("#uname").text('')
+    //                 $("#username").css('border-color','gray')
+    //             })
+    //         });
+    //     return;
+    // } else if (!email) {
+    //     $("#emailid").html("Please Enter Your Email").css('color', 'red');
+    //     return;
+    // } else if (!emailRegex.test(email)) {
+    //     $("#emailid").html("Please enter a valid email address").css('color', 'red');
+    //     return;
+    // } else if (!password) {
+    //     $("#passwordid").html("Please Enter Your Password").css('color', 'red');
+    //     return;
+    // }else if (!passwordRegex.test(password)) {
+    // $("#passwordid").html(`
+    //     <ul style="color: red; padding-left: 15px;">
+    //         <li>Password must be at least 8 characters long</li>
+    //         <li>Must include 1 uppercase letter</li>
+    //         <li>Must include 1 special character (@$!%*?&)</li>
+    //         <li>Must include 1 number</li>
+    //     </ul>
+    // `);
+    // return;
+    //  } else if (!phone) {
+    //     $("#phoneno").text("Please Enter Your Phone No").css('color', 'red');
+    //     return;
+    // } else if (phone.length !== 10) {
+    //     $("#phoneno").text("Please Enter a Valid 10-digit Phone No").css('color', 'red');
+    //     return;
+    // } else if (!firstname) {
+    //     $("#firstname").html("Please Enter Your First Name").css('color', 'red');
+    //     return;
+    // } else if (!lastname) {
+    //     $("#lastname").html("Please Enter Your Last Name").css('color', 'red');
+    //     return;
+    // } else if (!birthdate) {
+    //     $("#birthdate").html("Please fill in your Date of Birth").css('color', 'red');
+    //     return;
+    // } else if (!profile) {
+    //     $("#profile").html("Please Upload Your Profile Picture").css('color', 'red');
+    //     return;
+    // } else {
+    //     $("#emailid, #passwordid, #phoneno, #firstname, #lastname, #birthdate, #profile").html('');
+    //     $("input").css('border-color', 'gray');
+    // }
 
     const formdata = new FormData();
-    formdata.append('user_id', id);
     formdata.append('username', username);
     formdata.append('email', email);
     formdata.append('password', password);
@@ -542,15 +510,13 @@
     formdata.append('profile', profile);
     formdata.append('role', role);
     formdata.append('nick', nick);
-    formdata.append('is_active', is_active);
-    let cover_photo = $("#cover_photo"+id)[0]
-    if(cover_photo){
-        formdata.append('cover_photo', cover_photo.files[0]);
-    }
-    $("#btn_update").text("redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
+    formdata.append('cover_photo', cover_photo);
+    $("#comment-loader").show();
+    const startTime = new Date().getTime();
+    $("#btn_submit").text("Please Wait").css({ 'color': '#007BFF', 'fontWeight': '400' });
     $.ajax({
-        type: 'PUT',
-        url: '/update_user/',
+        type: 'POST',
+        url: '/add_user/',
         data: formdata,
         processData: false,
         contentType: false,
@@ -559,38 +525,44 @@
                     const duration = endTime - startTime;
                     const minimumLoaderTime = 1500;
                     const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
-           setTimeout(() => {
-            $("#comment-loader").hide();
+             setTimeout(() => {
+                $("#comment-loader").hide();
 
-             if (data["status"] === 'pass') {
-                alert("Updated Successfully")
-                $("#login").text(" Updated Successfully").css({ 'color': '#28A745', 'fontWeight': '400' });
+                if (data["status"] === 'pass') {
+                    alert('Signup success')
+                $("#login").text("Signup Successful").css({ 'color': '#28A745', 'fontWeight': '400' });
                 $("input").css('border-color', 'green');
-                $("#btn_submit").text("Redirecting...").css({ 'color': '#007BFF', 'fontWeight': '400' });
                 setTimeout(() => {
-                    window.location.replace('/update_user/{{user.id}}');
+                    window.location.replace('/view_user/{{user.id}}');
                 }, 3000);
             } else if (data["status"] === 'fail') {
-                alert("Failed to updated.");
+                $("#uname").text(data['Error']).css({ 'color': '#dc3545', 'fontWeight': '400' });
+                $("#btn_submit").text('Submit')
+                $("#comment-loader").hide();
+
             }
-           }, delay);
+             }, delay);
+            
+
         },
         error: function (xhr, status, error, data) {
             if (error) {
-                $("#login").text("Something Went Wrong").css({ 'color': '#DC3545', 'fontWeight': '400' });
+                $("#login").text("Please Fill all the fields").css({ 'color': '#DC3545', 'fontWeight': '400' });
                 $('input').css('border-color', 'red');
+                $("#comment-loader").hide();
+
             } else if (data['error']) {
                 $("#login").text(data['error']);
+                $("#comment-loader").hide();
+
             } else {
                 $('input').css('border-color', 'gray');
+                $("#comment-loader").hide();
+
             }
         }
     });
 }
-
-    
-       
-
 </script>
 {% endblock main-content %}
       

@@ -9,4 +9,6 @@ urlpatterns = [
     path('update_page/<int:uid>', UpdatePage.as_view(), name='update_page'),
     path('update_user/', UpdateUserDetails.as_view(), name='update_user'),
     path('delete_user_admin/', DeleteUser.as_view(), name='delete_user_admin'),
+    path('delete_all/', DeleteAll.as_view(), name='DeleteAll'),
+    path('create_kitchen_admin/<int:uid>', CreateKitchen.as_view(), name='create_kitchen'),
 ]
