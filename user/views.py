@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework.parsers import JSONParser
 from kitchen.models import Kitchen, KitchenImage, KitchenVideo
+from django.contrib import messages
 def signup(request):
     return render(request,"user/signup.html")
 def login(request):
@@ -198,6 +199,7 @@ class LogoutUser(APIView):
         user_id = request.session.get('user_id',None)
         user = User.objects.get(id=user_id)
         print(f"User: {user.username} has been logged out")
+        # messages.success(request, f'User:{user.username} has been logged out')
         user.is_logged_in = False
         user.save()
         request.session.flush()

@@ -41,6 +41,7 @@ class AdminDashboard(TemplateView):
         context['user_img'] = user_img
         context['uid'] = uid
         context['user'] = user
+        context['comments'] = comment.order_by('-created_at')
         return context
 class CreateUser(TemplateView):
     template_name = 'adminPanel/create_user.html'
