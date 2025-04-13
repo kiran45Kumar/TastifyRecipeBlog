@@ -349,65 +349,69 @@
                                             <div class="form-group">
                                                 <label for="username">Kitchen Name</label>
                                                 <input type="text" id="kitchen_name" class="form-control"
-                                                    placeholder="Username" name="kitchen_name">
+                                                    placeholder="Kitchen Name" name="kitchen_name">
                                             </div>
                                         </div>
                                         
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="email">Kitchen Email</label>
-                                                <input type="text" id="email" class="form-control"
-                                                    placeholder="Email" name="email">
+                                                <label for="email">Business Email</label>
+                                                <input type="text" id="business_email" class="form-control"
+                                                    placeholder="Business Email" name="email">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="password">Business Email</label>
-                                                <input type="text" id="password" class="form-control"
-                                                    placeholder="Password" name="city-column">
+                                                <label for="password">Website URL</label>
+                                                <input type="text" id="website_url" class="form-control"
+                                                    placeholder="Website URL" name="city-column">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
-                                                <label for="phoneno">Location</label>
-                                                <input type="text" id="phone" class="form-control"
-                                                    name="country-floating" placeholder="Phone No">
+                                                <label for="phoneno">Kitchen Location</label>
+                                                <input type="text" id="location" class="form-control"
+                                                    name="country-floating" placeholder="Kitchen Location">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="username">Description</label>
+                                                <textarea id="kitchen_desc" class="form-control"
+                                                    placeholder="Kitchen Description" name="username"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="lastname">Kitchen Logo</label>
-                                                <input type="file" id="profile" class="form-control"
-                                                    name="lastname" placeholder="Last Name">
+                                                <input type="file" id="kitchen_logo" class="form-control"
+                                                    name="lastname" placeholder="Kitchen Logo">
+                                                <input type="hidden" name="user_id" id="user_id" value="{{uid}}">
                                             </div>
                                         </div>
-                                  
+                                        <div class="col-12 d-flex justify-content-end">
+                                            <button type="submit"
+                                                class="btn btn-primary me-1 mb-1" onclick="CreateKitchen()">Add Kitchen</button>
+                                            <button type="reset"
+                                                class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                        </div>  
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="nick">Kitchen Images</label>
-                                                <input type="file" id="cover_photo" class="form-control" accept="image/*"
+                                                <input type="file" id="kitchen_images" class="form-control" multiple accept="image/*"
                                                 name="cover_photo" placeholder="Nick Name">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="nick">Kitchen Videos</label>
-                                                <input type="file" id="cover_photo" class="form-control"
+                                                <input type="file" id="kitchen_videos" multiple class="form-control"
                                                 name="cover_photo" placeholder="Nick Name" accept="video/*">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label for="username">Description</label>
-                                                <textarea id="username" class="form-control"
-                                                    placeholder="Kitchen Description" name="username"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-end">
                                             <button type="submit"
-                                                class="btn btn-primary me-1 mb-1" onclick="addKitchen()">Add Kitchen</button>
-                                            <button type="reset"
-                                                class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                                class="btn btn-primary me-1 mb-1" onclick="ImageVideoUpload()">Upload</button>
                                         </div>
                                     </div>
                                 </div>
@@ -433,6 +437,97 @@
     </footer>
 </div>
 <script>
+         
+         function CreateKitchen() { 
+        // $("#comment-loader").show();
+        const startTime = new Date().getTime();
+        let kitchen_name = $("#kitchen_name").val();
+        let website_url = $("#website_url").val();
+        let business_email = $("#business_email").val();
+        let location = $("#location").val();
+        let user_id  = $("#user_id").val();
+        let kitchen_desc = $("#kitchen_desc").val();
+        let kitchen_logo = $("#kitchen_logo")[0].files[0]
+        if(!kitchen_name){
+             const errorMsg = '<i class="fas fa-check-circle"></i> Enter Your Kitchen Name'
+            //  $("#comment-loader").hide();
+            alert("Please enter kitchen  name")
+            return;
+        }
+
+       else if(!location){
+             const errorMsg = '<i class="fas fa-check-circle"></i> Enter Your Location'
+            //  $("#comment-loader").hide();
+
+            alert("Please Enter Location")
+            return;
+        }
+       else if(kitchen_logo==null){
+             const errorMsg = '<i class="fas fa-check-circle"></i> Upload Your Kitchen Logo'
+            //  $("#comment-loader").hide();
+
+            alert("Please Upload Logo")
+            return;
+        }
+
+        let formdata = new FormData();
+        formdata.append('kitchen_name',kitchen_name);
+        formdata.append('website_url',website_url);
+        formdata.append('kitchen_desc',kitchen_desc);
+        formdata.append('business_email',business_email);
+        formdata.append('location',location);
+        formdata.append('kitchen_logo',kitchen_logo);
+        formdata.append('user',user_id);
+            $.ajax({
+            type: "POST",
+            url: "/add_kitchen_admin/",
+            data: formdata,
+            contentType:false,
+            processData:false,
+            success: function (response) {
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                // $("#comment-loader").hide();
+                if(response['status']=='pass'){
+                const successMsg =
+                    `<i class="fas fa-check-circle"></i>${response['message']}`;
+                alert("Kitchen Added Successfully")  
+                }
+                else if(response['status']=='fail'){
+                    const errorMsg = `<i class="fas fa-check-circle"></i> ${response['message']}`;
+                alert("Something Went Wrong")
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }
+                    
+                }, delay);
+            },
+            error: function (xhr) {
+                // $("#comment-loader").hide();
+
+                if (xhr.responseJSON) {
+                    let errors = xhr.responseJSON;
+                    for (let field in errors) {
+                        if (errors.hasOwnProperty(field)) {
+                            let errorMsg = `<i class="fas fa-check-circle"></i> ${errors[field]}`;
+                            alert("Something Went Wrong")
+
+                        }
+                    }
+                } else {
+                    const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';
+                    alert("Something Went Wrong")
+
+                }
+}
+
+        });
+     }
+
        function addUser() {
     let username = $("#username").val();
     let email = $("#email").val();
@@ -563,6 +658,59 @@
         }
     });
 }
+
+function ImageVideoUpload() { 
+        let kitchen_name = $("#kitchen_name").val();
+        let kitchen_images = $("#kitchen_images")[0].files;
+        let kitchen_videos = $("#kitchen_videos")[0].files;
+        let formdata = new FormData();
+        formdata.append("kitchen_name",kitchen_name);
+        for (let i = 0; i < kitchen_images.length; i++) {
+            formdata.append('kitchen_images', kitchen_images[i]);
+        }
+        for (let i = 0; i < kitchen_videos.length; i++) {
+            formdata.append('kitchen_videos', kitchen_videos[i]);
+        }
+        $("#comment-loader").show();
+        const startTime = new Date().getTime();
+        $.ajax({
+            type:"POST",
+            url:'/upload_image_video/',
+            data:formdata,
+            contentType:false,
+            processData:false,
+            success:function(response){
+                const endTime = new Date().getTime();
+                const duration = endTime - startTime;
+                const minimumLoaderTime = 1500;
+                const delay = duration < minimumLoaderTime ? minimumLoaderTime - duration : 0;
+                setTimeout(() => {
+                $("#comment-loader").hide();
+                if(response['status']=='pass'){
+                const successMsg =
+                    `<i class="fas fa-check-circle"></i> Uploaded Images`;
+                alert("Uploaded Successful")
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }
+                else if(response['status']=='fail'){
+                    const errorMsg = `<i class="fas fa-check-circle"></i> Uploaded Videos`;
+                alert("Error Uploading")
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                }
+                    
+                }, delay);
+            },
+            error:function(){
+                $("#comment-loader").hide();
+                const errorMsg = '<i class="fas fa-check-circle"></i> Something Went Wrong';
+                alert("Something Went Wrong")
+            }
+        })
+     }
 </script>
 {% endblock main-content %}
       

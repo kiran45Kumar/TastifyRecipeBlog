@@ -298,3 +298,35 @@ class CreateKitchen(TemplateView):
         context['user__name'] = user__name
         context['user__email'] = user__email
         return context
+class AddKitchenAdmin(APIView):
+    def post(self, request):
+        kitchen_name = request.data.get('kitchen_name')
+        website_url = request.data.get('website_url')
+        business_email = request.data.get('business_email')
+        location = request.data.get('location')
+        user_id = request.data.get('user')
+        kitchen_desc = request.data.get('kitchen_desc')
+        kitchen_logo = request.FILES.get('kitchen_logo')
+        user = User.objects.get(id = user_id)
+        if Kitchen.objects.filter(kitchen_name__iexact = kitchen_name).exists():
+            return JsonResponse({"status":"fail","message":"Kitchen Name is Already Taken"})
+        elif Kitchen.objects.filter(business_email = business_email).exists():
+            return JsonResponse({"status":"fail","message":"Email Already Exists"})
+        elif Kitchen.objects.filter(website_url = website_url).exists():
+            return JsonResponse({"status":"fail","message":"Enter an Unique URL"})
+        try:
+            kitchen = Kitchen()
+            kitchen.kitchen_name = kitchen_name
+            kitchen.website_url = website_url
+            kitchen.user = user
+            kitchen.business_email = business_email
+            kitchen.location = location
+            kitchen.kitchen_desc = kitchen_desc
+            kitchen.kitchen_logo = kitchen_logo
+            kitchen.save()
+            return JsonResponse({"status":"pass","message":"Kitchen Created Successfully",'kitchen_id':kitchen.kitchen_id})
+
+        except User.DoesNotExist as e:
+            return JsonResponse({'status':"fail",'message':'User Does not Exist'})  
+        except Exception as e:
+            return JsonResponse({'status':"fail",'message':str(e)}) 

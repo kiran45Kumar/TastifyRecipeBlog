@@ -11,4 +11,5 @@ urlpatterns = [
     path('delete_user_admin/', DeleteUser.as_view(), name='delete_user_admin'),
     path('delete_all/', DeleteAll.as_view(), name='DeleteAll'),
     path('create_kitchen_admin/<int:uid>', CreateKitchen.as_view(), name='create_kitchen'),
+    path('add_kitchen_admin/', AddKitchenAdmin.as_view(), name='add_kitchen_admin'),
 ]
