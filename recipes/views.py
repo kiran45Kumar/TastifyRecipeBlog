@@ -24,12 +24,10 @@ class RecipePosts(APIView):
         cooktime = request.data.get('cooktime')
         servSize = request.data.get('servSize')
         nutrition = request.data.get('nutrition')
-        kitchen = request.data.get('kitchen')
         userId = request.data.get('userId')
         postimg = request.FILES.get('postimg')
-        kchen = Kitchen.objects.get(kitchen_id = kitchen)
-        tags = json.loads(request.POST.get('postTag', '[]'))
-        user = get_object_or_404(User, id = userId)
+
+        user = get_object_or_404(User, id=userId)
         recipe = Recipes()
         recipe.user_id = user
         recipe.recipe_title = title
@@ -39,11 +37,9 @@ class RecipePosts(APIView):
         recipe.prep_time = preptime
         recipe.cook_time = cooktime
         recipe.status = 'Published'
-        recipe.kitchen = kchen
         recipe.serving_size = servSize
         recipe.nutrition_info = nutrition
         recipe.post_url = postimg
-        recipe.tags = tags
         recipe.save()
         messages.success(request, "Recipe posted successfully!")
         return JsonResponse({"status":"pass"})
